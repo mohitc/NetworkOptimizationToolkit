@@ -86,6 +86,10 @@ public class FixedTopologyModel {
     }
     LPConstantGroup constantGroup = model.createLPConstantGroup(VariableBoundConstants.GROUP_NAME, VariableBoundConstants.GROUP_DESC);
     model.createLpConstant(VariableBoundConstants.ROUTING_COST_MAX, 1000, constantGroup);
+    //constant to indicate the max number of dynamic circuits between a pair of nodes
+    model.createLpConstant(VariableBoundConstants.DYN_CIRTUITS_MAX, 1, constantGroup);
+    //constant to indicate the number of distinct dynamic circuit categories available
+    model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, 2, constantGroup);
   }
 
   public void initVarGroups() throws LPVarGroupException {

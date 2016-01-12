@@ -10,8 +10,10 @@ package com.network.topology.dyncircuits.vars;
 import com.lpapi.entities.LPVarGroup;
 import com.lpapi.entities.LPVarType;
 import com.lpapi.entities.group.LPGroupInitializer;
+import com.lpapi.exception.LPConstantException;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.VariableBoundConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,26 +28,24 @@ public class DynCircuitVarGroupInitializer extends LPGroupInitializer {
 
   private int circuitClasses;
 
-  private int maxCircuitBound;
-
-  public DynCircuitVarGroupInitializer(int circuitClasses, Set<String> vertices, int maxCircuitBound) {
+  public DynCircuitVarGroupInitializer(Set<String> vertices) {
     if (vertices == null) {
       log.error("Set of vertices is null, reverting to empty set");
       this.vertices = Collections.EMPTY_SET;
     } else {
       this.vertices = vertices;
     }
-    if (circuitClasses <= 0) {
-      log.error("Circuit classes should be a positive integer (>0). Defaulting to 1");
+    try {
+      int circuitClasses = (int) model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      if (circuitClasses <= 0) {
+        log.error("Circuit classes should be a positive integer (>0). Defaulting to 1");
+        this.circuitClasses = 1;
+      } else {
+        this.circuitClasses = circuitClasses;
+      }
+    } catch (LPConstantException e) {
+      log.error("Number of dynamic circuit classes not defined. Defaulting to 1");
       this.circuitClasses = 1;
-    } else {
-      this.circuitClasses = circuitClasses;
-    }
-    if (maxCircuitBound < 0) {
-      log.error("Number of circuits between any two nodes should be positive. Defaulting to 0");
-      this.maxCircuitBound = 0;
-    } else {
-      this.maxCircuitBound = maxCircuitBound;
     }
   }
 
@@ -58,7 +58,7 @@ public class DynCircuitVarGroupInitializer extends LPGroupInitializer {
           for (String j: vertices) {
             if (i.equals(j))
               continue;
-            this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(Integer.toString(n), i, j), LPVarType.INTEGER, 0, maxCircuitBound, group);
+            this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(Integer.toString(n), i, j), LPVarType.INTEGER, 0, model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX).getValue(), group);
           }
         }
       }
