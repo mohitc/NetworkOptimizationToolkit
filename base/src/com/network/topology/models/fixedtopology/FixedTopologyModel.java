@@ -13,6 +13,8 @@ import com.network.topology.forwarding.constraints.UniqueForwardingConstrGroupIn
 import com.network.topology.forwarding.constraints.UniqueForwardingConstrNameGenerator;
 import com.network.topology.forwarding.vars.ForwardingVarGroupInitializer;
 import com.network.topology.forwarding.vars.ForwardingVarNameGenerator;
+import com.network.topology.linkexists.constants.LinkExistsConstantGroupInitializer;
+import com.network.topology.linkexists.constants.LinkExistsConstantNameGenerator;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrGroupInitializer;
 import com.network.topology.linkexists.constraints.LinkExistsConstrNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
@@ -90,6 +92,12 @@ public class FixedTopologyModel {
     model.createLpConstant(VariableBoundConstants.DYN_CIRTUITS_MAX, 1, constantGroup);
     //constant to indicate the number of distinct dynamic circuit categories available
     model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, 2, constantGroup);
+
+    Set<String> vertexLabels = getVertexLabels();
+
+    LinkExistsConstantNameGenerator linkExistsConstantNameGenerator = new LinkExistsConstantNameGenerator(vertexLabels);
+    LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, linkExistsConstantNameGenerator, true);
+    model.createLPConstantGroup("Hat(LinkExists)", "Constants to indicate if link existed in original topology", linkExistsConstantNameGenerator, linkExistsConstantGroupInitializer);
   }
 
   public void initVarGroups() throws LPVarGroupException {
