@@ -7,6 +7,10 @@ import com.lpapi.entities.LPObjType;
 import com.lpapi.entities.cplex.impl.CplexLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
+import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGenerator;
+import com.network.topology.dyncircuits.constraints.DynCircuitBountConstrGroupInitializer;
+import com.network.topology.dyncircuits.vars.DynCircuitVarGroupInitializer;
+import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrNameGenerator;
 import com.network.topology.forwarding.constraints.UniqueForwardingConstrGroupInitializer;
@@ -17,6 +21,8 @@ import com.network.topology.linkexists.constants.LinkExistsConstantGroupInitiali
 import com.network.topology.linkexists.constants.LinkExistsConstantNameGenerator;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrGroupInitializer;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrNameGenerator;
+import com.network.topology.linkexists.constraints.LinkExistsConstrGroupInitializer;
+import com.network.topology.linkexists.constraints.LinkExistsConstrNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsVarGroupInitializer;
 import com.network.topology.routing.constraints.*;
@@ -127,6 +133,15 @@ public class FixedTopologyModel {
     RoutingCostVarNameGenerator rcVarNameGenerator = new RoutingCostVarNameGenerator(vertexLabels);
     RoutingCostVarGroupInitializer rcVarGroupInitializer = new RoutingCostVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("RoutingCost", "Routing Cost variables", rcVarNameGenerator, rcVarGroupInitializer);
+
+    try {
+      int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      DynCircuitVarNameGenerator dynCircuitVarNameGenerator = new DynCircuitVarNameGenerator(circuitClasses, vertexLabels);
+      DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
+      model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", dynCircuitVarNameGenerator, dynCircuitVarGroupInitializer);
+    } catch (LPConstantException e) {
+      log.error("Constant to indicate the number of dynamic circuit classes not defined");
+    }
   }
 
   public void initConstraintGroups() throws LPConstraintGroupException {
@@ -139,13 +154,30 @@ public class FixedTopologyModel {
     }
 
 
-    //Link Exists constraints
+    //Fixed Link Exists constraints
     Set<String> vertexLabels = getVertexLabels();
     LinkExistsNameGenerator linkExistsNameGenerator = new LinkExistsNameGenerator(vertexLabels);
     FixedLinkExistsConstrNameGenerator fixedLinkExistsConstrNameGenerator = new FixedLinkExistsConstrNameGenerator(vertexLabels);
     FixedLinkExistsConstrGroupInitializer fixedLinkExistsVarGroupInitializer = new FixedLinkExistsConstrGroupInitializer(_instance, linkExistsNameGenerator);
-
     model.createLPConstraintGroup("FixedLinkExistsConstr", "Constarint to restrict link exists to already existing links", fixedLinkExistsConstrNameGenerator, fixedLinkExistsVarGroupInitializer);
+
+
+    //Link Exists constraints
+    try {
+      LinkExistsConstrNameGenerator lLinkExistsConstrNameGenerator = new LinkExistsConstrNameGenerator(vertexLabels);
+      LinkExistsConstantNameGenerator linkExistsConstantNameGenerator = new LinkExistsConstantNameGenerator(vertexLabels);
+      int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      DynCircuitVarNameGenerator dynCircuitVarNameGenerator = new DynCircuitVarNameGenerator(circuitClasses, vertexLabels);
+      LinkExistsConstrGroupInitializer linkExistsVarGroupInitializer = new LinkExistsConstrGroupInitializer(vertexLabels, linkExistsNameGenerator, linkExistsConstantNameGenerator, dynCircuitVarNameGenerator);
+      model.createLPConstraintGroup("LinkExistsConstr", "Constarint to restrict link exists to already existing links or dynamic circuits", lLinkExistsConstrNameGenerator, linkExistsVarGroupInitializer);
+
+      //Dynamic circuit bound constrants
+      DynCircuitBoundConstrNameGenerator dynCircuitBoundConstrNameGenerator = new DynCircuitBoundConstrNameGenerator(vertexLabels);
+      DynCircuitBountConstrGroupInitializer dynCircuitBountConstrGroupInitializer = new DynCircuitBountConstrGroupInitializer(vertexLabels, dynCircuitVarNameGenerator);
+      model.createLPConstraintGroup("DynCircuitBound", "Constraints to bound the number of dynamic circuits", dynCircuitBoundConstrNameGenerator, dynCircuitBountConstrGroupInitializer);
+    } catch (LPConstantException e) {
+      log.error("Constant to indicate the number of dynamic circuit classes not defined");
+    }
 
 
     //Routing Constraints
