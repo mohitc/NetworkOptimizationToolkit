@@ -9,17 +9,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class LinkExistsConstrNameGenerator extends LPNameGeneratorImpl<String> {
+public class FixedLinkExistsConstrNameGenerator extends LPNameGeneratorImpl<String> {
 
   private static final String LINK_EXISTS_CONSTR_PREFIX = "LE-Const";
 
   private static final String LINK_EXISTS_CONSTR_LOG_PREFIX = "LE:- ";
 
-  private static final Logger log = LoggerFactory.getLogger(LinkExistsConstrNameGenerator.class);
+  private static final Logger log = LoggerFactory.getLogger(FixedLinkExistsConstrNameGenerator.class);
 
   private Set<String> vertexVars;
 
-  public LinkExistsConstrNameGenerator(Set<String> vertexVars) {
+  public FixedLinkExistsConstrNameGenerator(Set<String> vertexVars) {
     super(LINK_EXISTS_CONSTR_PREFIX, 2);
     if (vertexVars!=null) {
       this.vertexVars = Collections.unmodifiableSet(vertexVars);

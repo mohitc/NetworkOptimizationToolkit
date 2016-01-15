@@ -16,7 +16,7 @@ import com.network.topology.forwarding.vars.ForwardingVarNameGenerator;
 import com.network.topology.linkexists.constants.LinkExistsConstantGroupInitializer;
 import com.network.topology.linkexists.constants.LinkExistsConstantNameGenerator;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrGroupInitializer;
-import com.network.topology.linkexists.constraints.LinkExistsConstrNameGenerator;
+import com.network.topology.linkexists.constraints.FixedLinkExistsConstrNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsVarGroupInitializer;
 import com.network.topology.routing.constraints.*;
@@ -142,10 +142,10 @@ public class FixedTopologyModel {
     //Link Exists constraints
     Set<String> vertexLabels = getVertexLabels();
     LinkExistsNameGenerator linkExistsNameGenerator = new LinkExistsNameGenerator(vertexLabels);
-    LinkExistsConstrNameGenerator linkExistsConstrNameGenerator = new LinkExistsConstrNameGenerator(vertexLabels);
+    FixedLinkExistsConstrNameGenerator fixedLinkExistsConstrNameGenerator = new FixedLinkExistsConstrNameGenerator(vertexLabels);
     FixedLinkExistsConstrGroupInitializer fixedLinkExistsVarGroupInitializer = new FixedLinkExistsConstrGroupInitializer(_instance, linkExistsNameGenerator);
 
-    model.createLPConstraintGroup("FixedLinkExistsConstr", "Constarint to restrict link exists to already existing links", linkExistsConstrNameGenerator, fixedLinkExistsVarGroupInitializer);
+    model.createLPConstraintGroup("FixedLinkExistsConstr", "Constarint to restrict link exists to already existing links", fixedLinkExistsConstrNameGenerator, fixedLinkExistsVarGroupInitializer);
 
 
     //Routing Constraints
