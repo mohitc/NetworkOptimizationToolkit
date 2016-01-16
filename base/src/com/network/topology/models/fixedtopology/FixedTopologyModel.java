@@ -4,7 +4,8 @@ import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPObjType;
-import com.lpapi.entities.cplex.impl.CplexLPModel;
+//import com.lpapi.entities.gurobi.impl.CplexLPModel;
+import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
@@ -167,7 +168,8 @@ public class FixedTopologyModel {
   }
 
   public void initModel() throws LPModelException {
-    model = new CplexLPModel("Test");
+//    model = new CplexLPModel("Test");
+    model = new GurobiLPModel("Test");
   }
 
 
