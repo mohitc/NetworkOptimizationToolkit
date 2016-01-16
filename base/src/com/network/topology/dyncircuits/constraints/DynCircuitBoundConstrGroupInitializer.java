@@ -15,15 +15,15 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Set;
 
-public class DynCircuitBountConstrGroupInitializer extends LPGroupInitializer {
+public class DynCircuitBoundConstrGroupInitializer extends LPGroupInitializer {
 
-  private static final Logger log = LoggerFactory.getLogger(DynCircuitBountConstrGroupInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(DynCircuitBoundConstrGroupInitializer.class);
 
   private LPNameGenerator dynCircuitNameGenerator;
 
   private Set<String> vertexVars;
 
-  public DynCircuitBountConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator dynCircuitNameGenerator) {
+  public DynCircuitBoundConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator dynCircuitNameGenerator) {
     if (dynCircuitNameGenerator==null) {
       log.error("Initialized with empty dynamic circuit variable name generator");
       this.dynCircuitNameGenerator = new LPEmptyNameGenratorImpl<>();
