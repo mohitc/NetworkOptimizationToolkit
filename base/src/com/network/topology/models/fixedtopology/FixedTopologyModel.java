@@ -49,6 +49,8 @@ public class FixedTopologyModel {
 
   public TopologyManager _instance;
 
+  private FixedTopologyModelNameFactory factory;
+
   public TopologyManager initTopology() throws TopologyException {
     TopologyManagerFactory factory = new TopologyManagerFactoryImpl();
     TopologyManager manager = factory.createTopologyManager("Test");
@@ -100,11 +102,9 @@ public class FixedTopologyModel {
     //constant to indicate the number of distinct dynamic circuit categories available
     model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, 2, constantGroup);
 
-    Set<String> vertexLabels = getVertexLabels();
-
-    LinkExistsConstantNameGenerator linkExistsConstantNameGenerator = new LinkExistsConstantNameGenerator(vertexLabels);
-    LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, linkExistsConstantNameGenerator, true);
-    model.createLPConstantGroup("Hat(LinkExists)", "Constants to indicate if link existed in original topology", linkExistsConstantNameGenerator, linkExistsConstantGroupInitializer);
+    LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, factory.getLinkExistsConstantNameGenerator(), true);
+    model.createLPConstantGroup("Hat(LinkExists)", "Constants to indicate if link existed in original topology", factory.getLinkExistsConstantNameGenerator(),
+        linkExistsConstantGroupInitializer);
   }
 
   public void initVarGroups() throws LPVarGroupException {
@@ -119,27 +119,22 @@ public class FixedTopologyModel {
     Set<String> vertexLabels = getVertexLabels();
 
     //Initialize link exists variable group
-    LinkExistsNameGenerator linkExistsNameGenerator = new LinkExistsNameGenerator(vertexLabels);
     LinkExistsVarGroupInitializer linkExistsVarGroupInitializer = new LinkExistsVarGroupInitializer(vertexLabels);
-    model.createLPVarGroup("LinkExists", "Variables to indicate if link exists", linkExistsNameGenerator, linkExistsVarGroupInitializer);
+    model.createLPVarGroup("LinkExists", "Variables to indicate if link exists", factory.getLinkExistsNameGenerator(), linkExistsVarGroupInitializer);
 
-    RoutingNameGenerator routingNameGenerator = new RoutingNameGenerator(vertexLabels);
     RoutingVarGroupInitializer routingVarGroupInitializer = new RoutingVarGroupInitializer(vertexLabels);
-    model.createLPVarGroup("Routing", "Variables to indicate route", routingNameGenerator, routingVarGroupInitializer);
+    model.createLPVarGroup("Routing", "Variables to indicate route", factory.getRoutingNameGenerator(), routingVarGroupInitializer);
 
-    ForwardingVarNameGenerator forwardingNameGenerator = new ForwardingVarNameGenerator(vertexLabels);
     ForwardingVarGroupInitializer forwardingGroupInitializer = new ForwardingVarGroupInitializer(vertexLabels);
-    model.createLPVarGroup("Forwarding", "Variables to constrain forwarding", forwardingNameGenerator, forwardingGroupInitializer);
+    model.createLPVarGroup("Forwarding", "Variables to constrain forwarding", factory.getForwardingNameGenerator(), forwardingGroupInitializer);
 
-    RoutingCostVarNameGenerator rcVarNameGenerator = new RoutingCostVarNameGenerator(vertexLabels);
     RoutingCostVarGroupInitializer rcVarGroupInitializer = new RoutingCostVarGroupInitializer(vertexLabels);
-    model.createLPVarGroup("RoutingCost", "Routing Cost variables", rcVarNameGenerator, rcVarGroupInitializer);
+    model.createLPVarGroup("RoutingCost", "Routing Cost variables", factory.getRoutingCostNameGenerator(), rcVarGroupInitializer);
 
     try {
       int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
-      DynCircuitVarNameGenerator dynCircuitVarNameGenerator = new DynCircuitVarNameGenerator(circuitClasses, vertexLabels);
       DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
-      model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", dynCircuitVarNameGenerator, dynCircuitVarGroupInitializer);
+      model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(circuitClasses), dynCircuitVarGroupInitializer);
     } catch (LPConstantException e) {
       log.error("Constant to indicate the number of dynamic circuit classes not defined");
     }
@@ -157,24 +152,21 @@ public class FixedTopologyModel {
 
     //Fixed Link Exists constraints
     Set<String> vertexLabels = getVertexLabels();
-    LinkExistsNameGenerator linkExistsNameGenerator = new LinkExistsNameGenerator(vertexLabels);
     FixedLinkExistsConstrNameGenerator fixedLinkExistsConstrNameGenerator = new FixedLinkExistsConstrNameGenerator(vertexLabels);
-    FixedLinkExistsConstrGroupInitializer fixedLinkExistsVarGroupInitializer = new FixedLinkExistsConstrGroupInitializer(_instance, linkExistsNameGenerator);
+    FixedLinkExistsConstrGroupInitializer fixedLinkExistsVarGroupInitializer = new FixedLinkExistsConstrGroupInitializer(_instance, factory.getLinkExistsNameGenerator());
     model.createLPConstraintGroup("FixedLinkExistsConstr", "Constarint to restrict link exists to already existing links", fixedLinkExistsConstrNameGenerator, fixedLinkExistsVarGroupInitializer);
 
 
     //Link Exists constraints
     try {
       LinkExistsConstrNameGenerator lLinkExistsConstrNameGenerator = new LinkExistsConstrNameGenerator(vertexLabels);
-      LinkExistsConstantNameGenerator linkExistsConstantNameGenerator = new LinkExistsConstantNameGenerator(vertexLabels);
       int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
-      DynCircuitVarNameGenerator dynCircuitVarNameGenerator = new DynCircuitVarNameGenerator(circuitClasses, vertexLabels);
-      LinkExistsConstrGroupInitializer linkExistsVarGroupInitializer = new LinkExistsConstrGroupInitializer(vertexLabels, linkExistsNameGenerator, linkExistsConstantNameGenerator, dynCircuitVarNameGenerator);
+      LinkExistsConstrGroupInitializer linkExistsVarGroupInitializer = new LinkExistsConstrGroupInitializer(vertexLabels, factory.getLinkExistsNameGenerator(), factory.getLinkExistsConstantNameGenerator(), factory.getDynamicCircuitNameGenerator(circuitClasses));
       model.createLPConstraintGroup("LinkExistsConstr", "Constarint to restrict link exists to already existing links or dynamic circuits", lLinkExistsConstrNameGenerator, linkExistsVarGroupInitializer);
 
       //Dynamic circuit bound constrants
       DynCircuitBoundConstrNameGenerator dynCircuitBoundConstrNameGenerator = new DynCircuitBoundConstrNameGenerator(vertexLabels);
-      DynCircuitBoundConstrGroupInitializer dynCircuitBoundConstrGroupInitializer = new DynCircuitBoundConstrGroupInitializer(vertexLabels, dynCircuitVarNameGenerator);
+      DynCircuitBoundConstrGroupInitializer dynCircuitBoundConstrGroupInitializer = new DynCircuitBoundConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator(circuitClasses));
       model.createLPConstraintGroup("DynCircuitBound", "Constraints to bound the number of dynamic circuits", dynCircuitBoundConstrNameGenerator, dynCircuitBoundConstrGroupInitializer);
     } catch (LPConstantException e) {
       log.error("Constant to indicate the number of dynamic circuit classes not defined");
@@ -182,28 +174,26 @@ public class FixedTopologyModel {
 
 
     //Routing Constraints
-    RoutingNameGenerator routingNameGenerator = new RoutingNameGenerator(vertexLabels);
     RoutingConstrNameGenerator routingConstrNameGenerator = new RoutingConstrNameGenerator(vertexLabels);
-    RoutingConstrGroupInitializer routingConstrGroupInitializer = new RoutingConstrGroupInitializer(vertexLabels, linkExistsNameGenerator, routingNameGenerator);
+    RoutingConstrGroupInitializer routingConstrGroupInitializer = new RoutingConstrGroupInitializer(vertexLabels, factory.getLinkExistsNameGenerator(), factory.getRoutingNameGenerator());
     model.createLPConstraintGroup("RoutingConstr", "Constraints on routing using existing links", routingConstrNameGenerator, routingConstrGroupInitializer);
 
     RoutingContinuityConstrNameGenerator routingContinuityConstrNameGenerator = new RoutingContinuityConstrNameGenerator(vertexLabels);
-    RoutingContinuityConstrGroupInitializer routingContinuityConstrGroupInitializer = new RoutingContinuityConstrGroupInitializer(vertexLabels, routingNameGenerator);
+    RoutingContinuityConstrGroupInitializer routingContinuityConstrGroupInitializer = new RoutingContinuityConstrGroupInitializer(vertexLabels, factory.getRoutingNameGenerator());
     model.createLPConstraintGroup("RoutingContinuityConstr", "Constraints on single path routing continuity", routingContinuityConstrNameGenerator, routingContinuityConstrGroupInitializer);
 
     SymmetricRoutingConstrNameGenerator symmetricRoutingConstrNameGenerator = new SymmetricRoutingConstrNameGenerator(vertexLabels);
-    SymmetricRoutingConstrGroupInitializer symmetricRoutingConstrGroupInitializer = new SymmetricRoutingConstrGroupInitializer(vertexLabels, routingNameGenerator);
+    SymmetricRoutingConstrGroupInitializer symmetricRoutingConstrGroupInitializer = new SymmetricRoutingConstrGroupInitializer(vertexLabels, factory.getRoutingNameGenerator());
     model.createLPConstraintGroup("SymmetricRouting", "Constraint to ensure symmetric routing between each s-d pair", symmetricRoutingConstrNameGenerator, symmetricRoutingConstrGroupInitializer);
 
     //Forwarding Constraints
 
-    ForwardingVarNameGenerator forwardingNameGenerator = new ForwardingVarNameGenerator(vertexLabels);
     UniqueForwardingConstrNameGenerator uniqueForwardingConstrNameGenerator = new UniqueForwardingConstrNameGenerator(vertexLabels);
-    UniqueForwardingConstrGroupInitializer uniqueForwardingConstrGroupInitializer = new UniqueForwardingConstrGroupInitializer(vertexLabels, forwardingNameGenerator);
+    UniqueForwardingConstrGroupInitializer uniqueForwardingConstrGroupInitializer = new UniqueForwardingConstrGroupInitializer(vertexLabels, factory.getForwardingNameGenerator());
     model.createLPConstraintGroup("UniqueForwarding", "Constraints to ensure a single forwarding entry for each destination", uniqueForwardingConstrNameGenerator, uniqueForwardingConstrGroupInitializer);
 
     ForwardingBasedRoutingConstrNameGenerator forwardingBasedRoutingConstrNameGenerator = new ForwardingBasedRoutingConstrNameGenerator(vertexLabels);
-    ForwardingBasedRoutingConstrGroupInitializer forwardingBasedRoutingConstrGroupInitializer = new ForwardingBasedRoutingConstrGroupInitializer(vertexLabels, forwardingNameGenerator, routingNameGenerator);
+    ForwardingBasedRoutingConstrGroupInitializer forwardingBasedRoutingConstrGroupInitializer = new ForwardingBasedRoutingConstrGroupInitializer(vertexLabels, factory.getForwardingNameGenerator(), factory.getRoutingNameGenerator());
     model.createLPConstraintGroup("ForwardingRouting", "Routing follows forwarding", forwardingBasedRoutingConstrNameGenerator, forwardingBasedRoutingConstrGroupInitializer);
   }
 
@@ -219,6 +209,8 @@ public class FixedTopologyModel {
       FixedTopologyModel lpModel = new FixedTopologyModel();
 
       lpModel._instance = lpModel.initTopology();
+
+      lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels());
 
       lpModel.initModel();
       lpModel.initConstants();
