@@ -1,10 +1,3 @@
-/*
- *  Copyright 2013 ADVA Optical Networking SE. All rights reserved.
- *
- *  Owner: mchamania
- *
- *  $Id: $
- */
 package com.network.topology.linkexists.constraints;
 
 import com.lpapi.entities.group.generators.LPNameGeneratorImpl;
@@ -16,18 +9,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class LinkExistsConstrNameGenerator extends LPNameGeneratorImpl<String> {
+public class FixedLinkExistsConstrNameGenerator extends LPNameGeneratorImpl<String> {
 
-  private static final String LINK_EXISTS_CONSTR_PREFIX = "LE";
+  private static final String LINK_EXISTS_CONSTR_PREFIX = "LE-Const";
 
   private static final String LINK_EXISTS_CONSTR_LOG_PREFIX = "LE:- ";
 
-  private static final Logger log = LoggerFactory.getLogger(LinkExistsConstrNameGenerator.class);
+  private static final Logger log = LoggerFactory.getLogger(FixedLinkExistsConstrNameGenerator.class);
 
   private Set<String> vertexVars;
 
-  public LinkExistsConstrNameGenerator(Set<String> vertexVars) {
-    super(LINK_EXISTS_CONSTR_PREFIX, 3);
+  public FixedLinkExistsConstrNameGenerator(Set<String> vertexVars) {
+    super(LINK_EXISTS_CONSTR_PREFIX, 2);
     if (vertexVars!=null) {
       this.vertexVars = Collections.unmodifiableSet(vertexVars);
     } else {
@@ -38,25 +31,14 @@ public class LinkExistsConstrNameGenerator extends LPNameGeneratorImpl<String> {
 
   @Override
   protected void validatePrefixConstraint(List<String> strings) throws LPNameException {
-    //first prefix is the type of constranit
-    //1) LE(ij) >=hat(LE)(ij)
-    //2) LE(ij) >=Sum[X(n)(ij)] / M
-    //3) LE(ij) <= hat(LE)(ij) + Sum[X(n)(ij)]
     //because prefixes are validated in existing methods, we can iterate over the ones available and check if
     //a) unique because LinkExists x-x is an invalid variable, and
     //b) both a and be should be in the set of vertexes
-    if (strings.get(1).equals(strings.get(2))) {
+    if (strings.get(0).equals(strings.get(1))) {
       throw new LPNameException("Both vertices have the same index");
     }
-    if (! (vertexVars.contains(strings.get(1)) && (vertexVars.contains(strings.get(2))))) {
+    if (! (vertexVars.contains(strings.get(0)) && (vertexVars.contains(strings.get(1))))) {
       throw new LPNameException("Both vertices have to be in the set of vertices for the graph");
-    }
-    try {
-      int eqType = Integer.parseInt(strings.get(0));
-      if (eqType<1 || eqType >3)
-        throw new LPNameException("First index should be an integer between [1,3]");
-    } catch (NumberFormatException e) {
-      throw new LPNameException("First index should be an integer between [1,3]");
     }
   }
 }
