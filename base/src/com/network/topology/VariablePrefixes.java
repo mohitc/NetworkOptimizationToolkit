@@ -7,4 +7,7 @@ public interface VariablePrefixes {
   public static final String LINK_EXISTS = "LE";
   public static final String FORWARDING = "F";
   public static final String DYN_CIRTUIT = "X";
+  public static final String CAPACITY = "C";
+  public static final String DEMANDED_CAPACITY = "DC";
+
 }

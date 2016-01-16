@@ -9,7 +9,7 @@ import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGenerator;
-import com.network.topology.dyncircuits.constraints.DynCircuitBountConstrGroupInitializer;
+import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupInitializer;
 import com.network.topology.dyncircuits.vars.DynCircuitVarGroupInitializer;
 import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
@@ -47,7 +47,7 @@ public class FixedTopologyModel {
 
   private LPModel model;
 
-  private TopologyManager _instance;
+  public TopologyManager _instance;
 
   public TopologyManager initTopology() throws TopologyException {
     TopologyManagerFactory factory = new TopologyManagerFactoryImpl();
@@ -174,8 +174,8 @@ public class FixedTopologyModel {
 
       //Dynamic circuit bound constrants
       DynCircuitBoundConstrNameGenerator dynCircuitBoundConstrNameGenerator = new DynCircuitBoundConstrNameGenerator(vertexLabels);
-      DynCircuitBountConstrGroupInitializer dynCircuitBountConstrGroupInitializer = new DynCircuitBountConstrGroupInitializer(vertexLabels, dynCircuitVarNameGenerator);
-      model.createLPConstraintGroup("DynCircuitBound", "Constraints to bound the number of dynamic circuits", dynCircuitBoundConstrNameGenerator, dynCircuitBountConstrGroupInitializer);
+      DynCircuitBoundConstrGroupInitializer dynCircuitBoundConstrGroupInitializer = new DynCircuitBoundConstrGroupInitializer(vertexLabels, dynCircuitVarNameGenerator);
+      model.createLPConstraintGroup("DynCircuitBound", "Constraints to bound the number of dynamic circuits", dynCircuitBoundConstrNameGenerator, dynCircuitBoundConstrGroupInitializer);
     } catch (LPConstantException e) {
       log.error("Constant to indicate the number of dynamic circuit classes not defined");
     }
