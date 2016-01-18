@@ -2,15 +2,17 @@ package com.network.topology;
 
 public interface VariableBoundConstants {
 
-  public static final String GROUP_NAME="VariableBounds";
-  public static final String GROUP_DESC="Constants defining maximum bounds on variables";
+  String GROUP_NAME="VariableBounds";
+  String GROUP_DESC="Constants defining maximum bounds on variables";
 
-  public static final String ROUTING_COST_MAX = "RC(MAX)";
+  String ROUTING_COST_MAX = "RC(MAX)";
 
-  public static final String DYN_CIRTUITS_MAX = "M(MAX)";
+  String DYN_CIRTUITS_MAX = "M(MAX)";
 
-  public static final String CIRCUIT_CLASSES = "N";
+  String CIRCUIT_CLASSES = "N";
 
-  public static final String CAP_MAX = "C(MAX)";
+  String CAP_MAX = "C(MAX)";
+
+  String W_INF = "W_INF";
 
 }

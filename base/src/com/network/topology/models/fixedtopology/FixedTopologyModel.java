@@ -27,6 +27,8 @@ import com.network.topology.linkexists.constraints.LinkExistsConstrGroupInitiali
 import com.network.topology.linkexists.constraints.LinkExistsConstrNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsVarGroupInitializer;
+import com.network.topology.linkweight.constants.LinkWeightConstantGroupInitializer;
+import com.network.topology.linkweight.vars.LinkWeightVarGroupInitializer;
 import com.network.topology.routing.constraints.*;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarGroupInitializer;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarNameGenerator;
@@ -104,10 +106,17 @@ public class FixedTopologyModel {
     model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, 2, constantGroup);
     //constant to indicate the max capacity C(inf) for a link between a pair of nodes
     model.createLpConstant(VariableBoundConstants.CAP_MAX, 100000, constantGroup);
+    //constant to indicate the max capacity C(inf) for a link between a pair of nodes
+    model.createLpConstant(VariableBoundConstants.W_INF, 100000, constantGroup);
 
     LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, factory.getLinkExistsConstantNameGenerator(), true);
     model.createLPConstantGroup("Hat(LinkExists)", "Constants to indicate if link existed in original topology", factory.getLinkExistsConstantNameGenerator(),
-        linkExistsConstantGroupInitializer);
+      linkExistsConstantGroupInitializer);
+
+    LinkWeightConstantGroupInitializer linkWeightConstantGroupInitializer = new LinkWeightConstantGroupInitializer(getVertexLabels());
+    model.createLPConstantGroup("Hat(W)", "Constants to indicate weight of link if exists", factory.getLinkWeightConstantNameGenerator(),
+      linkWeightConstantGroupInitializer);
+
   }
 
   public void initVarGroups() throws LPVarGroupException {
@@ -136,6 +145,10 @@ public class FixedTopologyModel {
 
     CapacityVarGroupInitializer capacityVarGroupInitializer = new CapacityVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("LinkCapacity", "Variables to indicate link capacity", factory.getCapacityNameGenerator(), capacityVarGroupInitializer);
+
+    LinkWeightVarGroupInitializer linkWeightVarGroupInitializer = new LinkWeightVarGroupInitializer(vertexLabels);
+    model.createLPVarGroup("LinkWeight", "Variables to indicate link weights", factory.getLinkWeightVarNameGenerator(), linkWeightVarGroupInitializer);
+
     try {
       int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
       DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);

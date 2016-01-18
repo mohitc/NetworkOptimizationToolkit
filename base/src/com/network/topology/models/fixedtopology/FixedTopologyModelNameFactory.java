@@ -6,6 +6,8 @@ import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
 import com.network.topology.forwarding.vars.ForwardingVarNameGenerator;
 import com.network.topology.linkexists.constants.LinkExistsConstantNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
+import com.network.topology.linkweight.constants.LinkWeightConstantNameGenerator;
+import com.network.topology.linkweight.vars.LinkWeightVarNameGenerator;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarNameGenerator;
 import com.network.topology.routing.vars.RoutingNameGenerator;
 
@@ -81,6 +83,24 @@ public class FixedTopologyModelNameFactory {
       _capacityVarNameGenerator = new CapacityVarNameGenerator(vertexLabels);
     }
     return _capacityVarNameGenerator;
+  }
+
+  private LPNameGenerator _linkWeightVarNameGenerator;
+
+  public LPNameGenerator getLinkWeightVarNameGenerator() {
+    if (_linkWeightVarNameGenerator == null) {
+      _linkWeightVarNameGenerator = new LinkWeightVarNameGenerator(vertexLabels);
+    }
+    return _linkWeightVarNameGenerator;
+  }
+
+  private LPNameGenerator _linkWeightConstantNameGenerator;
+
+  public LPNameGenerator getLinkWeightConstantNameGenerator() {
+    if (_linkWeightConstantNameGenerator == null) {
+      _linkWeightConstantNameGenerator = new LinkWeightConstantNameGenerator(vertexLabels);
+    }
+    return _linkWeightConstantNameGenerator;
   }
 
 }
