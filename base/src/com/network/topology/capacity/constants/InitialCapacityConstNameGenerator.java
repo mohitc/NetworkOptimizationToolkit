@@ -3,7 +3,6 @@ package com.network.topology.capacity.constants;
 import com.lpapi.entities.group.generators.LPNameGeneratorImpl;
 import com.lpapi.exception.LPNameException;
 import com.network.topology.ConstantPrefixes;
-import com.network.topology.VariablePrefixes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +13,14 @@ import java.util.Set;
 /**
  * Created by fpederzolli on 16/01/16.
  */
-public class CapacityConstNameGenerator extends LPNameGeneratorImpl<String> {
-    private static final String PREFIX = ConstantPrefixes.DEMANDED_CAPACITY;
+public class InitialCapacityConstNameGenerator extends LPNameGeneratorImpl<String> {
+    private static final String PREFIX = ConstantPrefixes.INITIAL_CAPACITY;
 
-    private static final Logger log = LoggerFactory.getLogger(CapacityConstNameGenerator.class);
+    private static final Logger log = LoggerFactory.getLogger(InitialCapacityConstNameGenerator.class);
 
     private Set<String> vertexVars;
 
-    public CapacityConstNameGenerator(String prefix, int indexCount) {
+    public InitialCapacityConstNameGenerator(String prefix, int indexCount) {
         super(PREFIX, 2);
         if (vertexVars!=null) {
             this.vertexVars = Collections.unmodifiableSet(vertexVars);

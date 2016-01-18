@@ -20,8 +20,8 @@ import java.util.Set;
 /**
  * Created by fpederzolli on 16/01/16.
  */
-public class CapacityConstGroupInitializer extends LPGroupInitializer {
-    private static final Logger log = LoggerFactory.getLogger(CapacityConstGroupInitializer.class);
+public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
+    private static final Logger log = LoggerFactory.getLogger(InitialCapacityConstGroupInitializer.class);
 
     private Set<String> vertices;
 
@@ -29,7 +29,7 @@ public class CapacityConstGroupInitializer extends LPGroupInitializer {
 
     private TopologyManager topo;
 
-    public CapacityConstGroupInitializer(Set<String> vertices, LPNameGenerator capacityConstNameGenerator, TopologyManager topo) {
+    public InitialCapacityConstGroupInitializer(Set<String> vertices, LPNameGenerator capacityConstNameGenerator, TopologyManager topo) {
         if (vertices==null) {
             log.error("Set of vertices is null, reverting to empty set");
             this.vertices = Collections.EMPTY_SET;
@@ -56,6 +56,16 @@ public class CapacityConstGroupInitializer extends LPGroupInitializer {
     public void run() throws LPModelException {
         try {
             LPConstantGroup group = model().getLPConstantGroup(this.getGroup().getIdentifier());
+//            TopologyManager topo;
+//            try {
+//                Field this$0 = model().getClass().getDeclaredField("this$0");
+//                FixedTopologyModel outer = (FixedTopologyModel) this$0.get(model().getClass()); //TODO: this is an ugly hack
+//                topo = outer._instance;
+//            } catch (NoSuchFieldException e) {
+//                throw new RuntimeException(e);
+//            } catch (IllegalAccessException e) {
+//                throw new RuntimeException(e);
+//            }
             TEPropertyKey demandStoreKey;
             Map<String, Map<String, String>> demandStore;
             try {

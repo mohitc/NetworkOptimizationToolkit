@@ -1,12 +1,8 @@
 package com.network.topology.capacity.constraints;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
-import com.network.topology.models.fixedtopology.FixedTopologyModel;
-import com.topology.primitives.TopologyManager;
-import com.topology.primitives.exception.properties.PropertyException;
-import com.topology.primitives.properties.TEPropertyKey;
+import com.network.topology.VariableBoundConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,30 +14,38 @@ import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
 
 
 public class ActualCapacityGroupInitializer extends LPGroupInitializer {
 	
 	private static final Logger log = LoggerFactory.getLogger(ActualCapacityGroupInitializer.class);
 
-	private LPNameGenerator capacityNameGenerator, circuitNameGenerator;
+	private LPNameGenerator capacityVarNameGenerator, initialCapacityConstNameGenerator,
+			dynCircuitVarnameGenerator;
 
 	private Set<String> vertexVars;
 	
-	public ActualCapacityGroupInitializer(Set<String> vertexVars, LPNameGenerator capacityNameGenerator, LPNameGenerator circuitNameGenerator) {
-		if (capacityNameGenerator==null) {
+	public ActualCapacityGroupInitializer(Set<String> vertexVars, LPNameGenerator capacityVarNameGenerator,
+										  LPNameGenerator initialCapacityConstNameGenerator,
+										  LPNameGenerator dynCircuitVarnameGenerator) {
+		if (capacityVarNameGenerator==null) {
 	      log.error("Initialized with empty capacity variable name generator");
-	      this.capacityNameGenerator = new LPEmptyNameGenratorImpl<>();
+	      this.capacityVarNameGenerator = new LPEmptyNameGenratorImpl<>();
 	    } else {
-	      this.capacityNameGenerator = capacityNameGenerator;
+	      this.capacityVarNameGenerator = capacityVarNameGenerator;
 	    }
-	    if (circuitNameGenerator==null) {
+	    if (initialCapacityConstNameGenerator==null) {
 	      log.error("Initialized with empty circuit variable name generator");
-//	      this.circuitNameGenerator = new circuitNameGenerator<>();
+		  this.initialCapacityConstNameGenerator = new LPEmptyNameGenratorImpl<>();
 	    } else {
-	      this.circuitNameGenerator = circuitNameGenerator;
+	      this.initialCapacityConstNameGenerator = initialCapacityConstNameGenerator;
 	    }
+		if (dynCircuitVarnameGenerator==null) {
+			log.error("Initialized with empty circuit variable name generator");
+			this.dynCircuitVarnameGenerator = new LPEmptyNameGenratorImpl<>();
+		} else {
+			this.dynCircuitVarnameGenerator = dynCircuitVarnameGenerator;
+		}
 	    if (vertexVars!=null) {
 	      this.vertexVars = Collections.unmodifiableSet(vertexVars);
 	    } else {
@@ -52,66 +56,48 @@ public class ActualCapacityGroupInitializer extends LPGroupInitializer {
 
 	@Override
 	public void run() throws LPModelException {
-		// TODO Auto-generated method stub
 		try {
 			LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
-			TopologyManager topo;
-			try {
-				Field this$0 = model().getClass().getDeclaredField("this$0");
-				FixedTopologyModel outer = (FixedTopologyModel) this$0.get(model().getClass()); //TODO: this is an ugly hack
-				topo = outer._instance;
-			} catch (NoSuchFieldException e) {
-				throw new RuntimeException(e);
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
-			TEPropertyKey demandStoreKey;
-			Map<String, Map<String, String>> demandStore;
-			try {
-				demandStoreKey = topo.getKey("Demands");
-				demandStore = (Map<String, Map<String, String>>) topo.getProperty(demandStoreKey);
-			} catch (PropertyException e) {
-				e.printStackTrace();
-				throw new LPModelException("Demand store not found: " + e.getMessage());
-			}
+			int maxCircuitTypes = (int)model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
 
-			//for each demand, we want capacity between two vertices to be greater than the demand
 			for (String i : vertexVars) {
 				for (String j : vertexVars) {
-					String label = i.concat(j);
-					if (demandStore.containsKey(label)){
-						Map<String, String> demand = demandStore.get(label);
-						LPExpression rhs = new LPExpression(model());
-						//actual capacity grater than demanded
-						rhs.addTerm(model().getLPVar(capacityNameGenerator.getName(i, j)));
-
+					if (i.equals(j)) {
+						continue; //skip self loop case
 					}
+					LPExpression lhs = new LPExpression(model());
+					lhs.addTerm(model().getLPVar(capacityVarNameGenerator.getName(i,j)));
+					LPExpression rhs = new LPExpression(model());
+					rhs.addTerm(model().getLPConstant(initialCapacityConstNameGenerator.getName(i,j)));
+					for (int n = 1; n <= maxCircuitTypes; n++){
+						double cn = getDynCircuitCapacity(n);
+						rhs.addTerm(cn,model().getLPVar(dynCircuitVarnameGenerator.getName(n,i,j)));
+					}
+					model().addConstraint(generator().getName(i,j), lhs, LPOperator.EQUAL, rhs, group);
 				}
 			}
-
-
-//			for (String i : vertexVars) {
-//				for (String j : vertexVars) {
-//					if (i.equals(j)){
-//						continue;
-//					}
-//					//For each couple of vertexes, capacity equals existing capacity (starts at 0) plus the sum of the circuits established betweent hose endpoints;
-//					LPExpression lhs = new LPExpression(model());
-//					lhs.addTerm(model().getLPVar(capacityNameGenerator.getName(i, j)));
-//
-//					LPExpression rhs = new LPExpression(model());
-//					for (String n : TODO){
-//
-//					}
-//		              rhs.addTerm(model().getLPVar(forwardingNameGenerator.getName(d, i, j)));
-//		              model().addConstraint(generator().getName(s,d,i,j), lhs, LPOperator.LESS_EQUAL, rhs, group);
-//				}
-//			}
 		} catch (LPNameException e) {
 			log.error("Variable name not found: " + e.getMessage());
 		    throw new LPModelException("Variable name not found: " + e.getMessage());
 		}
 	 }
+
+	static public double getDynCircuitCapacity(int n){
+		switch(n){
+			case 1:
+				return 2.5;
+			case 2:
+				return 10;
+			case 3:
+				return 40;
+			case 4:
+				return 100;
+			default:
+				log.error("Unable to convert circuit to capacity: " + Integer.toString(n));
+				//TODO: should probably thrown an exception here
+		}
+		return 0;
+	}
 
 
 }
