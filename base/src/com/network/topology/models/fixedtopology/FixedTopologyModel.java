@@ -11,6 +11,8 @@ import com.network.topology.VariableBoundConstants;
 import com.network.topology.capacity.vars.CapacityVarGroupInitializer;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGenerator;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupInitializer;
+import com.network.topology.dyncircuits.constraints.SymDynCirConstrGroupInitializer;
+import com.network.topology.dyncircuits.constraints.SymDynCirConstrNameGenerator;
 import com.network.topology.dyncircuits.vars.DynCircuitVarGroupInitializer;
 import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
@@ -188,6 +190,12 @@ public class FixedTopologyModel {
       DynCircuitBoundConstrNameGenerator dynCircuitBoundConstrNameGenerator = new DynCircuitBoundConstrNameGenerator(vertexLabels);
       DynCircuitBoundConstrGroupInitializer dynCircuitBoundConstrGroupInitializer = new DynCircuitBoundConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator(circuitClasses));
       model.createLPConstraintGroup("DynCircuitBound", "Constraints to bound the number of dynamic circuits", dynCircuitBoundConstrNameGenerator, dynCircuitBoundConstrGroupInitializer);
+
+      //Symmetric dynamic circuit constraint
+      SymDynCirConstrNameGenerator symDynCirConstrNameGenerator = new SymDynCirConstrNameGenerator(circuitClasses, vertexLabels);
+      SymDynCirConstrGroupInitializer symDynCirConstrGroupInitializer = new SymDynCirConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator(circuitClasses));
+      model.createLPConstraintGroup("SymDynCirConstr", "Constraints to symmetric dynamic circuits", symDynCirConstrNameGenerator, symDynCirConstrGroupInitializer);
+
     } catch (LPConstantException e) {
       log.error("Constant to indicate the number of dynamic circuit classes not defined");
     }

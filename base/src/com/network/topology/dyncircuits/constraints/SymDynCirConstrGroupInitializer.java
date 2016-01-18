@@ -1,15 +1,9 @@
-/*
- *  Copyright 2013 ADVA Optical Networking SE. All rights reserved.
- *
- *  Owner: mchamania
- *
- *  $Id: $
- */
-package com.network.topology.dyncircuits.vars;
+package com.network.topology.dyncircuits.constraints;
 
-import com.lpapi.entities.LPVarGroup;
-import com.lpapi.entities.LPVarType;
+import com.lpapi.entities.*;
 import com.lpapi.entities.group.LPGroupInitializer;
+import com.lpapi.entities.group.LPNameGenerator;
+import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPConstantException;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
@@ -20,20 +14,28 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Set;
 
-public class DynCircuitVarGroupInitializer extends LPGroupInitializer {
+public class SymDynCirConstrGroupInitializer extends LPGroupInitializer {
 
-  private static final Logger log = LoggerFactory.getLogger(DynCircuitVarGroupInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(SymDynCirConstrGroupInitializer.class);
 
   private Set<String> vertices;
 
   private int circuitClasses;
 
-  public DynCircuitVarGroupInitializer(Set<String> vertices) {
+  private LPNameGenerator dynCircuitNameGenerator;
+
+  public SymDynCirConstrGroupInitializer(Set<String> vertices, LPNameGenerator dynCircuitNameGenerator) {
     if (vertices == null) {
       log.error("Set of vertices is null, reverting to empty set");
       this.vertices = Collections.EMPTY_SET;
     } else {
       this.vertices = vertices;
+    }
+    if (dynCircuitNameGenerator==null) {
+      log.error("Initialized with empty forwarding variable name generator");
+      this.dynCircuitNameGenerator = new LPEmptyNameGenratorImpl<>();
+    } else {
+      this.dynCircuitNameGenerator = dynCircuitNameGenerator;
     }
   }
 
@@ -52,13 +54,17 @@ public class DynCircuitVarGroupInitializer extends LPGroupInitializer {
       this.circuitClasses = 1;
     }
     try {
-      LPVarGroup group = this.getGroup().getModel().getLPVarGroup(this.getGroup().getIdentifier());
+      LPConstraintGroup group = this.getGroup().getModel().getLPConstraintGroup(this.getGroup().getIdentifier());
       for (int n=1; n<=circuitClasses; n++) {
         for (String i: vertices) {
           for (String j: vertices) {
             if (i.equals(j))
               continue;
-            this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(Integer.toString(n), i, j), LPVarType.INTEGER, 0, model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX).getValue(), group);
+            LPExpression lhs = new LPExpression(model());
+            LPExpression rhs = new LPExpression(model());
+            lhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(Integer.toString(n), i, j)));
+            rhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(Integer.toString(n), j, i)));
+            model().addConstraint(generator().getName(Integer.toString(n), i, j), lhs, LPOperator.EQUAL, rhs, group);
           }
         }
       }
