@@ -8,7 +8,6 @@ public interface VariablePrefixes {
   String FORWARDING = "F";
   String DYN_CIRTUIT = "X";
   String CAPACITY = "C";
-  String DEMANDED_CAPACITY = "DC";
   String LINK_WEIGHT = "W";
 
 }
