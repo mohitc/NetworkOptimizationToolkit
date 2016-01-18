@@ -10,4 +10,7 @@ public interface VariableBoundConstants {
   public static final String DYN_CIRTUITS_MAX = "M(MAX)";
 
   public static final String CIRCUIT_CLASSES = "N";
+
+  public static final String CAP_MAX = "C(MAX)";
+
 }

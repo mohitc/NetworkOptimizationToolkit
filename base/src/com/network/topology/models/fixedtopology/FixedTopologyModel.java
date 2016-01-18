@@ -8,6 +8,7 @@ import com.lpapi.entities.LPObjType;
 import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
+import com.network.topology.capacity.vars.CapacityVarGroupInitializer;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGenerator;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupInitializer;
 import com.network.topology.dyncircuits.vars.DynCircuitVarGroupInitializer;
@@ -101,6 +102,8 @@ public class FixedTopologyModel {
     model.createLpConstant(VariableBoundConstants.DYN_CIRTUITS_MAX, 1, constantGroup);
     //constant to indicate the number of distinct dynamic circuit categories available
     model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, 2, constantGroup);
+    //constant to indicate the max capacity C(inf) for a link between a pair of nodes
+    model.createLpConstant(VariableBoundConstants.CAP_MAX, 100000, constantGroup);
 
     LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, factory.getLinkExistsConstantNameGenerator(), true);
     model.createLPConstantGroup("Hat(LinkExists)", "Constants to indicate if link existed in original topology", factory.getLinkExistsConstantNameGenerator(),
@@ -131,6 +134,8 @@ public class FixedTopologyModel {
     RoutingCostVarGroupInitializer rcVarGroupInitializer = new RoutingCostVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("RoutingCost", "Routing Cost variables", factory.getRoutingCostNameGenerator(), rcVarGroupInitializer);
 
+    CapacityVarGroupInitializer capacityVarGroupInitializer = new CapacityVarGroupInitializer(vertexLabels);
+    model.createLPVarGroup("LinkCapacity", "Variables to indicate link capacity", factory.getCapacityNameGenerator(), capacityVarGroupInitializer);
     try {
       int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
       DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);

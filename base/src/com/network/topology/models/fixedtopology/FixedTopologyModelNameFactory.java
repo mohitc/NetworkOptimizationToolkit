@@ -1,6 +1,7 @@
 package com.network.topology.models.fixedtopology;
 
 import com.lpapi.entities.group.LPNameGenerator;
+import com.network.topology.capacity.vars.CapacityVarNameGenerator;
 import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
 import com.network.topology.forwarding.vars.ForwardingVarNameGenerator;
 import com.network.topology.linkexists.constants.LinkExistsConstantNameGenerator;
@@ -73,5 +74,13 @@ public class FixedTopologyModelNameFactory {
     return _dynCircuitVarNameGenerator;
   }
 
+  private LPNameGenerator _capacityVarNameGenerator;
+
+  public LPNameGenerator getCapacityNameGenerator() {
+    if (_capacityVarNameGenerator == null) {
+      _capacityVarNameGenerator = new CapacityVarNameGenerator(vertexLabels);
+    }
+    return _capacityVarNameGenerator;
+  }
 
 }
