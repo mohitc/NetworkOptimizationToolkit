@@ -1,16 +1,6 @@
-/*
- *  Copyright 2013 ADVA Optical Networking SE. All rights reserved.
- *
- *  Owner: mchamania
- *
- *  $Id: $
- */
 package com.network.topology.linkexists.constants;
 
 import com.lpapi.entities.LPConstantGroup;
-import com.lpapi.entities.LPConstraintGroup;
-import com.lpapi.entities.LPExpression;
-import com.lpapi.entities.LPOperator;
 import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;

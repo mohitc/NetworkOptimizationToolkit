@@ -46,7 +46,7 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
       this.vertexVars= vertexVars;
     } else {
       log.error("Null topology manager provided for initializing constraints");
-      vertexVars = Collections.EMPTY_SET;
+      this.vertexVars = Collections.EMPTY_SET;
     }
     if (linkExistsNameGenerator==null) {
       log.error("Initialized with empty variable name generator");

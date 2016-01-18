@@ -28,6 +28,8 @@ import com.network.topology.linkexists.constraints.LinkExistsConstrNameGenerator
 import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsVarGroupInitializer;
 import com.network.topology.linkweight.constants.LinkWeightConstantGroupInitializer;
+import com.network.topology.linkweight.constraints.LinkWeightConstrGroupInitializer;
+import com.network.topology.linkweight.constraints.LinkWeightConstrNameGenerator;
 import com.network.topology.linkweight.vars.LinkWeightVarGroupInitializer;
 import com.network.topology.routing.constraints.*;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarGroupInitializer;
@@ -213,6 +215,12 @@ public class FixedTopologyModel {
     ForwardingBasedRoutingConstrNameGenerator forwardingBasedRoutingConstrNameGenerator = new ForwardingBasedRoutingConstrNameGenerator(vertexLabels);
     ForwardingBasedRoutingConstrGroupInitializer forwardingBasedRoutingConstrGroupInitializer = new ForwardingBasedRoutingConstrGroupInitializer(vertexLabels, factory.getForwardingNameGenerator(), factory.getRoutingNameGenerator());
     model.createLPConstraintGroup("ForwardingRouting", "Routing follows forwarding", forwardingBasedRoutingConstrNameGenerator, forwardingBasedRoutingConstrGroupInitializer);
+
+    //Link weight constraint
+    LinkWeightConstrNameGenerator linkWeightConstrNameGenerator = new LinkWeightConstrNameGenerator(vertexLabels);
+    LinkWeightConstrGroupInitializer linkWeightConstrGroupInitializer = new LinkWeightConstrGroupInitializer(vertexLabels, factory.getLinkWeightVarNameGenerator(),
+      factory.getLinkExistsNameGenerator(), factory.getLinkWeightConstantNameGenerator());
+    model.createLPConstraintGroup("LinkWeightConstr", "Constraints to define link weight", linkWeightConstrNameGenerator, linkWeightConstrGroupInitializer);
   }
 
   public void initModel() throws LPModelException {
