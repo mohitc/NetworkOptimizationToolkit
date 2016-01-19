@@ -56,7 +56,7 @@ public class ForwardingBasedRoutingConstrGroupInitializer extends LPGroupInitial
             if (d.equals(i))
               continue;
             for (String j : vertexVars) {
-              if (i.equals(j))
+              if (i.equals(j) || s.equals(j))
                 continue;
               LPExpression lhs = new LPExpression(model());
               lhs.addTerm(model().getLPVar(routingNameGenerator.getName(s, d, i, j)));

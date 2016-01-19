@@ -1,10 +1,3 @@
-/*
- *  Copyright 2013 ADVA Optical Networking SE. All rights reserved.
- *
- *  Owner: mchamania
- *
- *  $Id: $
- */
 package com.network.topology.linkexists.constraints;
 
 import com.lpapi.entities.LPConstraintGroup;
@@ -90,7 +83,7 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
           lhs1.addTerm(model().getLPVar(linkExistsNameGenerator.getName(i, j)));
           LPExpression rhs1 = new LPExpression(model());
           rhs1.addTerm(model().getLPConstant(fixedLinkExistsNameGenerator.getName(i, j)));
-          model().addConstraint(generator().getName("1", i, j), lhs1, LPOperator.GREATER_EQUAL, rhs1, group);
+          model().addConstraint(generator().getName(1, i, j), lhs1, LPOperator.GREATER_EQUAL, rhs1, group);
 
           //Constr 2
           //LE(ij) >=Sum[X(n)(ij)] / M
@@ -101,7 +94,7 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
           for (int n=1; n <= vertexClasses; n++) {
             rhs2.addTerm(coeff, model().getLPVar(dynCircuitNameGenerator.getName(i, j, n)));
           }
-          model().addConstraint(generator().getName("2", i, j), lhs2, LPOperator.GREATER_EQUAL, rhs2, group);
+          model().addConstraint(generator().getName(2, i, j), lhs2, LPOperator.GREATER_EQUAL, rhs2, group);
 
           LPExpression lhs3 = new LPExpression(model());
           lhs3.addTerm(model().getLPVar(linkExistsNameGenerator.getName(i, j)));
@@ -111,7 +104,7 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
             rhs3.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(i, j, n)));
           }
           rhs3.addTerm(model().getLPConstant(fixedLinkExistsNameGenerator.getName(i, j)));
-          model().addConstraint(generator().getName("3", i, j), lhs3, LPOperator.LESS_EQUAL, rhs3, group);
+          model().addConstraint(generator().getName(3, i, j), lhs3, LPOperator.LESS_EQUAL, rhs3, group);
 
         }
       }
