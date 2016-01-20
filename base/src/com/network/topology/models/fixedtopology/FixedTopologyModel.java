@@ -4,7 +4,6 @@ import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPObjType;
-//import com.lpapi.entities.gurobi.impl.CplexLPModel;
 import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
@@ -14,29 +13,25 @@ import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupIn
 import com.network.topology.dyncircuits.constraints.SymDynCirConstrGroupInitializer;
 import com.network.topology.dyncircuits.constraints.SymDynCirConstrNameGenerator;
 import com.network.topology.dyncircuits.vars.DynCircuitVarGroupInitializer;
-import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrNameGenerator;
 import com.network.topology.forwarding.constraints.UniqueForwardingConstrGroupInitializer;
 import com.network.topology.forwarding.constraints.UniqueForwardingConstrNameGenerator;
 import com.network.topology.forwarding.vars.ForwardingVarGroupInitializer;
-import com.network.topology.forwarding.vars.ForwardingVarNameGenerator;
 import com.network.topology.linkexists.constants.LinkExistsConstantGroupInitializer;
-import com.network.topology.linkexists.constants.LinkExistsConstantNameGenerator;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrGroupInitializer;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrNameGenerator;
 import com.network.topology.linkexists.constraints.LinkExistsConstrGroupInitializer;
 import com.network.topology.linkexists.constraints.LinkExistsConstrNameGenerator;
-import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
 import com.network.topology.linkexists.vars.LinkExistsVarGroupInitializer;
 import com.network.topology.linkweight.constants.LinkWeightConstantGroupInitializer;
 import com.network.topology.linkweight.constraints.LinkWeightConstrGroupInitializer;
 import com.network.topology.linkweight.constraints.LinkWeightConstrNameGenerator;
 import com.network.topology.linkweight.vars.LinkWeightVarGroupInitializer;
 import com.network.topology.routing.constraints.*;
+import com.network.topology.routing.routingcost.constraints.RoutingCostConstrGroupInitializer;
+import com.network.topology.routing.routingcost.constraints.RoutingCostConstrNameGenerator;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarGroupInitializer;
-import com.network.topology.routing.routingcost.vars.RoutingCostVarNameGenerator;
-import com.network.topology.routing.vars.RoutingNameGenerator;
 import com.network.topology.routing.vars.RoutingVarGroupInitializer;
 import com.topology.impl.primitives.TopologyManagerFactoryImpl;
 import com.topology.primitives.*;
@@ -214,6 +209,10 @@ public class FixedTopologyModel {
     SymmetricRoutingConstrGroupInitializer symmetricRoutingConstrGroupInitializer = new SymmetricRoutingConstrGroupInitializer(vertexLabels, factory.getRoutingNameGenerator());
     model.createLPConstraintGroup("SymmetricRouting", "Constraint to ensure symmetric routing between each s-d pair", symmetricRoutingConstrNameGenerator, symmetricRoutingConstrGroupInitializer);
 
+    RoutingCostConstrNameGenerator routingCostConstrNameGenerator = new RoutingCostConstrNameGenerator(vertexLabels);
+    RoutingCostConstrGroupInitializer routingCostConstrGroupInitializer = new RoutingCostConstrGroupInitializer(vertexLabels, factory.getRoutingCostNameGenerator(),
+      factory.getRoutingNameGenerator(), factory.getLinkWeightConstantNameGenerator());
+    model.createLPConstraintGroup("RoutingCost", "Constraint to calculate routing cost based on route", routingCostConstrNameGenerator, routingCostConstrGroupInitializer);
     //Forwarding Constraints
 
     UniqueForwardingConstrNameGenerator uniqueForwardingConstrNameGenerator = new UniqueForwardingConstrNameGenerator(vertexLabels);
