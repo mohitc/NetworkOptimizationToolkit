@@ -38,7 +38,7 @@ public class RoutingVarGroupInitializer extends LPGroupInitializer {
             continue;
           for (String i: vertices) {
             for (String j: vertices) {
-              if (i.equals(j))
+              if (i.equals(j) || d.equals(i))
                 continue;
               //all incoming links to the source cannot carry traffic going out from the source
               if (j.equals(s))
