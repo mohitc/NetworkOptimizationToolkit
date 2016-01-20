@@ -29,6 +29,8 @@ import com.network.topology.linkweight.constraints.LinkWeightConstrGroupInitiali
 import com.network.topology.linkweight.constraints.LinkWeightConstrNameGenerator;
 import com.network.topology.linkweight.vars.LinkWeightVarGroupInitializer;
 import com.network.topology.routing.constraints.*;
+import com.network.topology.routing.routingcost.constraints.MinRoutingCostConstrGroupInitializer;
+import com.network.topology.routing.routingcost.constraints.MinRoutingCostConstrNameGenerator;
 import com.network.topology.routing.routingcost.constraints.RoutingCostConstrGroupInitializer;
 import com.network.topology.routing.routingcost.constraints.RoutingCostConstrNameGenerator;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarGroupInitializer;
@@ -213,6 +215,10 @@ public class FixedTopologyModel {
     RoutingCostConstrGroupInitializer routingCostConstrGroupInitializer = new RoutingCostConstrGroupInitializer(vertexLabels, factory.getRoutingCostNameGenerator(),
       factory.getRoutingNameGenerator(), factory.getLinkWeightConstantNameGenerator());
     model.createLPConstraintGroup("RoutingCost", "Constraint to calculate routing cost based on route", routingCostConstrNameGenerator, routingCostConstrGroupInitializer);
+
+    MinRoutingCostConstrNameGenerator minRoutingCostConstrNameGenerator = new MinRoutingCostConstrNameGenerator(vertexLabels);
+    MinRoutingCostConstrGroupInitializer minRoutingCostConstrGroupInitializer = new MinRoutingCostConstrGroupInitializer(vertexLabels, factory.getRoutingCostNameGenerator(), factory.getLinkWeightVarNameGenerator());
+    model.createLPConstraintGroup("MinRoutingCost", "Constraint to ensure that routing cost is minimized", minRoutingCostConstrNameGenerator, minRoutingCostConstrGroupInitializer);
     //Forwarding Constraints
 
     UniqueForwardingConstrNameGenerator uniqueForwardingConstrNameGenerator = new UniqueForwardingConstrNameGenerator(vertexLabels);

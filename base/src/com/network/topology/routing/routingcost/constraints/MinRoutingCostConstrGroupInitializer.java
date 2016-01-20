@@ -1,10 +1,3 @@
-/*
- *  Copyright 2013 ADVA Optical Networking SE. All rights reserved.
- *
- *  Owner: mchamania
- *
- *  $Id: $
- */
 package com.network.topology.routing.routingcost.constraints;
 
 import com.lpapi.entities.LPConstraintGroup;
@@ -22,15 +15,15 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Set;
 
-public class RoutingCostConstrGroupInitializer extends LPGroupInitializer {
+public class MinRoutingCostConstrGroupInitializer extends LPGroupInitializer {
 
-  private static final Logger log = LoggerFactory.getLogger(RoutingCostConstrGroupInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(MinRoutingCostConstrGroupInitializer.class);
 
   private Set<String> vertexVars;
 
-  private LPNameGenerator routingCostNameGenerator, routingNameGenerator, linkWeightConstantNameGenerator;
+  private LPNameGenerator routingCostNameGenerator, linkWeightNameGenerator;
 
-  public RoutingCostConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator routingCostNameGenerator, LPNameGenerator routingNameGenerator, LPNameGenerator linkWeightConstantNameGenerator) {
+  public MinRoutingCostConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator routingCostNameGenerator, LPNameGenerator linkWeightNameGenerator) {
     if (vertexVars!=null) {
       this.vertexVars= vertexVars;
     } else {
@@ -44,45 +37,34 @@ public class RoutingCostConstrGroupInitializer extends LPGroupInitializer {
       this.routingCostNameGenerator = routingCostNameGenerator;
     }
 
-    if (routingNameGenerator==null) {
+    if (linkWeightNameGenerator==null) {
       log.error("Initialized with empty variable name generator");
-      this.routingNameGenerator = new LPEmptyNameGenratorImpl<>();
+      this.linkWeightNameGenerator = new LPEmptyNameGenratorImpl<>();
     } else {
-      this.routingNameGenerator = routingNameGenerator;
-    }
-    if (linkWeightConstantNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkWeightConstantNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkWeightConstantNameGenerator = linkWeightConstantNameGenerator;
+      this.linkWeightNameGenerator = linkWeightNameGenerator;
     }
   }
 
   @Override
   public void run() throws LPModelException {
-    //Set<Link> links = manager.getAllElements(Link.class);
     try {
-
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
-
       for (String s: vertexVars) {
         for (String d: vertexVars) {
           if (s.equals(d))
             continue;
-          LPExpression lhs = new LPExpression(model());
-          lhs.addTerm(model().getLPVar(routingCostNameGenerator.getName(s, d)));
-          LPExpression rhs = new LPExpression(model());
-          for (String i: vertexVars) {
-            if (i.equals(d))
+          for (String x: vertexVars) {
+            if (x.equals(d))
               continue;
-            for (String j: vertexVars) {
-              if (j.equals(s) || j.equals(i))
-                continue;
-              rhs.addTerm(model().getLPConstant(linkWeightConstantNameGenerator.getName(s,d)).getValue(), model().getLPVar(routingNameGenerator.getName(s, d, i, j)));
-
+            LPExpression lhs = new LPExpression(model());
+            lhs.addTerm(model().getLPVar(routingCostNameGenerator.getName(s, d)));
+            LPExpression rhs = new LPExpression(model());
+            rhs.addTerm(model().getLPVar(linkWeightNameGenerator.getName(x,d)));
+            if (!x.equals(s)) { //RC ss == 0
+              rhs.addTerm(model().getLPVar(routingCostNameGenerator.getName(s,x)));
             }
+            model().addConstraint(generator().getName(s, d), lhs, LPOperator.LESS_EQUAL, rhs, group);
           }
-          model().addConstraint(generator().getName(s, d), lhs, LPOperator.EQUAL, rhs, group);
         }
       }
     } catch (LPNameException e) {

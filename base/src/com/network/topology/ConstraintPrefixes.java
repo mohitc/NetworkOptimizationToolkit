@@ -9,5 +9,6 @@ package com.network.topology;
 
 public interface ConstraintPrefixes {
 
+  String MIN_ROUTING_COST = "MinRoutingCostConstr";
   String ROUTING_COST = "RoutingCostConstr";
 }
