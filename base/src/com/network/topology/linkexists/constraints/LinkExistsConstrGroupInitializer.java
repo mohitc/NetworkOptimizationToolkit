@@ -92,7 +92,7 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
           LPExpression rhs2 = new LPExpression(model());
           double coeff = 1/ maxCircuits;
           for (int n=1; n <= vertexClasses; n++) {
-            rhs2.addTerm(coeff, model().getLPVar(dynCircuitNameGenerator.getName(i, j, n)));
+            rhs2.addTerm(coeff, model().getLPVar(dynCircuitNameGenerator.getName(n, i, j)));
           }
           model().addConstraint(generator().getName(2, i, j), lhs2, LPOperator.GREATER_EQUAL, rhs2, group);
 
@@ -101,7 +101,7 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
 
           LPExpression rhs3 = new LPExpression(model());
           for (int n=1; n <= vertexClasses; n++) {
-            rhs3.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(i, j, n)));
+            rhs3.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(n, i, j)));
           }
           rhs3.addTerm(model().getLPConstant(fixedLinkExistsNameGenerator.getName(i, j)));
           model().addConstraint(generator().getName(3, i, j), lhs3, LPOperator.LESS_EQUAL, rhs3, group);

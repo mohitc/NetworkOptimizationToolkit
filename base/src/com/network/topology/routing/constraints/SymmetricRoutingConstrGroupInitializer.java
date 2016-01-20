@@ -47,10 +47,13 @@ public class SymmetricRoutingConstrGroupInitializer extends LPGroupInitializer {
           if (s.compareTo(d)<=0)
             continue;
           for (String i : vertexVars) {
+            if (i.equals(d))
+              continue;
             for (String j : vertexVars) {
               if (i.compareTo(j)<=0)
                 continue;
-
+              if (j.equals(s))
+                continue;;
               LPExpression lhs = new LPExpression(model());
               lhs.addTerm(model().getLPVar(routingNameGenerator.getName(s, d, i, j)));
               LPExpression rhs = new LPExpression(model());

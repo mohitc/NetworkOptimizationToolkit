@@ -63,7 +63,7 @@ public class MinRoutingCostConstrGroupInitializer extends LPGroupInitializer {
             if (!x.equals(s)) { //RC ss == 0
               rhs.addTerm(model().getLPVar(routingCostNameGenerator.getName(s,x)));
             }
-            model().addConstraint(generator().getName(s, d), lhs, LPOperator.LESS_EQUAL, rhs, group);
+            model().addConstraint(generator().getName(s, x, d), lhs, LPOperator.LESS_EQUAL, rhs, group);
           }
         }
       }

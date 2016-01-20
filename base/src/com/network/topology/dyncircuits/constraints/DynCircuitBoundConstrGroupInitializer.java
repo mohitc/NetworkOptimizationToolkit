@@ -50,7 +50,7 @@ public class DynCircuitBoundConstrGroupInitializer extends LPGroupInitializer {
             continue;
           LPExpression lhs = new LPExpression(model());
           for (int n=1; n <= vertexClasses; n++) {
-            lhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(s, d, n)));
+            lhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(n, s, d)));
           }
           LPExpression rhs = new LPExpression(model());
           rhs.addTerm(model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX));

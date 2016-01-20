@@ -53,8 +53,10 @@ public class RoutingConstrGroupInitializer extends LPGroupInitializer {
           if (s.equals(d))
             continue;
           for (String i : vertexVars) {
+            if (i.equals(d))
+              continue;
             for (String j : vertexVars) {
-              if (i.equals(j))
+              if (i.equals(j) || j.equals(s))
                 continue;
 
               LPExpression lhs = new LPExpression(model());

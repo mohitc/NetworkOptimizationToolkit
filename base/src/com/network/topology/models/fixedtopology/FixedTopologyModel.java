@@ -5,6 +5,7 @@ import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPObjType;
 import com.lpapi.entities.gurobi.impl.GurobiLPModel;
+import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
 import com.network.topology.capacity.vars.CapacityVarGroupInitializer;
@@ -238,7 +239,8 @@ public class FixedTopologyModel {
 
   public void initModel() throws LPModelException {
 //    model = new CplexLPModel("Test");
-    model = new GurobiLPModel("Test");
+//    model = new GurobiLPModel("Test");
+    model = new SkeletonLPModel("Test");
   }
 
 
