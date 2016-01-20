@@ -64,7 +64,7 @@ public class SymDynCirConstrGroupInitializer extends LPGroupInitializer {
             LPExpression rhs = new LPExpression(model());
             lhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(Integer.toString(n), i, j)));
             rhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(Integer.toString(n), j, i)));
-            model().addConstraint(generator().getName(Integer.toString(n), i, j), lhs, LPOperator.EQUAL, rhs, group);
+            model().addConstraint(generator().getName(n, i, j), lhs, LPOperator.EQUAL, rhs, group);
           }
         }
       }
