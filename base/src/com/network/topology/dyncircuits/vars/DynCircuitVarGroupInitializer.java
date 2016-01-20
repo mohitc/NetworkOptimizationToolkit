@@ -51,7 +51,7 @@ public class DynCircuitVarGroupInitializer extends LPGroupInitializer {
           for (String j: vertices) {
             if (i.equals(j))
               continue;
-            this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(Integer.toString(n), i, j), LPVarType.INTEGER, 0, model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX).getValue(), group);
+            this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(n, i, j), LPVarType.INTEGER, 0, model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX).getValue(), group);
           }
         }
       }
