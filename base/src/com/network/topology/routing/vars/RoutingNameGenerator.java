@@ -36,7 +36,8 @@ public class RoutingNameGenerator extends LPNameGeneratorImpl<String> {
     addValidator(new LPDistinctPrefixValidator(0, 1, "Source and destination cannot be the same"));
     addValidator(new LPDistinctPrefixValidator(1, 2, "d != i"));
     addValidator(new LPDistinctPrefixValidator(2, 3, "i != j"));
-    addValidator(new LPDistinctPrefixValidator(0, 3, "s != j"));  }
+  //  addValidator(new LPDistinctPrefixValidator(0, 3, "s != j"));
+  }
 
   @Override
   protected void validatePrefixConstraint(List<String> strings) throws LPNameException {
