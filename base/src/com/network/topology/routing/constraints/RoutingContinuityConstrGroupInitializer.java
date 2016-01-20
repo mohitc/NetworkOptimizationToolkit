@@ -53,9 +53,9 @@ public class RoutingContinuityConstrGroupInitializer extends LPGroupInitializer 
             for (String i: vertexVars) {
               if (i.equals(k))
                 continue;
-              if (!i.equals(s))
+              if ((!i.equals(s)) || (k.equals(d))) //dont calculate sum1 when k equals d
                 sum1.addTerm(model().getLPVar(routingNameGenerator.getName(s,d,k,i)));
-              if (!i.equals(d))
+              if ((!i.equals(d)) || (k.equals(s))) //dont calculate sum2 when k equals s
                 sum2.addTerm(model().getLPVar(routingNameGenerator.getName(s, d, i, k)));
             }
             LPExpression constExpr = new LPExpression(model());
