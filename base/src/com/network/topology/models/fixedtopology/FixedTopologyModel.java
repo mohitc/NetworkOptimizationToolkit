@@ -8,6 +8,8 @@ import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
+import com.network.topology.capacity.constants.CapacityConstGroupInitializer;
+import com.network.topology.capacity.constants.InitialCapacityConstGroupInitializer;
 import com.network.topology.capacity.vars.CapacityVarGroupInitializer;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGenerator;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupInitializer;
@@ -119,6 +121,14 @@ public class FixedTopologyModel {
     model.createLPConstantGroup("Hat(W)", "Constants to indicate weight of link if exists", factory.getLinkWeightConstantNameGenerator(),
       linkWeightConstantGroupInitializer);
 
+    CapacityConstGroupInitializer capacityConstGroupInitializer = new CapacityConstGroupInitializer(getVertexLabels(),factory.getCapacityConstNameGenerator(), _instance);
+    model.createLPConstantGroup("lambda", "Constants to indicate requested capacity between two nodes", factory.getCapacityConstNameGenerator(),
+      capacityConstGroupInitializer);
+
+    InitialCapacityConstGroupInitializer initialCapacityConstGroupInitializer = new InitialCapacityConstGroupInitializer(getVertexLabels(),factory.getInitialCapacityConstNameGenerator(), _instance);
+    model.createLPConstantGroup("Hat(C)", "Constants to store the initial capacity between each node pair",
+            factory.getInitialCapacityConstNameGenerator(), initialCapacityConstGroupInitializer);
+
   }
 
   public void initVarGroups() throws LPVarGroupException {
@@ -146,7 +156,7 @@ public class FixedTopologyModel {
     model.createLPVarGroup("RoutingCost", "Routing Cost variables", factory.getRoutingCostNameGenerator(), rcVarGroupInitializer);
 
     CapacityVarGroupInitializer capacityVarGroupInitializer = new CapacityVarGroupInitializer(vertexLabels);
-    model.createLPVarGroup("LinkCapacity", "Variables to indicate link capacity", factory.getCapacityNameGenerator(), capacityVarGroupInitializer);
+    model.createLPVarGroup("LinkCapacity", "Variables to indicate link capacity", factory.getCapacityVarNameGenerator(), capacityVarGroupInitializer);
 
     LinkWeightVarGroupInitializer linkWeightVarGroupInitializer = new LinkWeightVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("LinkWeight", "Variables to indicate link weights", factory.getLinkWeightVarNameGenerator(), linkWeightVarGroupInitializer);

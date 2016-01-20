@@ -21,7 +21,7 @@ public class CapacityConstNameGenerator extends LPNameGeneratorImpl<String> {
 
     private Set<String> vertexVars;
 
-    public CapacityConstNameGenerator(String prefix, int indexCount) {
+    public CapacityConstNameGenerator(Set<String> vertexVars) {
         super(PREFIX, 2);
         if (vertexVars!=null) {
             this.vertexVars = Collections.unmodifiableSet(vertexVars);

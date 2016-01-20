@@ -1,6 +1,8 @@
 package com.network.topology.models.fixedtopology;
 
 import com.lpapi.entities.group.LPNameGenerator;
+import com.network.topology.capacity.constants.CapacityConstNameGenerator;
+import com.network.topology.capacity.constants.InitialCapacityConstNameGenerator;
 import com.network.topology.capacity.vars.CapacityVarNameGenerator;
 import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
 import com.network.topology.forwarding.vars.ForwardingVarNameGenerator;
@@ -78,11 +80,31 @@ public class FixedTopologyModelNameFactory {
 
   private LPNameGenerator _capacityVarNameGenerator;
 
-  public LPNameGenerator getCapacityNameGenerator() {
+  public LPNameGenerator getCapacityVarNameGenerator() {
     if (_capacityVarNameGenerator == null) {
       _capacityVarNameGenerator = new CapacityVarNameGenerator(vertexLabels);
     }
     return _capacityVarNameGenerator;
+  }
+
+  private LPNameGenerator _capacityConstNameGenerator;
+
+  public LPNameGenerator getCapacityConstNameGenerator() {
+    if (_capacityConstNameGenerator == null) {
+      _capacityConstNameGenerator = new CapacityConstNameGenerator(vertexLabels);
+    }
+    return _capacityVarNameGenerator;
+  }
+
+
+
+  private LPNameGenerator _initialCapacityConstNameGenerator;
+
+  public LPNameGenerator getInitialCapacityConstNameGenerator() {
+    if (_initialCapacityConstNameGenerator == null) {
+      _initialCapacityConstNameGenerator = new InitialCapacityConstNameGenerator(vertexLabels);
+    }
+    return _initialCapacityConstNameGenerator;
   }
 
   private LPNameGenerator _linkWeightVarNameGenerator;
