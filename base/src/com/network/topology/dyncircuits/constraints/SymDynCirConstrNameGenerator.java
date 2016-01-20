@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SymDynCirConstrNameGenerator extends LPNameGeneratorImpl<String> {
+public class SymDynCirConstrNameGenerator extends LPNameGeneratorImpl {
 
   private static final String PREFIX = "SYM-DYN-CIR";
 
@@ -47,7 +47,6 @@ public class SymDynCirConstrNameGenerator extends LPNameGeneratorImpl<String> {
 
   }
 
-  @Override
-  protected void validatePrefixConstraint(List<String> strings) throws LPNameException {
+  protected void validatePrefixConstraint(List strings) throws LPNameException {
   }
 }
