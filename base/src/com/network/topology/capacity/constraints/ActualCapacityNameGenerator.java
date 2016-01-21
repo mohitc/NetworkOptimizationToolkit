@@ -19,7 +19,7 @@ public class ActualCapacityNameGenerator extends LPNameGeneratorImpl<String> {
 
 	private Set<String> vertexVars;
 	
-	public ActualCapacityNameGenerator(String prefix, int indexCount) {
+	public ActualCapacityNameGenerator(Set<String> vertexVars) {
 		super(PREFIX, 2);
 	    if (vertexVars!=null) {
 		      this.vertexVars = Collections.unmodifiableSet(vertexVars);

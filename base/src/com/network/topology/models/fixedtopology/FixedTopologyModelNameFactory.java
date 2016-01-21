@@ -96,8 +96,6 @@ public class FixedTopologyModelNameFactory {
     return _capacityVarNameGenerator;
   }
 
-
-
   private LPNameGenerator _initialCapacityConstNameGenerator;
 
   public LPNameGenerator getInitialCapacityConstNameGenerator() {

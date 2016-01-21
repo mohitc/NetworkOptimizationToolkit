@@ -5,11 +5,15 @@ import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPObjType;
 import com.lpapi.entities.gurobi.impl.GurobiLPModel;
-import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
+//import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
 import com.network.topology.capacity.constants.CapacityConstGroupInitializer;
 import com.network.topology.capacity.constants.InitialCapacityConstGroupInitializer;
+import com.network.topology.capacity.constraints.ActualCapacityGroupInitializer;
+import com.network.topology.capacity.constraints.ActualCapacityNameGenerator;
+import com.network.topology.capacity.constraints.ActualDemandedCapacityGroupInitializer;
+import com.network.topology.capacity.constraints.ActualDemandedCapacityNameGenerator;
 import com.network.topology.capacity.vars.CapacityVarGroupInitializer;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGenerator;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupInitializer;
@@ -204,6 +208,34 @@ public class FixedTopologyModel {
       SymDynCirConstrGroupInitializer symDynCirConstrGroupInitializer = new SymDynCirConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator(circuitClasses));
       model.createLPConstraintGroup("SymDynCirConstr", "Constraints to symmetric dynamic circuits", symDynCirConstrNameGenerator, symDynCirConstrGroupInitializer);
 
+      //Capacity constraints
+      ActualCapacityNameGenerator actualCapacityNameGenerator =
+              new ActualCapacityNameGenerator(vertexLabels);
+      ActualCapacityGroupInitializer actualCapacityGroupInitializer =
+              new ActualCapacityGroupInitializer(
+                      vertexLabels,
+                      actualCapacityNameGenerator,
+                      factory.getInitialCapacityConstNameGenerator(),
+                      factory.getDynamicCircuitNameGenerator(circuitClasses)
+              );
+      model.createLPConstraintGroup("ActualCapacityConstr",
+              "Constraints to instantiated capacity equal to initial plus dynaimc circuits",
+              actualCapacityNameGenerator, actualCapacityGroupInitializer);
+      ActualDemandedCapacityNameGenerator actualDemandedCapacityNameGenerator =
+              new ActualDemandedCapacityNameGenerator(vertexLabels);
+      ActualDemandedCapacityGroupInitializer actualDemandedCapacityGroupInitializer =
+              new ActualDemandedCapacityGroupInitializer(
+                      vertexLabels,
+                      factory.getCapacityVarNameGenerator(),
+                      factory.getCapacityConstNameGenerator(),
+                      factory.getDynamicCircuitNameGenerator(circuitClasses),
+                      _instance
+              );
+      model.createLPConstraintGroup("ActualDemandedCapacityConstr",
+              "Constrains instantiated capacity to be at least as big as requested",
+              actualDemandedCapacityNameGenerator, actualDemandedCapacityGroupInitializer);
+
+
     } catch (LPConstantException e) {
       log.error("Constant to indicate the number of dynamic circuit classes not defined");
     }
@@ -249,8 +281,8 @@ public class FixedTopologyModel {
 
   public void initModel() throws LPModelException {
 //    model = new CplexLPModel("Test");
-//    model = new GurobiLPModel("Test");
-    model = new SkeletonLPModel("Test");
+    model = new GurobiLPModel("Test");
+//    model = new SkeletonLPModel("Test");
   }
 
 
