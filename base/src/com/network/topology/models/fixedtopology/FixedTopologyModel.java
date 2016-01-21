@@ -42,12 +42,15 @@ import com.network.topology.routing.routingcost.constraints.RoutingCostConstrGro
 import com.network.topology.routing.routingcost.constraints.RoutingCostConstrNameGenerator;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarGroupInitializer;
 import com.network.topology.routing.vars.RoutingVarGroupInitializer;
+import com.topology.impl.importers.sndlib.SNDLibImportTopology;
 import com.topology.impl.primitives.TopologyManagerFactoryImpl;
 import com.topology.primitives.*;
+import com.topology.primitives.exception.FileFormatException;
 import com.topology.primitives.exception.TopologyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,27 +68,27 @@ public class FixedTopologyModel {
   public TopologyManager initTopology() throws TopologyException {
     TopologyManagerFactory factory = new TopologyManagerFactoryImpl();
     TopologyManager manager = factory.createTopologyManager("Test");
-    NetworkElement ne1 = manager.createNetworkElement();
-    ne1.setLabel("1");
-    ConnectionPoint cp1 = manager.createConnectionPoint(ne1);
-    cp1.setLabel("1");
-    NetworkElement ne2 = manager.createNetworkElement();
-    ne2.setLabel("2");
-    ConnectionPoint cp2 = manager.createConnectionPoint(ne2);
-    cp2.setLabel("2");
-    NetworkElement ne3 = manager.createNetworkElement();
-    ne3.setLabel("3");
-    ConnectionPoint cp3 = manager.createConnectionPoint(ne3);
-    cp3.setLabel("3");
-    NetworkElement ne4 = manager.createNetworkElement();
-    ne4.setLabel("4");
-    ConnectionPoint cp4 = manager.createConnectionPoint(ne4);
-    cp4.setLabel("4");
-
-    Link link12 = manager.createLink(cp1.getID(), cp2.getID());
-    Link link23 = manager.createLink(cp2.getID(), cp3.getID());
-    Link link34 = manager.createLink(cp3.getID(), cp4.getID());
-    Link link41 = manager.createLink(cp4.getID(), cp1.getID());
+//    NetworkElement ne1 = manager.createNetworkElement();
+//    ne1.setLabel("1");
+//    ConnectionPoint cp1 = manager.createConnectionPoint(ne1);
+//    cp1.setLabel("1");
+//    NetworkElement ne2 = manager.createNetworkElement();
+//    ne2.setLabel("2");
+//    ConnectionPoint cp2 = manager.createConnectionPoint(ne2);
+//    cp2.setLabel("2");
+//    NetworkElement ne3 = manager.createNetworkElement();
+//    ne3.setLabel("3");
+//    ConnectionPoint cp3 = manager.createConnectionPoint(ne3);
+//    cp3.setLabel("3");
+//    NetworkElement ne4 = manager.createNetworkElement();
+//    ne4.setLabel("4");
+//    ConnectionPoint cp4 = manager.createConnectionPoint(ne4);
+//    cp4.setLabel("4");
+//
+//    Link link12 = manager.createLink(cp1.getID(), cp2.getID());
+//    Link link23 = manager.createLink(cp2.getID(), cp3.getID());
+//    Link link34 = manager.createLink(cp3.getID(), cp4.getID());
+//    Link link41 = manager.createLink(cp4.getID(), cp1.getID());
 
     return manager;
   }
@@ -292,6 +295,9 @@ public class FixedTopologyModel {
       FixedTopologyModel lpModel = new FixedTopologyModel();
 
       lpModel._instance = lpModel.initTopology();
+      SNDLibImportTopology importer = new SNDLibImportTopology();
+      importer.importFromFile("nobel-us.xml", lpModel._instance);
+
 
       lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels());
 
@@ -308,6 +314,10 @@ public class FixedTopologyModel {
       log.error("Error initializing model", e);
     } catch (TopologyException e) {
       log.error("Error initializing topology", e);
+    } catch (FileFormatException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      log.error("Error initializing model file", e);
     }
   }
 
