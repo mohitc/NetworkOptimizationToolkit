@@ -93,7 +93,7 @@ public class FixedTopologyModelNameFactory {
     if (_capacityConstNameGenerator == null) {
       _capacityConstNameGenerator = new CapacityConstNameGenerator(vertexLabels);
     }
-    return _capacityVarNameGenerator;
+    return _capacityConstNameGenerator;
   }
 
   private LPNameGenerator _initialCapacityConstNameGenerator;
