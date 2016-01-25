@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<circuitclasses>
+    <circuitclass>
+        <classtype>1</classtype>
+        <cap>2500</cap>
+        <cost>1</cost>
+    </circuitclass>
+    <circuitclass>
+        <classtype>2</classtype>
+        <cap>10000</cap>
+        <cost>3</cost>
+    </circuitclass>
+    <circuitclass>
+        <classtype>3</classtype>
+        <cap>40000</cap>
+        <cost>9</cost>
+    </circuitclass>
+    <circuitclass>
+        <classtype>4</classtype>
+        <cap>10000</cap>
+        <cost>22</cost>
+    </circuitclass>
+</circuitclasses>
