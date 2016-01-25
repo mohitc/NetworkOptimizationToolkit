@@ -217,7 +217,7 @@ public class FixedTopologyModel {
       ActualCapacityGroupInitializer actualCapacityGroupInitializer =
               new ActualCapacityGroupInitializer(
                       vertexLabels,
-                      actualCapacityNameGenerator,
+                      factory.getCapacityVarNameGenerator(),//actualCapacityNameGenerator
                       factory.getInitialCapacityConstNameGenerator(),
                       factory.getDynamicCircuitNameGenerator(circuitClasses)
               );
