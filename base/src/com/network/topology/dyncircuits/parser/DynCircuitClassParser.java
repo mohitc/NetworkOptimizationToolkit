@@ -11,9 +11,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class DynCircuitClassParser {
 
@@ -25,26 +23,26 @@ public class DynCircuitClassParser {
     this.fileName = fileName;
   }
 
-  private List<DynCircuitClass> result = null;
+  private Map<Integer, DynCircuitClass> result = null;
 
-  public List<DynCircuitClass> getResult() {
+  public Map<Integer, DynCircuitClass> getResult() {
     if (result==null) {
       result = parse();
     }
     return result;
   }
 
-  private List<DynCircuitClass> parse() {
+  private Map<Integer, DynCircuitClass> parse() {
     //List<DynCircuitClass> outList = new ArrayList<>();
     if (fileName==null) {
       log.error("Null file name not allowed. Defaulting to empty capacity list");
-      return Collections.EMPTY_LIST;
+      return Collections.EMPTY_MAP;
     }
     log.info("Starting scan of circuit capacities from the file " + (fileName));
     File capFile = new File(fileName);
     if (!(capFile.exists() && capFile.isFile())) {
       log.error("Invalid path provided to file for dynamic circuit capacities. Defaulting to empty list.");
-      return Collections.EMPTY_LIST;
+      return Collections.EMPTY_MAP;
     }
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = null;
@@ -54,7 +52,7 @@ public class DynCircuitClassParser {
       doc = builder.parse(capFile);
       if (doc==null) {
         log.error("No document found. Please check XML file. Defaulting to empty list");
-        return Collections.EMPTY_LIST;
+        return Collections.EMPTY_MAP;
       }
       //Normalize document
       doc.normalizeDocument();
@@ -63,17 +61,17 @@ public class DynCircuitClassParser {
       log.error("Error while setting up XML parser", e);
     }
     //In case of exception, return empty List
-    return Collections.EMPTY_LIST;
+    return Collections.EMPTY_MAP;
   }
 
-  private List<DynCircuitClass> parseDynCircuitClasses(Document doc) {
+  private Map<Integer, DynCircuitClass> parseDynCircuitClasses(Document doc) {
     NodeList list = doc.getElementsByTagName("circuitclasses");
     if (list.getLength()!=1) {
       log.error("The document should only have one tag with the list of all circuit classes. Defaulting to empty list");
-      return Collections.EMPTY_LIST;
+      return Collections.EMPTY_MAP;
     }
 
-    List<DynCircuitClass> outList = new ArrayList<>();
+    Map<Integer, DynCircuitClass> outList = new HashMap<>();
     //Parse circuits
     NodeList nodeList = list.item(0).getChildNodes();
     for (int i=0;i<nodeList.getLength(); i++) {
@@ -86,8 +84,13 @@ public class DynCircuitClassParser {
           double capacity = extractDoubleVal(parent, "cap");
           double cost  = extractDoubleVal(parent, "cost");
           //no exception, create object
-          outList.add(new DynCircuitClass(classType, capacity, cost));
-          log.info("Circuit Class Parsed: " + outList.get(outList.size() - 1));
+          DynCircuitClass circuitClass = new DynCircuitClass(classType, capacity, cost);
+          if (outList.containsKey(classType)) {
+            log.error("Circuit classtype clash. Object " + circuitClass + " ignored");
+          } else {
+            outList.put(classType, circuitClass);
+            log.info("Circuit Class Parsed: " + circuitClass);
+          }
         } catch (IOException e) {
           log.error("Error while parsing element. Skipping class creation: " + e.getMessage());
         }

@@ -68,6 +68,8 @@ public class FixedTopologyModel {
 
   private FixedTopologyModelNameFactory factory;
 
+  private DynCircuitClassParser dynCircuitParser;
+
   public TopologyManager initTopology() throws TopologyException {
     TopologyManagerFactory factory = new TopologyManagerFactoryImpl();
     TopologyManager manager = factory.createTopologyManager("Test");
@@ -112,14 +114,13 @@ public class FixedTopologyModel {
       log.error("LPModel provided is not initialized, skipping var group generation");
       return;
     }
-    DynCircuitClassParser parser = new DynCircuitClassParser("conf/circuit-cap.xml");
 
     LPConstantGroup constantGroup = model.createLPConstantGroup(VariableBoundConstants.GROUP_NAME, VariableBoundConstants.GROUP_DESC);
     model.createLpConstant(VariableBoundConstants.ROUTING_COST_MAX, 1000, constantGroup);
     //constant to indicate the max number of dynamic circuits between a pair of nodes
     model.createLpConstant(VariableBoundConstants.DYN_CIRTUITS_MAX, 1, constantGroup);
     //constant to indicate the number of distinct dynamic circuit categories available
-    model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, parser.getResult().size(), constantGroup);
+    model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, dynCircuitParser.getResult().keySet().size(), constantGroup);
     //constant to indicate the max capacity C(inf) for a link between a pair of nodes
     model.createLpConstant(VariableBoundConstants.CAP_MAX, 100000, constantGroup);
     //constant to indicate the max capacity C(inf) for a link between a pair of nodes
@@ -224,7 +225,8 @@ public class FixedTopologyModel {
                       vertexLabels,
                       factory.getCapacityVarNameGenerator(),
                       factory.getInitialCapacityConstNameGenerator(),
-                      factory.getDynamicCircuitNameGenerator(circuitClasses)
+                      factory.getDynamicCircuitNameGenerator(circuitClasses),
+                dynCircuitParser.getResult()
               );
       model.createLPConstraintGroup("ActualCapacityConstr",
               "Constraints to instantiated capacity equal to initial plus dynaimc circuits",
@@ -305,6 +307,8 @@ public class FixedTopologyModel {
 
 
       lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels());
+
+      lpModel.dynCircuitParser = new DynCircuitClassParser("conf/circuit-cap.xml");
 
       lpModel.initModel();
       lpModel.initConstants();
