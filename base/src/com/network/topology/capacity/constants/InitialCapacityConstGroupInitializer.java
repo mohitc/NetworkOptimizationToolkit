@@ -21,41 +21,33 @@ import java.util.Set;
  * Created by fpederzolli on 16/01/16.
  */
 public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
-    private static final Logger log = LoggerFactory.getLogger(InitialCapacityConstGroupInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(InitialCapacityConstGroupInitializer.class);
 
-    private Set<String> vertices;
+  private Set<String> vertices;
 
-    private LPNameGenerator capacityConstNameGenerator;
+  private TopologyManager topo;
 
-    private TopologyManager topo;
-
-    public InitialCapacityConstGroupInitializer(Set<String> vertices, LPNameGenerator capacityConstNameGenerator, TopologyManager topo) {
-        if (vertices==null) {
-            log.error("Set of vertices is null, reverting to empty set");
-            this.vertices = Collections.EMPTY_SET;
-        } else {
-            this.vertices = vertices;
-        }
-
-        if (capacityConstNameGenerator==null) {
-            log.error("Initialized with empty variable name generator");
-            this.capacityConstNameGenerator = new LPEmptyNameGenratorImpl<>();
-        } else {
-            this.capacityConstNameGenerator = capacityConstNameGenerator;
-        }
-
-        if (topo==null) {
-            log.error("Initialized with empty variable topology manager");
-            this.topo = new TopologyManagerImpl("New");
-        } else {
-            this.topo = topo;
-        }
+  public InitialCapacityConstGroupInitializer(Set<String> vertices, TopologyManager topo) {
+    if (vertices==null) {
+      log.error("Set of vertices is null, reverting to empty set");
+      this.vertices = Collections.EMPTY_SET;
+    } else {
+      this.vertices = vertices;
     }
+
+    if (topo==null) {
+      log.error("Initialized with empty variable topology manager");
+      this.topo = new TopologyManagerImpl("New");
+    } else {
+      this.topo = topo;
+    }
+  }
 
     @Override
     public void run() throws LPModelException {
         try {
             LPConstantGroup group = model().getLPConstantGroup(this.getGroup().getIdentifier());
+            LPNameGenerator generator = generator();
 //            TopologyManager topo;
 //            try {
 //                Field this$0 = model().getClass().getDeclaredField("this$0");
@@ -81,7 +73,7 @@ public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
                     if (demandStore.containsKey(label)){
                         Map<String, String> demand = demandStore.get(label);
 
-                        model().createLpConstant(capacityConstNameGenerator.getName(i,j), Double.valueOf(demand.get("capacity")), group);
+                        model().createLpConstant(generator.getName(i,j), Double.valueOf(demand.get("capacity")), group);
                     }
                 }
             }
