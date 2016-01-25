@@ -69,12 +69,14 @@ public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
             }
             for (String i : vertices) {
                 for (String j : vertices) {
-                    String label = i.concat(j);
-                    if (demandStore.containsKey(label)){
-                        Map<String, String> demand = demandStore.get(label);
-                        model().createLpConstant(generator.getName(i,j), Double.valueOf(demand.get("capacity")), group);
-                    }else{
-                        model().createLpConstant(generator.getName(i,j), 0.0, group);
+                    if(!i.equals(j)){
+                        String label = i.concat(j);
+                        if (demandStore.containsKey(label)){
+                            Map<String, String> demand = demandStore.get(label);
+                            model().createLpConstant(generator.getName(i,j), Double.valueOf(demand.get("capacity")), group);
+                        }else{
+                            model().createLpConstant(generator.getName(i,j), 0.0, group);
+                        }
                     }
                 }
             }
