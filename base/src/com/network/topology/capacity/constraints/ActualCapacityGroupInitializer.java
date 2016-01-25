@@ -3,6 +3,7 @@ package com.network.topology.capacity.constraints;
 import java.util.*;
 
 import com.network.topology.VariableBoundConstants;
+import com.network.topology.dyncircuits.parser.DynCircuitClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +25,12 @@ public class ActualCapacityGroupInitializer extends LPGroupInitializer {
 			dynCircuitVarnameGenerator;
 
 	private Set<String> vertexVars;
-	
+
+	private Map<Integer, DynCircuitClass> circuitClassMap;
+
 	public ActualCapacityGroupInitializer(Set<String> vertexVars, LPNameGenerator capacityVarNameGenerator,
 										  LPNameGenerator initialCapacityConstNameGenerator,
-										  LPNameGenerator dynCircuitVarnameGenerator) {
+										  LPNameGenerator dynCircuitVarnameGenerator, Map<Integer, DynCircuitClass> circuitClassMap) {
 		if (capacityVarNameGenerator==null) {
 	      log.error("Initialized with empty capacity variable name generator");
 	      this.capacityVarNameGenerator = new LPEmptyNameGenratorImpl<>();
@@ -52,6 +55,13 @@ public class ActualCapacityGroupInitializer extends LPGroupInitializer {
 	      log.error("Constraint generator initialized with empty set of vertices");
 	      this.vertexVars = Collections.EMPTY_SET;
 	    }
+		if (circuitClassMap==null) {
+			log.error("Circuit class map provided is empty. Defaulting to Empty Map");
+			this.circuitClassMap = Collections.EMPTY_MAP;
+		} else {
+			this.circuitClassMap = circuitClassMap;
+		}
+
 	}
 
 	@Override
@@ -83,21 +93,13 @@ public class ActualCapacityGroupInitializer extends LPGroupInitializer {
 		}
 	 }
 
-	static public double getDynCircuitCapacity(int n){
-		switch(n){
-			case 1:
-				return 2.5;
-			case 2:
-				return 10;
-			case 3:
-				return 40;
-			case 4:
-				return 100;
-			default:
-				log.error("Unable to convert circuit to capacity: " + Integer.toString(n));
-				//TODO: should probably thrown an exception here
+	public double getDynCircuitCapacity(int n){
+		if (circuitClassMap.containsKey(n)) {
+			return circuitClassMap.get(n).getCapacity();
+		} else {
+			log.error("Invalid circuit class used: " + n);
+			return 0;
 		}
-		return 0;
 	}
 
 

@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class CapacityVarNameGenerator extends LPNameGeneratorImpl {
+public class CapacityVarNameGenerator extends LPNameGeneratorImpl<String> {
 
   private static final String PREFIX = VariablePrefixes.CAPACITY;
 
@@ -28,8 +28,6 @@ public class CapacityVarNameGenerator extends LPNameGeneratorImpl {
       log.error("{}Name generator initialized with empty set of vertices", LOG_PREFIX);
       vertexVars = Collections.EMPTY_SET;
     }
-    addValidator(new LPPrefixClassValidator(0, String.class, "Vertex should be of type string"));
-    addValidator(new LPPrefixClassValidator(1, String.class, "Vertex should be of type string"));
     //b) both vertices should be in the set of vertexes
     addValidator(new LPSetContainmentValidator(0, vertexVars, "Index 0 should be in the set of vertices"));
     addValidator(new LPSetContainmentValidator(1, vertexVars, "Index 1 should be in the set of vertices"));

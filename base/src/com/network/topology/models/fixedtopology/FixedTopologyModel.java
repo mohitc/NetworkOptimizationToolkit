@@ -19,6 +19,8 @@ import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGen
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupInitializer;
 import com.network.topology.dyncircuits.constraints.SymDynCirConstrGroupInitializer;
 import com.network.topology.dyncircuits.constraints.SymDynCirConstrNameGenerator;
+import com.network.topology.dyncircuits.parser.DynCircuitClass;
+import com.network.topology.dyncircuits.parser.DynCircuitClassParser;
 import com.network.topology.dyncircuits.vars.DynCircuitVarGroupInitializer;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrNameGenerator;
@@ -65,6 +67,8 @@ public class FixedTopologyModel {
 
   private FixedTopologyModelNameFactory factory;
 
+  private DynCircuitClassParser dynCircuitParser;
+
   public TopologyManager initTopology() throws TopologyException {
     TopologyManagerFactory factory = new TopologyManagerFactoryImpl();
     TopologyManager manager = factory.createTopologyManager("Test");
@@ -109,12 +113,13 @@ public class FixedTopologyModel {
       log.error("LPModel provided is not initialized, skipping var group generation");
       return;
     }
+
     LPConstantGroup constantGroup = model.createLPConstantGroup(VariableBoundConstants.GROUP_NAME, VariableBoundConstants.GROUP_DESC);
     model.createLpConstant(VariableBoundConstants.ROUTING_COST_MAX, 1000, constantGroup);
     //constant to indicate the max number of dynamic circuits between a pair of nodes
     model.createLpConstant(VariableBoundConstants.DYN_CIRTUITS_MAX, 1, constantGroup);
     //constant to indicate the number of distinct dynamic circuit categories available
-    model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, 2, constantGroup);
+    model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, dynCircuitParser.getResult().keySet().size(), constantGroup);
     //constant to indicate the max capacity C(inf) for a link between a pair of nodes
     model.createLpConstant(VariableBoundConstants.CAP_MAX, 100000, constantGroup);
     //constant to indicate the max capacity C(inf) for a link between a pair of nodes
@@ -132,8 +137,8 @@ public class FixedTopologyModel {
     model.createLPConstantGroup("lambda", "Constants to indicate requested capacity between two nodes", factory.getCapacityConstNameGenerator(),
       capacityConstGroupInitializer);
 
-    InitialCapacityConstGroupInitializer initialCapacityConstGroupInitializer = new InitialCapacityConstGroupInitializer(getVertexLabels(),factory.getInitialCapacityConstNameGenerator(), _instance);
-    model.createLPConstantGroup("Hat(C)", "Constants to store the initial capacity between each node pair",
+    InitialCapacityConstGroupInitializer initialCapacityConstGroupInitializer = new InitialCapacityConstGroupInitializer(getVertexLabels(),_instance);
+    model.createLPConstantGroup("HAT(C)", "Constants to store the initial capacity between each node pair",
             factory.getInitialCapacityConstNameGenerator(), initialCapacityConstGroupInitializer);
 
   }
@@ -217,9 +222,10 @@ public class FixedTopologyModel {
       ActualCapacityGroupInitializer actualCapacityGroupInitializer =
               new ActualCapacityGroupInitializer(
                       vertexLabels,
-                      factory.getCapacityVarNameGenerator(),//actualCapacityNameGenerator
+                      factory.getCapacityVarNameGenerator(),
                       factory.getInitialCapacityConstNameGenerator(),
-                      factory.getDynamicCircuitNameGenerator(circuitClasses)
+                      factory.getDynamicCircuitNameGenerator(circuitClasses),
+                dynCircuitParser.getResult()
               );
       model.createLPConstraintGroup("ActualCapacityConstr",
               "Constraints to instantiated capacity equal to initial plus dynaimc circuits",
@@ -283,8 +289,8 @@ public class FixedTopologyModel {
   }
 
   public void initModel() throws LPModelException {
-//    model = new CplexLPModel("Test");
-    model = new GurobiLPModel("Test");
+//  model = new CplexLPModel("Test");
+  model = new GurobiLPModel("Test");
 //    model = new SkeletonLPModel("Test");
   }
 
@@ -296,10 +302,12 @@ public class FixedTopologyModel {
 
       lpModel._instance = lpModel.initTopology();
       SNDLibImportTopology importer = new SNDLibImportTopology();
-      importer.importFromFile("nobel-us.xml", lpModel._instance);
+      importer.importFromFile("conf/nobel-us.xml", lpModel._instance);
 
 
       lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels());
+
+      lpModel.dynCircuitParser = new DynCircuitClassParser("conf/circuit-cap.xml");
 
       lpModel.initModel();
       lpModel.initConstants();
