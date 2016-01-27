@@ -4,8 +4,8 @@ import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPObjType;
-import com.lpapi.entities.gurobi.impl.GurobiLPModel;
-//import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
+//import com.lpapi.entities.gurobi.impl.GurobiLPModel;
+import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.VariableBoundConstants;
 import com.network.topology.capacity.constants.CapacityConstGroupInitializer;
@@ -131,9 +131,9 @@ public class FixedTopologyModel {
 
     LinkWeightConstantGroupInitializer linkWeightConstantGroupInitializer = new LinkWeightConstantGroupInitializer(getVertexLabels());
     model.createLPConstantGroup("Hat(W)", "Constants to indicate weight of link if exists", factory.getLinkWeightConstantNameGenerator(),
-      linkWeightConstantGroupInitializer);
+        linkWeightConstantGroupInitializer);
 
-    CapacityConstGroupInitializer capacityConstGroupInitializer = new CapacityConstGroupInitializer(getVertexLabels(),factory.getCapacityConstNameGenerator(), _instance);
+    CapacityConstGroupInitializer capacityConstGroupInitializer = new CapacityConstGroupInitializer(getVertexLabels(),_instance);
     model.createLPConstantGroup("lambda", "Constants to indicate requested capacity between two nodes", factory.getCapacityConstNameGenerator(),
       capacityConstGroupInitializer);
 
@@ -237,7 +237,7 @@ public class FixedTopologyModel {
                       vertexLabels,
                       factory.getCapacityVarNameGenerator(),
                       factory.getCapacityConstNameGenerator(),
-                      factory.getDynamicCircuitNameGenerator(circuitClasses),
+                      factory.getRoutingNameGenerator(),
                       _instance
               );
       model.createLPConstraintGroup("ActualDemandedCapacityConstr",
@@ -290,8 +290,8 @@ public class FixedTopologyModel {
 
   public void initModel() throws LPModelException {
 //  model = new CplexLPModel("Test");
-  model = new GurobiLPModel("Test");
-//    model = new SkeletonLPModel("Test");
+//  model = new GurobiLPModel("Test");
+    model = new SkeletonLPModel("Test");
   }
 
 

@@ -43,61 +43,23 @@ public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
     }
   }
 
-    @Override
-    public void run() throws LPModelException {
-        try {
-            LPConstantGroup group = model().getLPConstantGroup(this.getGroup().getIdentifier());
-            LPNameGenerator generator = generator();
-//            TopologyManager topo;
-//            try {
-//                Field this$0 = model().getClass().getDeclaredField("this$0");
-//                FixedTopologyModel outer = (FixedTopologyModel) this$0.get(model().getClass()); //TODO: this is an ugly hack
-//                topo = outer._instance;
-//            } catch (NoSuchFieldException e) {
-//                throw new RuntimeException(e);
-//            } catch (IllegalAccessException e) {
-//                throw new RuntimeException(e);
-//            }
-            TEPropertyKey demandStoreKey;
-            Map<String, Map<String, String>> demandStore;
-            try {
-                demandStoreKey = topo.getKey("Demands");
-                demandStore = (Map<String, Map<String, String>>) topo.getProperty(demandStoreKey);
-            } catch (PropertyException e) {
-                e.printStackTrace();
-                throw new LPModelException("Demand store not found: " + e.getMessage());
-            }
-            for (String i : vertices) {
-                for (String j : vertices) {
-                    if(!i.equals(j)){
-                        String label = i.concat(j);
-                        if (demandStore.containsKey(label)){
-                            Map<String, String> demand = demandStore.get(label);
-                            model().createLpConstant(generator.getName(i,j), Double.valueOf(demand.get("capacity")), group);
-                        }else{
-                            model().createLpConstant(generator.getName(i,j), 0.0, group);
-                        }
-                    }
-                }
-            }
-        }catch (LPNameException e) {
-        log.error("Variable name not found: " + e.getMessage());
-        throw new LPModelException("Variable name not found: " + e.getMessage());
+  @Override
+  public void run() throws LPModelException {
+    try {
+      LPConstantGroup group = model().getLPConstantGroup(this.getGroup().getIdentifier());
+      LPNameGenerator generator = generator();
+      for (String i : vertices) {
+        for (String j : vertices) {
+          if (i.equals(j))
+            continue;
+          //current default initialization to 0
+          model().createLpConstant(generator().getName(i, j), 0, group);
+          //TODO add check to read capacity from topology links
+        }
+      }
+    }catch (LPNameException e) {
+      log.error("Variable name not found: " + e.getMessage());
+      throw new LPModelException("Variable name not found: " + e.getMessage());
     }
-//        try {
-//            LPVarGroup group = this.getGroup().getModel().getLPVarGroup(this.getGroup().getIdentifier());
-//            for (String i : vertices) {
-//                for (String j : vertices) {
-//                    if (i.equals(j)) {
-//                        continue;
-//                    }
-//                    this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(i, j), LPVarType.INTEGER, 0, Integer.MAX_VALUE, group);
-//                }
-//            }
-//
-//        } catch (LPNameException e) {
-//            log.error("Error while initializing Capacity variable group variables", e);
-//            throw new LPModelException(e.getMessage());
-//        }
-    }
+  }
 }

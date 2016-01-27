@@ -22,40 +22,40 @@ public class ActualDemandedCapacityGroupInitializer extends LPGroupInitializer {
 	private static final Logger log = LoggerFactory.getLogger(ActualDemandedCapacityGroupInitializer.class);
 
 	private LPNameGenerator capacityVarNameGenerator, demandedCapacityConstNameGenerator,
-			dynCircuitVarnameGenerator;
+			routingVarNameGenerator;
 
 	private TopologyManager topo;
 
 	private Set<String> vertexVars;
 
 	public ActualDemandedCapacityGroupInitializer(Set<String> vertexVars, LPNameGenerator capacityVarNameGenerator,
-												  LPNameGenerator demandedCapacityConstNameGenerator,
-												  LPNameGenerator dynCircuitVarnameGenerator,
-												  TopologyManager topo) {
+																								LPNameGenerator demandedCapacityConstNameGenerator,
+																								LPNameGenerator routingVarNameGenerator,
+																								TopologyManager topo) {
 		if (capacityVarNameGenerator==null) {
-	      log.error("Initialized with empty capacity variable name generator");
-	      this.capacityVarNameGenerator = new LPEmptyNameGenratorImpl<>();
-	    } else {
-	      this.capacityVarNameGenerator = capacityVarNameGenerator;
-	    }
-	    if (demandedCapacityConstNameGenerator==null) {
-	      log.error("Initialized with empty circuit variable name generator");
-		  this.demandedCapacityConstNameGenerator = new LPEmptyNameGenratorImpl<>();
-	    } else {
-	      this.demandedCapacityConstNameGenerator = demandedCapacityConstNameGenerator;
-	    }
-		if (dynCircuitVarnameGenerator==null) {
-			log.error("Initialized with empty circuit variable name generator");
-			this.dynCircuitVarnameGenerator = new LPEmptyNameGenratorImpl<>();
+			log.error("Initialized with empty capacity variable name generator");
+			this.capacityVarNameGenerator = new LPEmptyNameGenratorImpl<>();
 		} else {
-			this.dynCircuitVarnameGenerator = dynCircuitVarnameGenerator;
+			this.capacityVarNameGenerator = capacityVarNameGenerator;
 		}
-	    if (vertexVars!=null) {
-	      this.vertexVars = Collections.unmodifiableSet(vertexVars);
-	    } else {
-	      log.error("Constraint generator initialized with empty set of vertices");
-	      this.vertexVars = Collections.EMPTY_SET;
-	    }
+		if (demandedCapacityConstNameGenerator==null) {
+			log.error("Initialized with empty circuit variable name generator");
+			this.demandedCapacityConstNameGenerator = new LPEmptyNameGenratorImpl<>();
+		} else {
+			this.demandedCapacityConstNameGenerator = demandedCapacityConstNameGenerator;
+		}
+		if (routingVarNameGenerator==null) {
+			log.error("Initialized with empty circuit variable name generator");
+			this.routingVarNameGenerator = new LPEmptyNameGenratorImpl<>();
+		} else {
+			this.routingVarNameGenerator = routingVarNameGenerator;
+		}
+		if (vertexVars!=null) {
+			this.vertexVars = Collections.unmodifiableSet(vertexVars);
+		} else {
+			log.error("Constraint generator initialized with empty set of vertices");
+			this.vertexVars = Collections.EMPTY_SET;
+		}
 		if (topo==null) {
 			log.error("Initialized with empty circuit variable name generator");
 		} else {
@@ -80,22 +80,24 @@ public class ActualDemandedCapacityGroupInitializer extends LPGroupInitializer {
 					rhs.addTerm(model().getLPVar(capacityVarNameGenerator.getName(i,j)));
 
 					LPExpression lhs = new LPExpression(model());
-//					for (String s : vertexVars) {
-//						for (String d : vertexVars) {
-//							for (int k = 1; k <= maxCircuitTypes; k++){
-//							lhs.addTerm(model().getLPConstant(TODO.getName(TODO)));
-//						}
-//					}
-					lhs.addTerm(model().getLPConstant(demandedCapacityConstNameGenerator.getName(i,j)));
+					for (String s : vertexVars) {
+						if (s.equals(j))
+							continue;
+						for (String d : vertexVars) {
+							if (i.equals(d) || s.equals(d))
+								continue;
+							lhs.addTerm(model().getLPConstant(demandedCapacityConstNameGenerator.getName(s, d)), model().getLPVar(routingVarNameGenerator.getName(s, d, i, j)));
+						}
+					}
 
 					model().addConstraint(generator().getName(i,j), lhs, LPOperator.LESS_EQUAL, rhs, group);
 				}
 			}
 		} catch (LPNameException e) {
 			log.error("Variable name not found: " + e.getMessage());
-		    throw new LPModelException("Variable name not found: " + e.getMessage());
+			throw new LPModelException("Variable name not found: " + e.getMessage());
 		}
-	 }
+	}
 
 	static public double getDynCircuitCapacity(int n){
 		switch(n){
