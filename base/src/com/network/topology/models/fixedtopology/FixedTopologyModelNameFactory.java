@@ -13,14 +13,18 @@ import com.network.topology.linkweight.vars.LinkWeightVarNameGenerator;
 import com.network.topology.routing.routingcost.vars.RoutingCostVarNameGenerator;
 import com.network.topology.routing.vars.RoutingNameGenerator;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class FixedTopologyModelNameFactory {
 
   private Set<String> vertexLabels;
 
-  public FixedTopologyModelNameFactory(Set<String> vertexLabels) {
-    this.vertexLabels = vertexLabels;
+  private int circuitClasses;
+
+  public FixedTopologyModelNameFactory(Set<String> vertexLabels, int circuitClasses) {
+    this.vertexLabels = Collections.unmodifiableSet(vertexLabels);
+    this.circuitClasses = circuitClasses;
   }
 
   private LPNameGenerator _linkExistsConstantNameGenerator;
@@ -71,7 +75,7 @@ public class FixedTopologyModelNameFactory {
 
   private LPNameGenerator _dynCircuitVarNameGenerator;
 
-  public LPNameGenerator getDynamicCircuitNameGenerator(int circuitClasses) {
+  public LPNameGenerator getDynamicCircuitNameGenerator() {
     if (_dynCircuitVarNameGenerator == null) {
       _dynCircuitVarNameGenerator = new DynCircuitVarNameGenerator(circuitClasses, vertexLabels);
     }

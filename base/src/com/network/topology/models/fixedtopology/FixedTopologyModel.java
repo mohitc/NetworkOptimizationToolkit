@@ -37,6 +37,7 @@ import com.network.topology.linkweight.constants.LinkWeightConstantGroupInitiali
 import com.network.topology.linkweight.constraints.LinkWeightConstrGroupInitializer;
 import com.network.topology.linkweight.constraints.LinkWeightConstrNameGenerator;
 import com.network.topology.linkweight.vars.LinkWeightVarGroupInitializer;
+import com.network.topology.objfn.MinDynCirCostObjFnGenerator;
 import com.network.topology.routing.constraints.*;
 import com.network.topology.routing.routingcost.constraints.MinRoutingCostConstrGroupInitializer;
 import com.network.topology.routing.routingcost.constraints.MinRoutingCostConstrNameGenerator;
@@ -173,13 +174,8 @@ public class FixedTopologyModel {
     LinkWeightVarGroupInitializer linkWeightVarGroupInitializer = new LinkWeightVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("LinkWeight", "Variables to indicate link weights", factory.getLinkWeightVarNameGenerator(), linkWeightVarGroupInitializer);
 
-    try {
-      int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
-      DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
-      model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(circuitClasses), dynCircuitVarGroupInitializer);
-    } catch (LPConstantException e) {
-      log.error("Constant to indicate the number of dynamic circuit classes not defined");
-    }
+    DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
+    model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(), dynCircuitVarGroupInitializer);
   }
 
   public void initConstraintGroups() throws LPConstraintGroupException {
@@ -203,17 +199,17 @@ public class FixedTopologyModel {
     try {
       LinkExistsConstrNameGenerator lLinkExistsConstrNameGenerator = new LinkExistsConstrNameGenerator(vertexLabels);
       int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
-      LinkExistsConstrGroupInitializer linkExistsVarGroupInitializer = new LinkExistsConstrGroupInitializer(vertexLabels, factory.getLinkExistsNameGenerator(), factory.getLinkExistsConstantNameGenerator(), factory.getDynamicCircuitNameGenerator(circuitClasses));
+      LinkExistsConstrGroupInitializer linkExistsVarGroupInitializer = new LinkExistsConstrGroupInitializer(vertexLabels, factory.getLinkExistsNameGenerator(), factory.getLinkExistsConstantNameGenerator(), factory.getDynamicCircuitNameGenerator());
       model.createLPConstraintGroup("LinkExistsConstr", "Constarint to restrict link exists to already existing links or dynamic circuits", lLinkExistsConstrNameGenerator, linkExistsVarGroupInitializer);
 
       //Dynamic circuit bound constrants
       DynCircuitBoundConstrNameGenerator dynCircuitBoundConstrNameGenerator = new DynCircuitBoundConstrNameGenerator(vertexLabels);
-      DynCircuitBoundConstrGroupInitializer dynCircuitBoundConstrGroupInitializer = new DynCircuitBoundConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator(circuitClasses));
+      DynCircuitBoundConstrGroupInitializer dynCircuitBoundConstrGroupInitializer = new DynCircuitBoundConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator());
       model.createLPConstraintGroup("DynCircuitBound", "Constraints to bound the number of dynamic circuits", dynCircuitBoundConstrNameGenerator, dynCircuitBoundConstrGroupInitializer);
 
       //Symmetric dynamic circuit constraint
       SymDynCirConstrNameGenerator symDynCirConstrNameGenerator = new SymDynCirConstrNameGenerator(circuitClasses, vertexLabels);
-      SymDynCirConstrGroupInitializer symDynCirConstrGroupInitializer = new SymDynCirConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator(circuitClasses));
+      SymDynCirConstrGroupInitializer symDynCirConstrGroupInitializer = new SymDynCirConstrGroupInitializer(vertexLabels, factory.getDynamicCircuitNameGenerator());
       model.createLPConstraintGroup("SymDynCirConstr", "Constraints to symmetric dynamic circuits", symDynCirConstrNameGenerator, symDynCirConstrGroupInitializer);
 
       //Capacity constraints
@@ -224,7 +220,7 @@ public class FixedTopologyModel {
                       vertexLabels,
                       factory.getCapacityVarNameGenerator(),
                       factory.getInitialCapacityConstNameGenerator(),
-                      factory.getDynamicCircuitNameGenerator(circuitClasses),
+                      factory.getDynamicCircuitNameGenerator(),
                 dynCircuitParser.getResult()
               );
       model.createLPConstraintGroup("ActualCapacityConstr",
@@ -305,14 +301,19 @@ public class FixedTopologyModel {
       importer.importFromFile("conf/nobel-us.xml", lpModel._instance);
 
 
-      lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels());
 
       lpModel.dynCircuitParser = new DynCircuitClassParser("conf/circuit-cap.xml");
+
+      int circuitClasses = lpModel.dynCircuitParser.getResult().keySet().size();
+      lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels(), circuitClasses);
 
       lpModel.initModel();
       lpModel.initConstants();
       lpModel.initVarGroups();
       lpModel.initConstraintGroups();
+
+      //Initialize Objective function
+      MinDynCirCostObjFnGenerator objFnGenerator = new MinDynCirCostObjFnGenerator(lpModel.getVertexLabels(), lpModel.dynCircuitParser.getResult(), lpModel.factory.getDynamicCircuitNameGenerator());
       LPExpression obj = new LPExpression(lpModel.model);
       obj.addTerm(1);
       lpModel.model.setObjFn(obj, LPObjType.MAXIMIZE);
