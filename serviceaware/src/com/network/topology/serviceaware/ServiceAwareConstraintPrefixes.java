@@ -1,0 +1,8 @@
+package com.network.topology.serviceaware;
+
+public interface ServiceAwareConstraintPrefixes {
+  String SERVICE_ROUTING_IFF_LINK_EXISTS = "SREVICE-ROUTING-LE";
+  String SYMMETRIC_SERVICE_ROUTING = "SYMMETRIC_SERVICE_ROUTING";
+  String SERVICE_ROUTING_CONTINUITY = "SERVICE_ROUTING_CONTINUITY";
+  String SERVICE_TM_TRAFFIC = "SERVICE_TM_TRAFFIC";
+}
