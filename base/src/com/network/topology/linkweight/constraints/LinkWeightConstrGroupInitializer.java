@@ -8,16 +8,11 @@ import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.ConstantPrefixes;
-import com.network.topology.VariableBoundConstants;
-import com.topology.primitives.ConnectionPoint;
-import com.topology.primitives.Link;
-import com.topology.primitives.TopologyManager;
+import com.network.topology.FixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class LinkWeightConstrGroupInitializer extends LPGroupInitializer {
@@ -63,7 +58,7 @@ public class LinkWeightConstrGroupInitializer extends LPGroupInitializer {
 
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
 
-      double wInf = model().getLPConstant(VariableBoundConstants.W_INF).getValue();
+      double wInf = model().getLPConstant(FixedConstants.W_INF).getValue();
       for (String s: vertexVars) {
         for (String d: vertexVars) {
           if (s.equals(d))

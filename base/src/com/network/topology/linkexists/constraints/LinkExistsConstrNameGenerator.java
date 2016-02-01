@@ -5,6 +5,7 @@ import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
 import com.lpapi.entities.group.validators.LPPrefixClassValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstraintPrefixes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,13 +16,9 @@ import java.util.Set;
 
 public class LinkExistsConstrNameGenerator extends LPNameGeneratorImpl {
 
-  private static final String LINK_EXISTS_CONSTR_PREFIX = "LE";
-
-  private static final String LINK_EXISTS_CONSTR_LOG_PREFIX = "LE:- ";
+  private static final String LINK_EXISTS_CONSTR_PREFIX = ConstraintPrefixes.LINK_EXISTS;
 
   private static final Logger log = LoggerFactory.getLogger(LinkExistsConstrNameGenerator.class);
-
-  private Set<String> vertexVars;
 
   public LinkExistsConstrNameGenerator(Set<String> vertexVars) {
     super(LINK_EXISTS_CONSTR_PREFIX, 3);

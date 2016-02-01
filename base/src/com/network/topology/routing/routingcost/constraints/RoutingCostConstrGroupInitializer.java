@@ -1,10 +1,3 @@
-/*
- *  Copyright 2013 ADVA Optical Networking SE. All rights reserved.
- *
- *  Owner: mchamania
- *
- *  $Id: $
- */
 package com.network.topology.routing.routingcost.constraints;
 
 import com.lpapi.entities.LPConstraintGroup;
@@ -15,7 +8,6 @@ import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

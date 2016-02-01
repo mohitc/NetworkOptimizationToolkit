@@ -8,7 +8,7 @@ import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
+import com.network.topology.FixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class DynCircuitBoundConstrGroupInitializer extends LPGroupInitializer {
   @Override
   public void run() throws LPModelException {
     try {
-      int vertexClasses = (int)model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      int vertexClasses = (int)model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
       for (String s : vertexVars) {
         for (String d : vertexVars) {
@@ -53,7 +53,7 @@ public class DynCircuitBoundConstrGroupInitializer extends LPGroupInitializer {
             lhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(n, s, d)));
           }
           LPExpression rhs = new LPExpression(model());
-          rhs.addTerm(model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX));
+          rhs.addTerm(model().getLPConstant(FixedConstants.DYN_CIRTUITS_MAX));
           model().addConstraint(generator().getName(s,d), lhs, LPOperator.LESS_EQUAL, rhs, group);
         }
       }

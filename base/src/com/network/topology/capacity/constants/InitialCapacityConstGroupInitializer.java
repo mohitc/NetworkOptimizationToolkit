@@ -17,9 +17,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by fpederzolli on 16/01/16.
- */
 public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
   private static final Logger log = LoggerFactory.getLogger(InitialCapacityConstGroupInitializer.class);
 
@@ -47,7 +44,6 @@ public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
   public void run() throws LPModelException {
     try {
       LPConstantGroup group = model().getLPConstantGroup(this.getGroup().getIdentifier());
-      LPNameGenerator generator = generator();
       for (String i : vertices) {
         for (String j : vertices) {
           if (i.equals(j))

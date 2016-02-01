@@ -7,19 +7,18 @@ import com.lpapi.entities.LPObjType;
 //import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
-import com.network.topology.VariableBoundConstants;
-import com.network.topology.capacity.constants.CapacityConstGroupInitializer;
+import com.network.topology.FixedConstants;
+import com.network.topology.traffic.knowntm.constants.KnownTrafficMatConstGroupInitializer;
 import com.network.topology.capacity.constants.InitialCapacityConstGroupInitializer;
 import com.network.topology.capacity.constraints.ActualCapacityGroupInitializer;
 import com.network.topology.capacity.constraints.ActualCapacityNameGenerator;
-import com.network.topology.capacity.constraints.ActualDemandedCapacityGroupInitializer;
-import com.network.topology.capacity.constraints.ActualDemandedCapacityNameGenerator;
+import com.network.topology.traffic.knowntm.constraints.KnownTmTrafficConstrGroupInitializer;
+import com.network.topology.traffic.knowntm.constraints.KnownTmTrafficConstrNameGenerator;
 import com.network.topology.capacity.vars.CapacityVarGroupInitializer;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrNameGenerator;
 import com.network.topology.dyncircuits.constraints.DynCircuitBoundConstrGroupInitializer;
 import com.network.topology.dyncircuits.constraints.SymDynCirConstrGroupInitializer;
 import com.network.topology.dyncircuits.constraints.SymDynCirConstrNameGenerator;
-import com.network.topology.dyncircuits.parser.DynCircuitClass;
 import com.network.topology.dyncircuits.parser.DynCircuitClassParser;
 import com.network.topology.dyncircuits.vars.DynCircuitVarGroupInitializer;
 import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrGroupInitializer;
@@ -115,16 +114,18 @@ public class FixedTopologyModel {
       return;
     }
 
-    LPConstantGroup constantGroup = model.createLPConstantGroup(VariableBoundConstants.GROUP_NAME, VariableBoundConstants.GROUP_DESC);
-    model.createLpConstant(VariableBoundConstants.ROUTING_COST_MAX, 1000, constantGroup);
+    LPConstantGroup constantGroup = model.createLPConstantGroup(FixedConstants.GROUP_NAME, FixedConstants.GROUP_DESC);
+    model.createLpConstant(FixedConstants.ROUTING_COST_MAX, 1000, constantGroup);
     //constant to indicate the max number of dynamic circuits between a pair of nodes
-    model.createLpConstant(VariableBoundConstants.DYN_CIRTUITS_MAX, 1, constantGroup);
+    model.createLpConstant(FixedConstants.DYN_CIRTUITS_MAX, 1, constantGroup);
     //constant to indicate the number of distinct dynamic circuit categories available
-    model.createLpConstant(VariableBoundConstants.CIRCUIT_CLASSES, dynCircuitParser.getResult().keySet().size(), constantGroup);
+    model.createLpConstant(FixedConstants.CIRCUIT_CLASSES, dynCircuitParser.getResult().keySet().size(), constantGroup);
     //constant to indicate the max capacity C(inf) for a link between a pair of nodes
-    model.createLpConstant(VariableBoundConstants.CAP_MAX, 100000, constantGroup);
+    model.createLpConstant(FixedConstants.CAP_MAX, 100000, constantGroup);
     //constant to indicate the max capacity C(inf) for a link between a pair of nodes
-    model.createLpConstant(VariableBoundConstants.W_INF, 100000, constantGroup);
+    model.createLpConstant(FixedConstants.W_INF, 100000, constantGroup);
+    //constant to indicate the max utilization of a link (Alpha)
+    model.createLpConstant(FixedConstants.ALPHA, 0.7, constantGroup);
 
     LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, factory.getLinkExistsConstantNameGenerator(), true);
     model.createLPConstantGroup("Hat(LinkExists)", "Constants to indicate if link existed in original topology", factory.getLinkExistsConstantNameGenerator(),
@@ -134,9 +135,9 @@ public class FixedTopologyModel {
     model.createLPConstantGroup("Hat(W)", "Constants to indicate weight of link if exists", factory.getLinkWeightConstantNameGenerator(),
         linkWeightConstantGroupInitializer);
 
-    CapacityConstGroupInitializer capacityConstGroupInitializer = new CapacityConstGroupInitializer(getVertexLabels(),_instance);
-    model.createLPConstantGroup("lambda", "Constants to indicate requested capacity between two nodes", factory.getCapacityConstNameGenerator(),
-      capacityConstGroupInitializer);
+    KnownTrafficMatConstGroupInitializer knownTrafficMatConstGroupInitializer = new KnownTrafficMatConstGroupInitializer(getVertexLabels(),_instance);
+    model.createLPConstantGroup("lambda", "Constants to indicate requested capacity between two nodes", factory.getKnownTrafficMatConstNameGenerator(),
+      knownTrafficMatConstGroupInitializer);
 
     InitialCapacityConstGroupInitializer initialCapacityConstGroupInitializer = new InitialCapacityConstGroupInitializer(getVertexLabels(),_instance);
     model.createLPConstantGroup("HAT(C)", "Constants to store the initial capacity between each node pair",
@@ -174,8 +175,13 @@ public class FixedTopologyModel {
     LinkWeightVarGroupInitializer linkWeightVarGroupInitializer = new LinkWeightVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("LinkWeight", "Variables to indicate link weights", factory.getLinkWeightVarNameGenerator(), linkWeightVarGroupInitializer);
 
-    DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
-    model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(), dynCircuitVarGroupInitializer);
+    try {
+      int circuitClasses = (int) model.getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
+      DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
+      model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(), dynCircuitVarGroupInitializer);
+    } catch (LPConstantException e) {
+      log.error("Constant to indicate the number of dynamic circuit classes not defined");
+    }
   }
 
   public void initConstraintGroups() throws LPConstraintGroupException {
@@ -198,7 +204,7 @@ public class FixedTopologyModel {
     //Link Exists constraints
     try {
       LinkExistsConstrNameGenerator lLinkExistsConstrNameGenerator = new LinkExistsConstrNameGenerator(vertexLabels);
-      int circuitClasses = (int) model.getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      int circuitClasses = (int) model.getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
       LinkExistsConstrGroupInitializer linkExistsVarGroupInitializer = new LinkExistsConstrGroupInitializer(vertexLabels, factory.getLinkExistsNameGenerator(), factory.getLinkExistsConstantNameGenerator(), factory.getDynamicCircuitNameGenerator());
       model.createLPConstraintGroup("LinkExistsConstr", "Constarint to restrict link exists to already existing links or dynamic circuits", lLinkExistsConstrNameGenerator, linkExistsVarGroupInitializer);
 
@@ -226,19 +232,18 @@ public class FixedTopologyModel {
       model.createLPConstraintGroup("ActualCapacityConstr",
               "Constraints to instantiated capacity equal to initial plus dynaimc circuits",
               actualCapacityNameGenerator, actualCapacityGroupInitializer);
-      ActualDemandedCapacityNameGenerator actualDemandedCapacityNameGenerator =
-              new ActualDemandedCapacityNameGenerator(vertexLabels);
-      ActualDemandedCapacityGroupInitializer actualDemandedCapacityGroupInitializer =
-              new ActualDemandedCapacityGroupInitializer(
+      KnownTmTrafficConstrNameGenerator knownTmTrafficConstrNameGenerator =
+              new KnownTmTrafficConstrNameGenerator(vertexLabels);
+      KnownTmTrafficConstrGroupInitializer knownTmTrafficConstrGroupInitializer =
+              new KnownTmTrafficConstrGroupInitializer(
                       vertexLabels,
                       factory.getCapacityVarNameGenerator(),
-                      factory.getCapacityConstNameGenerator(),
-                      factory.getRoutingNameGenerator(),
-                      _instance
+                      factory.getKnownTrafficMatConstNameGenerator(),
+                      factory.getRoutingNameGenerator()
               );
       model.createLPConstraintGroup("ActualDemandedCapacityConstr",
               "Constrains instantiated capacity to be at least as big as requested",
-              actualDemandedCapacityNameGenerator, actualDemandedCapacityGroupInitializer);
+        knownTmTrafficConstrNameGenerator, knownTmTrafficConstrGroupInitializer);
 
 
     } catch (LPConstantException e) {
@@ -303,6 +308,7 @@ public class FixedTopologyModel {
 
 
       lpModel.dynCircuitParser = new DynCircuitClassParser("conf/circuit-cap.xml");
+      lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels(), lpModel.dynCircuitParser.getResult().keySet().size());
 
       int circuitClasses = lpModel.dynCircuitParser.getResult().keySet().size();
       lpModel.factory = new FixedTopologyModelNameFactory(lpModel.getVertexLabels(), circuitClasses);

@@ -1,4 +1,4 @@
-package com.network.topology.capacity.constants;
+package com.network.topology.traffic.knowntm.constants;
 
 import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.group.LPGroupInitializer;
@@ -15,17 +15,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by fpederzolli on 16/01/16.
- */
-public class CapacityConstGroupInitializer extends LPGroupInitializer {
-  private static final Logger log = LoggerFactory.getLogger(CapacityConstGroupInitializer.class);
+public class KnownTrafficMatConstGroupInitializer extends LPGroupInitializer {
+  private static final Logger log = LoggerFactory.getLogger(KnownTrafficMatConstGroupInitializer.class);
 
   private Set<String> vertices;
 
   private TopologyManager topo;
 
-  public CapacityConstGroupInitializer(Set<String> vertices, TopologyManager topo) {
+  public KnownTrafficMatConstGroupInitializer(Set<String> vertices, TopologyManager topo) {
     if (vertices==null) {
       log.error("Set of vertices is null, reverting to empty set");
       this.vertices = Collections.EMPTY_SET;
@@ -53,6 +50,7 @@ public class CapacityConstGroupInitializer extends LPGroupInitializer {
       } catch (PropertyException e) {
         throw new LPModelException("Demand store not found: " + e.getMessage());
       }
+      int count = 0;
       for (String i : vertices) {
         for (String j : vertices) {
           if (i.equals(j))
@@ -60,11 +58,14 @@ public class CapacityConstGroupInitializer extends LPGroupInitializer {
           String label = "{" + i + "}{" + j + "}";
           if (demandStore.containsKey(label)){
             model().createLpConstant(generator().getName(i, j), demandStore.get(label), group);
+            count++;
           } else {
+            log.info("No demand found for nodes (" + i + " -> " + j + "), defaulting to 0");
             model().createLpConstant(generator().getName(i, j), 0, group);
           }
         }
       }
+      log.info("Traffic for {} out of {} potential node pairs was populated from topology, others were defaulted to 0", count, (vertices.size() * (vertices.size()-1)));
     }catch (LPNameException e) {
       log.error("Variable name not found: " + e.getMessage());
       throw new LPModelException("Variable name not found: " + e.getMessage());

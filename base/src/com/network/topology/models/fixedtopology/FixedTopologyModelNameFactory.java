@@ -1,7 +1,7 @@
 package com.network.topology.models.fixedtopology;
 
 import com.lpapi.entities.group.LPNameGenerator;
-import com.network.topology.capacity.constants.CapacityConstNameGenerator;
+import com.network.topology.traffic.knowntm.constants.KnownTrafficMatConstNameGenerator;
 import com.network.topology.capacity.constants.InitialCapacityConstNameGenerator;
 import com.network.topology.capacity.vars.CapacityVarNameGenerator;
 import com.network.topology.dyncircuits.vars.DynCircuitVarNameGenerator;
@@ -91,13 +91,13 @@ public class FixedTopologyModelNameFactory {
     return _capacityVarNameGenerator;
   }
 
-  private LPNameGenerator _capacityConstNameGenerator;
+  private LPNameGenerator _knownTrafficMatConstNameGenerator;
 
-  public LPNameGenerator getCapacityConstNameGenerator() {
-    if (_capacityConstNameGenerator == null) {
-      _capacityConstNameGenerator = new CapacityConstNameGenerator(vertexLabels);
+  public LPNameGenerator getKnownTrafficMatConstNameGenerator() {
+    if (_knownTrafficMatConstNameGenerator == null) {
+      _knownTrafficMatConstNameGenerator = new KnownTrafficMatConstNameGenerator(vertexLabels);
     }
-    return _capacityConstNameGenerator;
+    return _knownTrafficMatConstNameGenerator;
   }
 
   private LPNameGenerator _initialCapacityConstNameGenerator;

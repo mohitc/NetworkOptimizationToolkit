@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class DynCircuitVarNameGenerator extends LPNameGeneratorImpl<String> {
 
-  private static final String PREFIX = VariablePrefixes.DYN_CIRTUIT;
+  private static final String PREFIX = VariablePrefixes.DYN_CIRCUIT;
 
   private static final Logger log = LoggerFactory.getLogger(DynCircuitVarNameGenerator.class);
 

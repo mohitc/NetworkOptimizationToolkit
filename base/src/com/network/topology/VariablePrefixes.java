@@ -6,7 +6,7 @@ public interface VariablePrefixes {
   String ROUTING_COST = "RC";
   String LINK_EXISTS = "LE";
   String FORWARDING = "F";
-  String DYN_CIRTUIT = "X";
+  String DYN_CIRCUIT = "X";
   String CAPACITY = "C";
   String LINK_WEIGHT = "W";
 

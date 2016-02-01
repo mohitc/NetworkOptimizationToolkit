@@ -4,6 +4,7 @@ import com.lpapi.entities.group.generators.LPNameGeneratorImpl;
 import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstraintPrefixes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 
 public class UniqueForwardingConstrNameGenerator extends LPNameGeneratorImpl<String> {
 
-  private static final String PREFIX = "UNIQUE-FW";
+  private static final String PREFIX = ConstraintPrefixes.UNIQUE_FORWARDING;
 
   private static final Logger log = LoggerFactory.getLogger(UniqueForwardingConstrNameGenerator.class);
 

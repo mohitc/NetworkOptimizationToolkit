@@ -6,7 +6,7 @@ import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPConstantException;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
+import com.network.topology.FixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public class DynCircuitVarGroupInitializer extends LPGroupInitializer {
   @Override
   public void run() throws LPModelException {
     try {
-      int circuitClasses = (int) model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      int circuitClasses = (int) model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
       if (circuitClasses <= 0) {
         log.error("Circuit classes should be a positive integer (>0). Defaulting to 1");
         this.circuitClasses = 1;
@@ -51,7 +51,7 @@ public class DynCircuitVarGroupInitializer extends LPGroupInitializer {
           for (String j: vertices) {
             if (i.equals(j))
               continue;
-            this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(n, i, j), LPVarType.INTEGER, 0, model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX).getValue(), group);
+            this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(n, i, j), LPVarType.INTEGER, 0, model().getLPConstant(FixedConstants.DYN_CIRTUITS_MAX).getValue(), group);
           }
         }
       }

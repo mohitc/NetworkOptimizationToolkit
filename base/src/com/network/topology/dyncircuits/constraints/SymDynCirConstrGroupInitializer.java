@@ -7,7 +7,7 @@ import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPConstantException;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
+import com.network.topology.FixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class SymDynCirConstrGroupInitializer extends LPGroupInitializer {
   @Override
   public void run() throws LPModelException {
     try {
-      int circuitClasses = (int) model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      int circuitClasses = (int) model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
       if (circuitClasses <= 0) {
         log.error("Circuit classes should be a positive integer (>0). Defaulting to 1");
         this.circuitClasses = 1;

@@ -5,7 +5,7 @@ import com.lpapi.entities.LPVarType;
 import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
+import com.network.topology.FixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ public class CapacityVarGroupInitializer extends LPGroupInitializer {
     public void run() throws LPModelException {
     try {
       LPVarGroup group = this.getGroup().getModel().getLPVarGroup(this.getGroup().getIdentifier());
-      double capInf = model().getLPConstant(VariableBoundConstants.CAP_MAX).getValue();
+      double capInf = model().getLPConstant(FixedConstants.CAP_MAX).getValue();
 
       for (String vertex1 : vertices) {
         for (String vertex2 : vertices) {

@@ -5,7 +5,7 @@ import com.lpapi.entities.LPVarType;
 import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
+import com.network.topology.FixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class RoutingCostVarGroupInitializer extends LPGroupInitializer {
           if (s.equals(d))
             continue;
           //all incoming links to the source cannot carry traffic going out from the source
-          this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(s, d), LPVarType.DOUBLE, 0, model().getLPConstant(VariableBoundConstants.ROUTING_COST_MAX).getValue(), group);
+          this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(s, d), LPVarType.DOUBLE, 0, model().getLPConstant(FixedConstants.ROUTING_COST_MAX).getValue(), group);
         }
       }
     }catch (LPNameException e) {

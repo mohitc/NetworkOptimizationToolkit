@@ -3,21 +3,16 @@ package com.network.topology.linkexists.constraints;
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
-import com.lpapi.entities.LPVarGroup;
 import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
-import com.topology.primitives.ConnectionPoint;
-import com.topology.primitives.Link;
-import com.topology.primitives.TopologyManager;
+import com.network.topology.FixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /** Initialize a group of 3 constraints to ensure that a Link Exists
@@ -65,12 +60,12 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
   public void run() throws LPModelException {
     try {
       LPConstraintGroup group = this.getGroup().getModel().getLPConstraintGroup(this.getGroup().getIdentifier());
-      double maxCircuits = model().getLPConstant(VariableBoundConstants.DYN_CIRTUITS_MAX).getValue();
+      double maxCircuits = model().getLPConstant(FixedConstants.DYN_CIRTUITS_MAX).getValue();
       if (maxCircuits<1) {
         log.error("Max number of dynamic circuits not initialized correctly, defaulting to 1");
         maxCircuits = 1;
       }
-      int vertexClasses = (int)model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+      int vertexClasses = (int)model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
 
       for (String i: vertexVars) {
         for (String j: vertexVars) {

@@ -2,7 +2,7 @@ package com.network.topology.capacity.constraints;
 
 import java.util.*;
 
-import com.network.topology.VariableBoundConstants;
+import com.network.topology.FixedConstants;
 import com.network.topology.dyncircuits.parser.DynCircuitClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +69,7 @@ public class ActualCapacityGroupInitializer extends LPGroupInitializer {
 		try {
 			//Constraint 10
 			LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
-			int maxCircuitTypes = (int)model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
+			int maxCircuitTypes = (int)model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
 
 			for (String i : vertexVars) {
 				for (String j : vertexVars) {

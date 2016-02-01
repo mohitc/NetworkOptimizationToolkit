@@ -6,6 +6,7 @@ import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
 import com.lpapi.entities.group.validators.LPPrefixClassValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstraintPrefixes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 
 public class DynCircuitBoundConstrNameGenerator extends LPNameGeneratorImpl {
 
-  private static final String PREFIX = "DYN-CIR-BOUND";
+  private static final String PREFIX = ConstraintPrefixes.DYN_CIRCUIT_BOUND;
 
   private static final Logger log = LoggerFactory.getLogger(DynCircuitBoundConstrNameGenerator.class);
 

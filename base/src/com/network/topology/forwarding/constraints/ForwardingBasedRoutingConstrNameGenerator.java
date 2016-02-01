@@ -5,6 +5,7 @@ import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
 import com.lpapi.entities.group.validators.LPPrefixClassValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstraintPrefixes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 
 public class ForwardingBasedRoutingConstrNameGenerator extends LPNameGeneratorImpl<String> {
 
-  private static final String PREFIX = "FORWARDING-ROUTING";
+  private static final String PREFIX = ConstraintPrefixes.FORWARDING_BASED_ROUTING;
 
   private static final Logger log = LoggerFactory.getLogger(ForwardingBasedRoutingConstrNameGenerator.class);
 

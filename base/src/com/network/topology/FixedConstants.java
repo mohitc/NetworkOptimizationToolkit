@@ -1,6 +1,6 @@
 package com.network.topology;
 
-public interface VariableBoundConstants {
+public interface FixedConstants {
 
   String GROUP_NAME="VariableBounds";
   String GROUP_DESC="Constants defining maximum bounds on variables";
@@ -14,5 +14,7 @@ public interface VariableBoundConstants {
   String CAP_MAX = "C(MAX)";
 
   String W_INF = "W_INF";
+
+  String ALPHA = "ALPHA";
 
 }

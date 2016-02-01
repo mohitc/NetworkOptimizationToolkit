@@ -1,4 +1,4 @@
-package com.network.topology.capacity.constraints;
+package com.network.topology.traffic.knowntm.constraints;
 
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
@@ -8,7 +8,7 @@ import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.VariableBoundConstants;
+import com.network.topology.FixedConstants;
 import com.topology.primitives.TopologyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,21 +17,18 @@ import java.util.Collections;
 import java.util.Set;
 
 
-public class ActualDemandedCapacityGroupInitializer extends LPGroupInitializer {
+public class KnownTmTrafficConstrGroupInitializer extends LPGroupInitializer {
 
-	private static final Logger log = LoggerFactory.getLogger(ActualDemandedCapacityGroupInitializer.class);
+	private static final Logger log = LoggerFactory.getLogger(KnownTmTrafficConstrGroupInitializer.class);
 
 	private LPNameGenerator capacityVarNameGenerator, demandedCapacityConstNameGenerator,
 			routingVarNameGenerator;
 
-	private TopologyManager topo;
-
 	private Set<String> vertexVars;
 
-	public ActualDemandedCapacityGroupInitializer(Set<String> vertexVars, LPNameGenerator capacityVarNameGenerator,
-																								LPNameGenerator demandedCapacityConstNameGenerator,
-																								LPNameGenerator routingVarNameGenerator,
-																								TopologyManager topo) {
+	public KnownTmTrafficConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator capacityVarNameGenerator,
+																							LPNameGenerator demandedCapacityConstNameGenerator,
+																							LPNameGenerator routingVarNameGenerator) {
 		if (capacityVarNameGenerator==null) {
 			log.error("Initialized with empty capacity variable name generator");
 			this.capacityVarNameGenerator = new LPEmptyNameGenratorImpl<>();
@@ -56,11 +53,6 @@ public class ActualDemandedCapacityGroupInitializer extends LPGroupInitializer {
 			log.error("Constraint generator initialized with empty set of vertices");
 			this.vertexVars = Collections.EMPTY_SET;
 		}
-		if (topo==null) {
-			log.error("Initialized with empty circuit variable name generator");
-		} else {
-			this.topo = topo;
-		}
 	}
 
 	@Override
@@ -68,7 +60,6 @@ public class ActualDemandedCapacityGroupInitializer extends LPGroupInitializer {
 		try {
 			//Constraint 11 //FIXME: no, this relates to demanded capacity... not 11 (not in the formulation at all)
 			LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
-			int maxCircuitTypes = (int)model().getLPConstant(VariableBoundConstants.CIRCUIT_CLASSES).getValue();
 
 			for (String i : vertexVars) {
 				for (String j : vertexVars) {
@@ -77,7 +68,7 @@ public class ActualDemandedCapacityGroupInitializer extends LPGroupInitializer {
 					}
 
 					LPExpression rhs = new LPExpression(model());
-					rhs.addTerm(model().getLPVar(capacityVarNameGenerator.getName(i,j)));
+					rhs.addTerm(model().getLPConstant(FixedConstants.ALPHA).getValue(), model().getLPVar(capacityVarNameGenerator.getName(i,j)));
 
 					LPExpression lhs = new LPExpression(model());
 					for (String s : vertexVars) {
@@ -98,23 +89,5 @@ public class ActualDemandedCapacityGroupInitializer extends LPGroupInitializer {
 			throw new LPModelException("Variable name not found: " + e.getMessage());
 		}
 	}
-
-	static public double getDynCircuitCapacity(int n){
-		switch(n){
-			case 1:
-				return 2.5;
-			case 2:
-				return 10;
-			case 3:
-				return 40;
-			case 4:
-				return 100;
-			default:
-				log.error("Unable to convert circuit to capacity: " + Integer.toString(n));
-				//TODO: should probably thrown an exception here
-		}
-		return 0;
-	}
-
 
 }
