@@ -320,8 +320,8 @@ public class FixedTopologyModel {
 
       //Initialize Objective function
       MinDynCirCostObjFnGenerator objFnGenerator = new MinDynCirCostObjFnGenerator(lpModel.getVertexLabels(), lpModel.dynCircuitParser.getResult(), lpModel.factory.getDynamicCircuitNameGenerator());
-      LPExpression obj = new LPExpression(lpModel.model);
-      obj.addTerm(1);
+      LPExpression obj = objFnGenerator.generate(lpModel.model);
+//      obj.addTerm(1);
       lpModel.model.setObjFn(obj, LPObjType.MAXIMIZE);
       lpModel.model.init();
       lpModel.model.computeModel();
