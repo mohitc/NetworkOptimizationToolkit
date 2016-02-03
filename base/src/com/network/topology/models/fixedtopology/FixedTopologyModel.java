@@ -175,13 +175,8 @@ public class FixedTopologyModel {
     LinkWeightVarGroupInitializer linkWeightVarGroupInitializer = new LinkWeightVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("LinkWeight", "Variables to indicate link weights", factory.getLinkWeightVarNameGenerator(), linkWeightVarGroupInitializer);
 
-    try {
-      int circuitClasses = (int) model.getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
-      DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
-      model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(), dynCircuitVarGroupInitializer);
-    } catch (LPConstantException e) {
-      log.error("Constant to indicate the number of dynamic circuit classes not defined");
-    }
+    DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
+    model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(), dynCircuitVarGroupInitializer);
   }
 
   public void initConstraintGroups() throws LPConstraintGroupException {
@@ -318,12 +313,14 @@ public class FixedTopologyModel {
       lpModel.initVarGroups();
       lpModel.initConstraintGroups();
 
+      lpModel.model.init();
+
       //Initialize Objective function
       MinDynCirCostObjFnGenerator objFnGenerator = new MinDynCirCostObjFnGenerator(lpModel.getVertexLabels(), lpModel.dynCircuitParser.getResult(), lpModel.factory.getDynamicCircuitNameGenerator());
       LPExpression obj = objFnGenerator.generate(lpModel.model);
 //      obj.addTerm(1);
       lpModel.model.setObjFn(obj, LPObjType.MAXIMIZE);
-      lpModel.model.init();
+
       lpModel.model.computeModel();
     } catch (LPModelException e) {
       log.error("Error initializing model", e);
