@@ -2,6 +2,7 @@ package com.network.topology.dyncircuits.vars;
 
 import com.lpapi.entities.group.generators.LPNameGeneratorImpl;
 import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
+import com.lpapi.entities.group.validators.LPNumberRangeValidator;
 import com.lpapi.entities.group.validators.LPPrefixClassValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
@@ -32,12 +33,9 @@ public class DynCircuitVarNameGenerator extends LPNameGeneratorImpl<String> {
       vertexVars = Collections.EMPTY_SET;
     }
     //add validators
-    Set<Integer> circuitClassSet = new HashSet<>();
-    for (int i=1;i<=circuitClasses;i++)
-      circuitClassSet.add(i);
     //circuit class is an integer in the set circuitClassSet
     addValidator(new LPPrefixClassValidator(0, Integer.class, "Circuit class should be an integer"));
-    addValidator(new LPSetContainmentValidator(0, circuitClassSet, "Not a valid circuit class"));
+    addValidator(new LPNumberRangeValidator(0, 1, circuitClasses, "Circuit class not in range [1, " + circuitClasses + "]"));
     //validate nodes
     addValidator(new LPPrefixClassValidator(1, String.class, "Vertex should be of type string"));
     addValidator(new LPPrefixClassValidator(2, String.class, "Vertex should be of type string"));

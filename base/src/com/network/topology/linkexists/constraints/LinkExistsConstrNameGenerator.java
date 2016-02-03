@@ -2,6 +2,7 @@ package com.network.topology.linkexists.constraints;
 
 import com.lpapi.entities.group.generators.LPNameGeneratorImpl;
 import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
+import com.lpapi.entities.group.validators.LPNumberRangeValidator;
 import com.lpapi.entities.group.validators.LPPrefixClassValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
@@ -26,13 +27,9 @@ public class LinkExistsConstrNameGenerator extends LPNameGeneratorImpl {
       log.error("Name generator initialized with empty set of vertices");
       vertexVars = Collections.EMPTY_SET;
     }
-    //add validators
-    Set<Integer> constrTypes = new HashSet<>();
-    for (int i=1;i<=3;i++)
-      constrTypes.add(i);
     //circuit class is an integer in the set circuitClassSet
     addValidator(new LPPrefixClassValidator(0, Integer.class, "Constraint type should be an integer between 1 and 3"));
-    addValidator(new LPSetContainmentValidator(0, constrTypes, "Constraint type should be an integer between 1 and 3"));
+    addValidator(new LPNumberRangeValidator(0, 1, 3, "Constraint type prefix not in range [1, 3]"));
     //validate nodes
     addValidator(new LPPrefixClassValidator(1, String.class, "Vertex should be of type string"));
     addValidator(new LPPrefixClassValidator(2, String.class, "Vertex should be of type string"));
