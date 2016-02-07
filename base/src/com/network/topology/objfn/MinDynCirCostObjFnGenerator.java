@@ -2,6 +2,7 @@ package com.network.topology.objfn;
 
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
+import com.lpapi.entities.LPObjFnGenerator;
 import com.lpapi.entities.LPObjType;
 import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
@@ -9,16 +10,12 @@ import com.lpapi.exception.LPExpressionException;
 import com.lpapi.exception.LPNameException;
 import com.lpapi.exception.LPVarException;
 import com.network.topology.dyncircuits.parser.DynCircuitClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-public class MinDynCirCostObjFnGenerator implements ObjFnGenerator{
-
-  private static final Logger log = LoggerFactory.getLogger(MinDynCirCostObjFnGenerator.class);
+public class MinDynCirCostObjFnGenerator extends LPObjFnGenerator {
 
   private Set<String> vertexSet;
 
@@ -28,6 +25,7 @@ public class MinDynCirCostObjFnGenerator implements ObjFnGenerator{
 
 
   public MinDynCirCostObjFnGenerator(Set<String> vertexSet, Map<Integer, DynCircuitClass> circuitClassMap, LPNameGenerator dynCircuitVarNameGenerator){
+    super(LPObjType.MINIMIZE);
     if (dynCircuitVarNameGenerator==null) {
       log.error("Initialized with empty dynamic circuit variable name generator");
       this.dynCircuitVarNameGenerator = new LPEmptyNameGenratorImpl<>();
@@ -48,9 +46,8 @@ public class MinDynCirCostObjFnGenerator implements ObjFnGenerator{
     }
   }
 
-  @Override
-  public LPExpression generate(LPModel model) throws LPExpressionException {
-    LPExpression expr = new LPExpression(model);
+  public LPExpression generate() throws LPExpressionException {
+    LPExpression expr = new LPExpression(getModel());
     try {
       for (int i: circuitClassMap.keySet()) {
         double cost = circuitClassMap.get(i).getCost();
@@ -58,7 +55,7 @@ public class MinDynCirCostObjFnGenerator implements ObjFnGenerator{
           for (String y: vertexSet) {
             if (x.equals(y))
               continue;
-            expr.addTerm(cost, model.getLPVar(dynCircuitVarNameGenerator.getName(i, x, y)));
+            expr.addTerm(cost, getModel().getLPVar(dynCircuitVarNameGenerator.getName(i, x, y)));
           }
         }
       }
@@ -70,11 +67,5 @@ public class MinDynCirCostObjFnGenerator implements ObjFnGenerator{
       log.error("Error generating var name", e);
       throw new LPExpressionException("Error generating var name: " + e.getMessage());
     }
-  }
-
-  //Objective is to minimize the circuit cost
-  @Override
-  public LPObjType getObjType() {
-    return LPObjType.MINIMIZE;
   }
 }

@@ -313,14 +313,13 @@ public class FixedTopologyModel {
       lpModel.initVarGroups();
       lpModel.initConstraintGroups();
 
-      lpModel.model.init();
 
       //Initialize Objective function
-      MinDynCirCostObjFnGenerator objFnGenerator = new MinDynCirCostObjFnGenerator(lpModel.getVertexLabels(), lpModel.dynCircuitParser.getResult(), lpModel.factory.getDynamicCircuitNameGenerator());
-      LPExpression obj = objFnGenerator.generate(lpModel.model);
+      lpModel.model.attachObjectiveFunctionGenerator(new MinDynCirCostObjFnGenerator(lpModel.getVertexLabels(),
+        lpModel.dynCircuitParser.getResult(), lpModel.factory.getDynamicCircuitNameGenerator()));
 //      obj.addTerm(1);
-      lpModel.model.setObjFn(obj, LPObjType.MAXIMIZE);
-
+//      lpModel.model.setObjFn(obj, LPObjType.MAXIMIZE);
+      lpModel.model.init();
       lpModel.model.computeModel();
     } catch (LPModelException e) {
       log.error("Error initializing model", e);
