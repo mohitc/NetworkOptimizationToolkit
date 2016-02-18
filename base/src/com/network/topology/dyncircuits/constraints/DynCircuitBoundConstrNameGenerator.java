@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class DynCircuitBoundConstrNameGenerator extends LPNameGeneratorImpl {
+public class DynCircuitBoundConstrNameGenerator extends LPNameGeneratorImpl<String> {
 
   private static final String PREFIX = ConstraintPrefixes.DYN_CIRCUIT_BOUND;
 
@@ -26,17 +26,15 @@ public class DynCircuitBoundConstrNameGenerator extends LPNameGeneratorImpl {
       log.error("Name generator initialized with empty set of vertices");
       vertexVars = Collections.EMPTY_SET;
     }
-    addValidator(new LPPrefixClassValidator(0, String.class, "Source should be of type string"));
-    addValidator(new LPPrefixClassValidator(1, String.class, "Destination should be of type string"));
-    //b) both vertices should be in the set of vertexes
+    //a) both vertices should be in the set of vertexes
     addValidator(new LPSetContainmentValidator(0, vertexVars, "Source should be in the set of vertices"));
     addValidator(new LPSetContainmentValidator(1, vertexVars, "Destination should be in the set of vertices"));
-    //a) unique because LinkExists x-x is an invalid variable, and
+    //b) unique because LinkExists x-x is an invalid variable, and
     addValidator(new LPDistinctPrefixValidator(0, 1, "Source and destination cannot be the same"));
 
   }
 
   @Override
-  protected void validatePrefixConstraint(List strings) throws LPNameException {
+  protected void validatePrefixConstraint(List<String> strings) throws LPNameException {
   }
 }
