@@ -72,12 +72,10 @@ public class KnownTmTrafficConstrGroupInitializer extends LPGroupInitializer {
 
 					LPExpression lhs = new LPExpression(model());
 					for (String s : vertexVars) {
-						if (s.equals(j))
-							continue;
 						for (String d : vertexVars) {
-							if (i.equals(d) || s.equals(d))
+							if (s.equals(d))
 								continue;
-							lhs.addTerm(model().getLPConstant(demandedCapacityConstNameGenerator.getName(s, d)), model().getLPVar(routingVarNameGenerator.getName(s, d, i, j)));
+							lhs.addTerm(model().getLPConstant(demandedCapacityConstNameGenerator.getName(s, d)).getValue(), model().getLPVar(routingVarNameGenerator.getName(s, d, i, j)));
 						}
 					}
 
