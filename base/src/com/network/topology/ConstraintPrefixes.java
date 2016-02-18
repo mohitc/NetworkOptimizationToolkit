@@ -2,6 +2,8 @@ package com.network.topology;
 
 public interface ConstraintPrefixes {
 
+  //Constraint for actual capacity
+  String ACTUAL_CAPACITY = "Capacity";
   //Constraint to minimize the routing cost
   String MIN_ROUTING_COST = "MinRoutingCostConstr";
   //Constraint to calculate routing cost of path based on routing

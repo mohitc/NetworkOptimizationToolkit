@@ -54,8 +54,8 @@ public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
         }
       }
     }catch (LPNameException e) {
-      log.error("Variable name not found: " + e.getMessage());
-      throw new LPModelException("Variable name not found: " + e.getMessage());
+      log.error("Constant name not found: " + e.getMessage());
+      throw new LPModelException("Constant name not found: " + e.getMessage());
     }
   }
 }

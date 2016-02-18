@@ -89,7 +89,7 @@ public class ActualCapacityGroupInitializer extends LPGroupInitializer {
 			}
 		} catch (LPNameException e) {
 			log.error("Variable name not found: " + e.getMessage());
-		    throw new LPModelException("Variable name not found: " + e.getMessage());
+		  throw new LPModelException("Variable name not found: " + e.getMessage());
 		}
 	 }
 

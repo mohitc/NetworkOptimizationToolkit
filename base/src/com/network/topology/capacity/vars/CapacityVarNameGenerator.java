@@ -17,7 +17,7 @@ public class CapacityVarNameGenerator extends LPNameGeneratorImpl<String> {
 
   private static final String PREFIX = VariablePrefixes.CAPACITY;
 
-  private static final String LOG_PREFIX = "C:- ";
+  private static final String LOG_PREFIX = "C:-";
 
   private static final Logger log = LoggerFactory.getLogger(CapacityVarNameGenerator.class);
 
