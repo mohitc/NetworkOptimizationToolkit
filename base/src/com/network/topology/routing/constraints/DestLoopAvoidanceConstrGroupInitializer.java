@@ -14,21 +14,15 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Set;
 
-public class RoutingConstrGroupInitializer extends LPGroupInitializer {
+public class DestLoopAvoidanceConstrGroupInitializer extends LPGroupInitializer {
 
-  private static final Logger log = LoggerFactory.getLogger(RoutingConstrGroupInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(DestLoopAvoidanceConstrGroupInitializer.class);
 
-  private LPNameGenerator linkExistsNameGenerator, routingNameGenerator;
+  private LPNameGenerator routingNameGenerator;
 
   private Set<String> vertexVars;
 
-  public RoutingConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator linkExistsNameGenerator, LPNameGenerator routingNameGenerator) {
-    if (linkExistsNameGenerator==null) {
-      log.error("Initialized with empty link exists variable name generator");
-      this.linkExistsNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkExistsNameGenerator = linkExistsNameGenerator;
-    }
+  public DestLoopAvoidanceConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator routingNameGenerator) {
     if (routingNameGenerator==null) {
       log.error("Initialized with empty routing variable name generator");
       this.routingNameGenerator = new LPEmptyNameGenratorImpl<>();
@@ -52,22 +46,20 @@ public class RoutingConstrGroupInitializer extends LPGroupInitializer {
           //for all distinct pair of vertices, routing can only use a link that exists : r(s,d,i,j) <= LE (i,j)
           if (s.equals(d))
             continue;
-          for (String i : vertexVars) {
-            for (String j : vertexVars) {
-              if (i.equals(j))
-                continue;
-              LPExpression lhs = new LPExpression(model());
-              lhs.addTerm(model().getLPVar(routingNameGenerator.getName(s, d, i, j)));
-              LPExpression rhs = new LPExpression(model());
-              rhs.addTerm(model().getLPVar(linkExistsNameGenerator.getName(i,j)));
-              model().addConstraint(generator().getName(s,d,i,j), lhs, LPOperator.LESS_EQUAL, rhs, group);
-            }
+          LPExpression lhs = new LPExpression(model());
+          for (String i: vertexVars) {
+            if (i.equals(d))
+              continue;
+            lhs.addTerm(model().getLPVar(routingNameGenerator.getName(s,d,d,i)));
           }
+          LPExpression rhs = new LPExpression(model());
+          rhs.addTerm(0);
+          model().addConstraint(generator().getName(s,d), lhs, LPOperator.EQUAL, rhs, group);
         }
       }
     } catch (LPNameException e) {
-      log.error("Variable name not found: " + e.getMessage());
-      throw new LPModelException("Variable name not found: " + e.getMessage());
+      log.error("Constr name not found: " + e.getMessage());
+      throw new LPModelException("Constr name not found: " + e.getMessage());
     }
   }
 }

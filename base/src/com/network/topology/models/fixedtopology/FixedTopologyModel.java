@@ -267,6 +267,14 @@ public class FixedTopologyModel {
     MinRoutingCostConstrNameGenerator minRoutingCostConstrNameGenerator = new MinRoutingCostConstrNameGenerator(vertexLabels);
     MinRoutingCostConstrGroupInitializer minRoutingCostConstrGroupInitializer = new MinRoutingCostConstrGroupInitializer(vertexLabels, factory.getRoutingCostNameGenerator(), factory.getLinkWeightVarNameGenerator());
     model.createLPConstraintGroup("MinRoutingCost", "Constraint to ensure that routing cost is minimized", minRoutingCostConstrNameGenerator, minRoutingCostConstrGroupInitializer);
+
+    SourceLoopAvoidanceConstrNameGenerator sourceLoopAvoidanceConstrNameGenerator = new SourceLoopAvoidanceConstrNameGenerator(vertexLabels);
+    SourceLoopAvoidanceConstrGroupInitializer sourceLoopAvoidanceConstrGroupInitializer = new SourceLoopAvoidanceConstrGroupInitializer(vertexLabels, factory.getRoutingNameGenerator());
+    model.createLPConstraintGroup("SourceLoopAvoidance", "Constraint to ensure loop avoidance at source", sourceLoopAvoidanceConstrNameGenerator, sourceLoopAvoidanceConstrGroupInitializer);
+
+    DestLoopAvoidanceConstrNameGenerator destLoopAvoidanceConstrNameGenerator = new DestLoopAvoidanceConstrNameGenerator(vertexLabels);
+    DestLoopAvoidanceConstrGroupInitializer destLoopAvoidanceConstrGroupInitializer = new DestLoopAvoidanceConstrGroupInitializer(vertexLabels, factory.getRoutingNameGenerator());
+    model.createLPConstraintGroup("DestLoopAvoidance", "Constraint to ensyre loop avoidance at destination", destLoopAvoidanceConstrNameGenerator, destLoopAvoidanceConstrGroupInitializer);
     //Forwarding Constraints
 
     UniqueForwardingConstrNameGenerator uniqueForwardingConstrNameGenerator = new UniqueForwardingConstrNameGenerator(vertexLabels);

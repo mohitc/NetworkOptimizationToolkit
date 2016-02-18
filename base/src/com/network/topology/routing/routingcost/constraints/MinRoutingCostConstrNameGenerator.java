@@ -32,7 +32,7 @@ public class MinRoutingCostConstrNameGenerator extends LPNameGeneratorImpl<Strin
     addValidator(new LPSetContainmentValidator(2, vertexVars, "Destination should be in the set of vertices"));
     //Min Routing Cost (s,x,d)
     addValidator(new LPDistinctPrefixValidator(0, 2, "s!=d"));
-    addValidator(new LPDistinctPrefixValidator(0, 2, "x!=d"));
+    addValidator(new LPDistinctPrefixValidator(1, 2, "x!=d"));
   }
 
   @Override

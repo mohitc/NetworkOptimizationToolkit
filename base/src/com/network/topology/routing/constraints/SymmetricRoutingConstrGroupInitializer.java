@@ -43,17 +43,13 @@ public class SymmetricRoutingConstrGroupInitializer extends LPGroupInitializer {
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
       for (String s : vertexVars) {
         for (String d : vertexVars) {
-          //for all distinct pair of vertices, routing can only use a link that exists : r(s,d,i,j) <= LE (i,j)
+          //Take a single s, d pair and create symmetric routing rules for all i,j pairs
           if (s.compareTo(d)<=0)
             continue;
           for (String i : vertexVars) {
-            if (i.equals(d))
-              continue;
             for (String j : vertexVars) {
-              if (i.compareTo(j)<=0)
+              if (i.equals(j))
                 continue;
-              if (j.equals(s))
-                continue;;
               LPExpression lhs = new LPExpression(model());
               lhs.addTerm(model().getLPVar(routingNameGenerator.getName(s, d, i, j)));
               LPExpression rhs = new LPExpression(model());

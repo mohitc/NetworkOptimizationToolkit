@@ -32,9 +32,9 @@ public class ForwardingBasedRoutingConstrNameGenerator extends LPNameGeneratorIm
     addValidator(new LPSetContainmentValidator(3, vertexVars, "prefix j should be in the set of vertices"));
     //a) unique because LinkExists x-x is an invalid variable, and
     addValidator(new LPDistinctPrefixValidator(0, 1, "Source and destination cannot be the same"));
-    addValidator(new LPDistinctPrefixValidator(1, 2, "d != i"));
+//    addValidator(new LPDistinctPrefixValidator(1, 2, "d != i"));
     addValidator(new LPDistinctPrefixValidator(2, 3, "i != j"));
-    addValidator(new LPDistinctPrefixValidator(0, 3, "s != j"));
+//    addValidator(new LPDistinctPrefixValidator(0, 3, "s != j"));
   }
 
   @Override

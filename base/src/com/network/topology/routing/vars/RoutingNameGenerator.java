@@ -24,7 +24,7 @@ public class RoutingNameGenerator extends LPNameGeneratorImpl<String> {
   public RoutingNameGenerator(Set<String> vertexVars) {
     super(PREFIX, 4);
     if (vertexVars==null) {
-      log.error("Name generator initialized with empty set of vertices");
+      log.error("{} Name generator initialized with empty set of vertices", LOG_PREFIX);
       vertexVars = Collections.EMPTY_SET;
     }
     //b) all prefixes should be in the set of vertexes
@@ -34,9 +34,7 @@ public class RoutingNameGenerator extends LPNameGeneratorImpl<String> {
     addValidator(new LPSetContainmentValidator(3, vertexVars, "prefix j should be in the set of vertices"));
     //a) unique because LinkExists x-x is an invalid variable, and
     addValidator(new LPDistinctPrefixValidator(0, 1, "Source and destination cannot be the same"));
-    addValidator(new LPDistinctPrefixValidator(1, 2, "d != i"));
     addValidator(new LPDistinctPrefixValidator(2, 3, "i != j"));
-  //  addValidator(new LPDistinctPrefixValidator(0, 3, "s != j"));
   }
 
   @Override

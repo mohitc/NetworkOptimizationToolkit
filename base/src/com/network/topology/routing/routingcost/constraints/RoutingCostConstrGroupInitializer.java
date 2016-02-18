@@ -52,7 +52,6 @@ public class RoutingCostConstrGroupInitializer extends LPGroupInitializer {
 
   @Override
   public void run() throws LPModelException {
-    //Set<Link> links = manager.getAllElements(Link.class);
     try {
 
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
@@ -65,13 +64,10 @@ public class RoutingCostConstrGroupInitializer extends LPGroupInitializer {
           lhs.addTerm(model().getLPVar(routingCostNameGenerator.getName(s, d)));
           LPExpression rhs = new LPExpression(model());
           for (String i: vertexVars) {
-            if (i.equals(d))
-              continue;
             for (String j: vertexVars) {
-              if (j.equals(s) || j.equals(i))
+              if (i.equals(j))
                 continue;
               rhs.addTerm(model().getLPConstant(linkWeightConstantNameGenerator.getName(s,d)).getValue(), model().getLPVar(routingNameGenerator.getName(s, d, i, j)));
-
             }
           }
           model().addConstraint(generator().getName(s, d), lhs, LPOperator.EQUAL, rhs, group);

@@ -23,7 +23,7 @@ public class RoutingCostVarNameGenerator extends LPNameGeneratorImpl<String> {
   public RoutingCostVarNameGenerator(Set<String> vertexVars) {
     super(PREFIX, 2);
     if (vertexVars == null) {
-      log.error("Name generator initialized with empty set of vertices");
+      log.error("{} Name generator initialized with empty set of vertices", LOG_PREFIX);
       vertexVars = Collections.EMPTY_SET;
     }
     //b) all prefixes should be in the set of vertexes

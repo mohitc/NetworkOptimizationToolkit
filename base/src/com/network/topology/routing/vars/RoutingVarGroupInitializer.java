@@ -33,18 +33,14 @@ public class RoutingVarGroupInitializer extends LPGroupInitializer {
       LPVarGroup group = this.getGroup().getModel().getLPVarGroup(this.getGroup().getIdentifier());
       for (String s : vertices) {
         for (String d : vertices) {
-          //for all distinct pair of vertices, a linkexists can possibly have a value 0 or 1
           if (s.equals(d))
             continue;
           for (String i: vertices) {
             for (String j: vertices) {
-              if (i.equals(j) || d.equals(i))
+              if (i.equals(j))
                 continue;
-              //all incoming links to the source cannot carry traffic going out from the source
-              if (j.equals(s))
-                this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(s, d, i, j), LPVarType.BOOLEAN, 0, 0, group);
-              else
-                this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(s, d, i, j), LPVarType.BOOLEAN, 0, 1, group);
+              //All routing variables can have the value between 0 and 1
+              this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(s, d, i, j), LPVarType.BOOLEAN, 0, 1, group);
             }
           }
         }

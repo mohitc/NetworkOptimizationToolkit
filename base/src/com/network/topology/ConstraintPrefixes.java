@@ -28,6 +28,11 @@ public interface ConstraintPrefixes {
   String ROUTING_CONTINUITY = "ROUTING-CONTINUITY";
   //Symmetric routing constraints
   String SYMMETRIC_ROUTING = "SYMMETRIC-ROUTING";
+  //Source loop avoidance
+  String LOOP_AVOIDANCE_SOURCE = "LOOP-AVOIDANCE-SOURCE";
+  //Destination loop avoidance
+  String LOOP_AVOIDANCE_DESTINATION = "LOOP-AVOIDANCE-DEST";
+
   //Traffic constriants (in case of known TM) to ensure that total traffic on a link is less than the capacity (taking into account
   //the max utilization of the link
   String KNOWN_TM_TRAFFIC = "KNOWN_TM_TRAFFIC";
