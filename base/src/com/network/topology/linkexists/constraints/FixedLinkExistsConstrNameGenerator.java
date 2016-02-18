@@ -20,8 +20,6 @@ public class FixedLinkExistsConstrNameGenerator extends LPNameGeneratorImpl<Stri
 
   private static final Logger log = LoggerFactory.getLogger(FixedLinkExistsConstrNameGenerator.class);
 
-  private Set<String> vertexVars;
-
   public FixedLinkExistsConstrNameGenerator(Set<String> vertexVars) {
     super(LINK_EXISTS_CONSTR_PREFIX, 2);
     if (vertexVars==null) {
