@@ -58,7 +58,8 @@ public class SymDynCirConstrGroupInitializer extends LPGroupInitializer {
       for (int n=1; n<=circuitClasses; n++) {
         for (String i: vertices) {
           for (String j: vertices) {
-            if (i.equals(j))
+            //reduce duplicates
+            if (i.compareTo(j)<=0)
               continue;
             LPExpression lhs = new LPExpression(model());
             LPExpression rhs = new LPExpression(model());
