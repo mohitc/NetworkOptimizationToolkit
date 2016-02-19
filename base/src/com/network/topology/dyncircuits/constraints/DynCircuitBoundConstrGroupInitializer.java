@@ -53,7 +53,7 @@ public class DynCircuitBoundConstrGroupInitializer extends LPGroupInitializer {
             lhs.addTerm(model().getLPVar(dynCircuitNameGenerator.getName(n, s, d)));
           }
           LPExpression rhs = new LPExpression(model());
-          rhs.addTerm(model().getLPConstant(FixedConstants.DYN_CIRTUITS_MAX));
+          rhs.addTerm(model().getLPConstant(FixedConstants.DYN_CIRTUITS_MAX).getValue());
           model().addConstraint(generator().getName(s,d), lhs, LPOperator.LESS_EQUAL, rhs, group);
         }
       }
