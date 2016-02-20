@@ -18,7 +18,7 @@
     </circuitclass>
     <circuitclass>
         <classtype>4</classtype>
-        <cap>10000</cap>
+        <cap>100000</cap>
         <cost>22</cost>
     </circuitclass>
 </circuitclasses>
