@@ -5,6 +5,7 @@ import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPObjType;
 //import com.lpapi.entities.gurobi.impl.GurobiLPModel;
+import com.lpapi.entities.glpk.impl.GlpkLPModel;
 import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.FixedConstants;
@@ -295,7 +296,8 @@ public class FixedTopologyModel {
   public void initModel() throws LPModelException {
 //  model = new CplexLPModel("Test");
 //  model = new GurobiLPModel("Test");
-    model = new SkeletonLPModel("Test");
+//    model = new SkeletonLPModel("Test");
+    model = new GlpkLPModel("Test");
   }
 
 
@@ -328,7 +330,9 @@ public class FixedTopologyModel {
 //      obj.addTerm(1);
 //      lpModel.model.setObjFn(obj, LPObjType.MAXIMIZE);
       lpModel.model.init();
+      lpModel.model.initObjectiveFunction();
       lpModel.model.computeModel();
+      log.info("Objective:" + lpModel.model.getObjectiveValue());
     } catch (LPModelException e) {
       log.error("Error initializing model", e);
     } catch (TopologyException e) {
