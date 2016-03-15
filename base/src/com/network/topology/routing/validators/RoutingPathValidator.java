@@ -18,26 +18,26 @@ import com.network.topology.models.validators.ModelValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RoutingPathValidator extends ModelValidator {
 
   private static final Logger log = LoggerFactory.getLogger(RoutingPathValidator.class);
 
-  private String source, destination;
-
   private Set<String> vertexLabels;
 
   private LPNameGenerator routingNameGenerator;
 
-  public RoutingPathValidator(LPModel model, String source, String destination, Set<String> vertexLabels, LPNameGenerator routingNameGenerator) {
+  public RoutingPathValidator(LPModel model, Set<String> vertexLabels, LPNameGenerator routingNameGenerator) {
     super(model);
-    this.source = source;
-    this.destination = destination;
-    this.vertexLabels = vertexLabels;
+    if (vertexLabels!=null) {
+      this.vertexLabels = vertexLabels;
+    } else {
+      log.error("Routing Path Validator initialized with an empty set");
+      this.vertexLabels = Collections.EMPTY_SET;
+    }
     if (routingNameGenerator == null) {
+      log.error("Routing Path Validator initialized with an empty name generator");
       this.routingNameGenerator = new LPEmptyNameGenratorImpl<>();
     } else {
       this.routingNameGenerator = routingNameGenerator;
@@ -46,6 +46,21 @@ public class RoutingPathValidator extends ModelValidator {
 
   @Override
   public void validate() throws ModelValidationException {
+    for (String s: vertexLabels) {
+      for (String d: vertexLabels) {
+        if (s.equals(d))
+          continue;
+        validateRoute(s, d);
+      }
+    }
+  }
+
+  protected String getRoutingVarNameGenerator(String s, String d, String i, String j) throws LPNameException {
+    return routingNameGenerator.getName(s,d,i,j);
+  }
+
+
+  public void validateRoute (String source, String destination) throws ModelValidationException {
     log.info("Validating routing path from " + source + " to " + destination);
     String currentNode = source;
     List<String> visitedVertices = new ArrayList<>();
@@ -58,7 +73,7 @@ public class RoutingPathValidator extends ModelValidator {
         if (node.equals(currentNode))
           continue;
         try {
-          String varName = routingNameGenerator.getName(source, destination, currentNode, node);
+          String varName = getRoutingVarNameGenerator(source, destination, currentNode, node);
           LPVar var = getModel().getLPVar(varName);
           if (var.getResult().intValue()==1) {
             count++;
