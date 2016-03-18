@@ -1,14 +1,13 @@
 package com.network.topology.models.fixedtopology;
 
 import com.lpapi.entities.LPConstantGroup;
-import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPModel;
-import com.lpapi.entities.LPObjType;
-//import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.entities.glpk.impl.GlpkLPModel;
-import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
 import com.network.topology.FixedConstants;
+import com.network.topology.linkexists.validators.FixedLinkExistsValidator;
+import com.network.topology.models.extractors.ModelExtractionException;
+import com.network.topology.models.extractors.ModelExtractor;
 import com.network.topology.models.validators.ModelValidationException;
 import com.network.topology.models.validators.ModelValidator;
 import com.network.topology.routing.validators.RoutingPathValidator;
@@ -310,12 +309,17 @@ public class FixedTopologyModel {
     RoutingPathValidator routingPathValidator = new RoutingPathValidator(model, getVertexLabels(), factory.getRoutingNameGenerator());
     validatorList.add(routingPathValidator);
     validatorList.add(new SymmetricRoutingPathValidator(model, getVertexLabels(), routingPathValidator));
+    validatorList.add(new FixedLinkExistsValidator(model, _instance, factory.getLinkExistsNameGenerator(), getVertexLabels()));
   }
 
   public void runModelValidators() throws ModelValidationException {
     for (ModelValidator validator: validatorList) {
       validator.validate();
     }
+  }
+
+  public ModelExtractor<TopologyManager> initModelExtractor() {
+    return new ModelTopologyExtractor(getVertexLabels(), factory.getLinkExistsNameGenerator());
   }
 
   public static void main (String[] args) {
@@ -353,6 +357,9 @@ public class FixedTopologyModel {
 
       lpModel.initModelValidators();
       lpModel.runModelValidators();
+
+      ModelExtractor<TopologyManager> extractor  = lpModel.initModelExtractor();
+      extractor.extractModel(lpModel.model);
     } catch (LPModelException e) {
       log.error("Error initializing model", e);
     } catch (TopologyException e) {
@@ -363,6 +370,8 @@ public class FixedTopologyModel {
       log.error("Error initializing model file", e);
     } catch (ModelValidationException e) {
       log.error("Error while validating model", e);
+    } catch (ModelExtractionException e) {
+      log.error("Error while extracting topology from model", e);
     }
   }
 

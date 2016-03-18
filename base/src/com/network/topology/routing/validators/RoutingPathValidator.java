@@ -97,7 +97,7 @@ public class RoutingPathValidator extends ModelValidator {
         throw new ModelValidationException("Unexpected case. Terminating");
       }
     }
-    log.info("Routing path: " + visitedVertices);
+    log.debug("Routing path: " + visitedVertices);
     addRoute(source, destination, visitedVertices);
   }
 
