@@ -12,6 +12,7 @@ import com.network.topology.FixedConstants;
 import com.network.topology.models.validators.ModelValidationException;
 import com.network.topology.models.validators.ModelValidator;
 import com.network.topology.routing.validators.RoutingPathValidator;
+import com.network.topology.routing.validators.SymmetricRoutingPathValidator;
 import com.network.topology.traffic.knowntm.constants.KnownTrafficMatConstGroupInitializer;
 import com.network.topology.capacity.constants.InitialCapacityConstGroupInitializer;
 import com.network.topology.capacity.constraints.ActualCapacityGroupInitializer;
@@ -306,7 +307,9 @@ public class FixedTopologyModel {
 
   public void initModelValidators() {
     validatorList = new ArrayList<>();
-    validatorList.add(new RoutingPathValidator(model, getVertexLabels(), factory.getRoutingNameGenerator()));
+    RoutingPathValidator routingPathValidator = new RoutingPathValidator(model, getVertexLabels(), factory.getRoutingNameGenerator());
+    validatorList.add(routingPathValidator);
+    validatorList.add(new SymmetricRoutingPathValidator(model, getVertexLabels(), routingPathValidator));
   }
 
   public void runModelValidators() throws ModelValidationException {

@@ -28,6 +28,8 @@ public class RoutingPathValidator extends ModelValidator {
 
   private LPNameGenerator routingNameGenerator;
 
+  private Map<String, List<String>> routeList;
+
   public RoutingPathValidator(LPModel model, Set<String> vertexLabels, LPNameGenerator routingNameGenerator) {
     super(model);
     if (vertexLabels!=null) {
@@ -42,6 +44,7 @@ public class RoutingPathValidator extends ModelValidator {
     } else {
       this.routingNameGenerator = routingNameGenerator;
     }
+    routeList = new HashMap<>();
   }
 
   @Override
@@ -102,5 +105,14 @@ public class RoutingPathValidator extends ModelValidator {
       }
     }
     log.info("Routing path: " + visitedVertices);
+    addRoute(source, destination, visitedVertices);
+  }
+
+  protected void addRoute(String source, String destination, List<String> route) {
+    routeList.put(source + "-/-" + destination, route);
+  }
+
+  public List<String> getRoute(String key) {
+    return (key!=null && routeList.containsKey(key))?new ArrayList<>(routeList.get(key)):Collections.EMPTY_LIST;
   }
 }
