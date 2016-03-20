@@ -3,7 +3,16 @@ package com.network.topology.models.fixedtopology;
 import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.glpk.impl.GlpkLPModel;
+import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
+import com.lpapi.export.LPModelExporter;
+import com.lpapi.export.LPModelExporterType;
+import com.lpapi.export.LPModelImporter;
+import com.lpapi.export.LPModelImporterType;
+import com.lpapi.export.factory.LPModelExporterFactory;
+import com.lpapi.export.factory.LPModelImporterFactory;
+import com.lpapi.export.jsonfile.JSONFileLPModelExporter;
+import com.lpapi.export.jsonfile.JSONFileLPModelImporter;
 import com.network.topology.FixedConstants;
 import com.network.topology.linkexists.validators.FixedLinkExistsValidator;
 import com.network.topology.models.extractors.ModelExtractionException;
@@ -360,6 +369,23 @@ public class FixedTopologyModel {
 
       ModelExtractor<TopologyManager> extractor  = lpModel.initModelExtractor();
       extractor.extractModel(lpModel.model);
+
+      log.info("Exporting model to JSON files");
+      LPModelExporter exporter = LPModelExporterFactory.instance(lpModel.model, LPModelExporterType.JSON_FILE);
+      ((JSONFileLPModelExporter)exporter).setFolderPath("./export/");
+      exporter.export();
+
+      //Import model from JSON to test
+      log.info("Import model from JSON Files");
+      LPModel importModel = new SkeletonLPModel(lpModel.model.getIdentifier());
+      LPModelImporter modelImporter = LPModelImporterFactory.instance(importModel, LPModelImporterType.JSON_FILE);
+      ((JSONFileLPModelImporter)modelImporter).setFolderPath("./export/");
+      modelImporter.importModel();
+
+      lpModel.model = importModel;
+      lpModel.runModelValidators();
+
+      log.info("Import Successful");
     } catch (LPModelException e) {
       log.error("Error initializing model", e);
     } catch (TopologyException e) {
@@ -372,6 +398,10 @@ public class FixedTopologyModel {
       log.error("Error while validating model", e);
     } catch (ModelExtractionException e) {
       log.error("Error while extracting topology from model", e);
+    } catch (LPExportException e) {
+      log.error("Error in exporting LP model", e);
+    } catch (LPImportException e) {
+      log.error("Error in importing LP model", e);
     }
   }
 
