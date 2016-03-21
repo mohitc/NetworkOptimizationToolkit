@@ -10,4 +10,5 @@ public interface VariablePrefixes {
   String CAPACITY = "C";
   String LINK_WEIGHT = "W";
 
+  String ROUTER_IN_PATH = "RP";
 }

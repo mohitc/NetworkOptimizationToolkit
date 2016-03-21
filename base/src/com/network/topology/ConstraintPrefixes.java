@@ -36,4 +36,7 @@ public interface ConstraintPrefixes {
   //Traffic constriants (in case of known TM) to ensure that total traffic on a link is less than the capacity (taking into account
   //the max utilization of the link
   String KNOWN_TM_TRAFFIC = "KNOWN_TM_TRAFFIC";
+
+  //Delay Constraints
+  String ROUTER_IN_PATH = "ROUTER_IN_PATH";
 }

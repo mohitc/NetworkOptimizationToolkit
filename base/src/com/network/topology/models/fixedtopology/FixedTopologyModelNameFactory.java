@@ -18,9 +18,9 @@ import java.util.Set;
 
 public class FixedTopologyModelNameFactory {
 
-  private Set<String> vertexLabels;
+  protected Set<String> vertexLabels;
 
-  private int circuitClasses;
+  protected int circuitClasses;
 
   public FixedTopologyModelNameFactory(Set<String> vertexLabels, int circuitClasses) {
     this.vertexLabels = Collections.unmodifiableSet(vertexLabels);

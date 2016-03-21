@@ -37,8 +37,8 @@ public class SymmetricRoutingPathValidator extends ModelValidator {
       for (String d: vertexLabels) {
         if (s.equals(d))
           continue;
-        List<String> forwardRoute = routingPathValidator.getRoute(generatePathKey(s,d));
-        List<String> reverseRoute = routingPathValidator.getRoute(generatePathKey(d,s));
+        List<String> forwardRoute = routingPathValidator.getRoute(routingPathValidator.generatePathKey(s, d));
+        List<String> reverseRoute = routingPathValidator.getRoute(routingPathValidator.generatePathKey(d,s));
         if (!(forwardRoute.size()>0 && reverseRoute.size()>0 && forwardRoute.size()==reverseRoute.size())) {
           throw new ModelValidationException("Symmetric route mismatch from " + s + " to " + d + "Forward Path = " + forwardRoute + " reverse path : " + reverseRoute);
         }
@@ -53,7 +53,4 @@ public class SymmetricRoutingPathValidator extends ModelValidator {
     }
   }
 
-  protected String generatePathKey(String s, String d) {
-    return s+ "-/-" + d;
-  }
 }

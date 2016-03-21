@@ -62,7 +62,7 @@ public class RoutingPathValidator extends ModelValidator {
     List<String> visitedVertices = new ArrayList<>();
     visitedVertices.add(currentNode);
 
-    while(currentNode.equals(destination) == false) {
+    while(!currentNode.equals(destination)) {
       int count = 0;
       String nextNode = null;
       for (String node : vertexLabels) {
@@ -102,7 +102,11 @@ public class RoutingPathValidator extends ModelValidator {
   }
 
   protected void addRoute(String source, String destination, List<String> route) {
-    routeList.put(source + "-/-" + destination, route);
+    routeList.put(generatePathKey(source, destination), route);
+  }
+
+  public String generatePathKey(String s, String d) {
+    return s+ "-/-" + d;
   }
 
   public List<String> getRoute(String key) {

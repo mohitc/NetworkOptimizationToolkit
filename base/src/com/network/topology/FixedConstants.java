@@ -17,4 +17,5 @@ public interface FixedConstants {
 
   String ALPHA = "ALPHA";
 
+  String ROUTE_DELAY_INF = "RD(MAX)";
 }
