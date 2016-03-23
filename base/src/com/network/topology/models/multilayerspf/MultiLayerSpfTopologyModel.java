@@ -70,6 +70,7 @@ import com.network.topology.traffic.knowntm.constraints.KnownTmTrafficConstrGrou
 import com.network.topology.traffic.knowntm.constraints.KnownTmTrafficConstrNameGenerator;
 import com.topology.impl.importers.sndlib.SNDLibImportTopology;
 import com.topology.impl.primitives.TopologyManagerFactoryImpl;
+import com.topology.impl.primitives.TopologyManagerImpl;
 import com.topology.primitives.ConnectionPoint;
 import com.topology.primitives.TopologyManager;
 import com.topology.primitives.TopologyManagerFactory;
@@ -85,45 +86,31 @@ public class MultiLayerSpfTopologyModel {
 
   private static final Logger log = LoggerFactory.getLogger(MultiLayerSpfTopologyModel.class);
 
-  private LPModel model;
+  protected LPModel model;
 
-  public TopologyManager _instance;
+  protected TopologyManager _instance;
 
-  private MultiLayerSpfModelNameFactory factory;
+  protected MultiLayerSpfModelNameFactory factory;
 
-  private DynCircuitClassParser dynCircuitParser;
+  protected DynCircuitClassParser dynCircuitParser;
 
-  private List<ModelValidator> validatorList;
+  protected List<ModelValidator> validatorList;
 
-  public TopologyManager initTopology() throws TopologyException {
-    TopologyManagerFactory factory = new TopologyManagerFactoryImpl();
-    TopologyManager manager = factory.createTopologyManager("Test");
-//    NetworkElement ne1 = manager.createNetworkElement();
-//    ne1.setLabel("1");
-//    ConnectionPoint cp1 = manager.createConnectionPoint(ne1);
-//    cp1.setLabel("1");
-//    NetworkElement ne2 = manager.createNetworkElement();
-//    ne2.setLabel("2");
-//    ConnectionPoint cp2 = manager.createConnectionPoint(ne2);
-//    cp2.setLabel("2");
-//    NetworkElement ne3 = manager.createNetworkElement();
-//    ne3.setLabel("3");
-//    ConnectionPoint cp3 = manager.createConnectionPoint(ne3);
-//    cp3.setLabel("3");
-//    NetworkElement ne4 = manager.createNetworkElement();
-//    ne4.setLabel("4");
-//    ConnectionPoint cp4 = manager.createConnectionPoint(ne4);
-//    cp4.setLabel("4");
-//
-//    Link link12 = manager.createLink(cp1.getID(), cp2.getID());
-//    Link link23 = manager.createLink(cp2.getID(), cp3.getID());
-//    Link link34 = manager.createLink(cp3.getID(), cp4.getID());
-//    Link link41 = manager.createLink(cp4.getID(), cp1.getID());
-
-    return manager;
+  public MultiLayerSpfTopologyModel(String circuitConfFile, TopologyManager manager) {
+    initDynamicCircuitParser(circuitConfFile);
+    this._instance = manager;
+    initNameFactory();
   }
 
-  private Set<String> getVertexLabels() {
+  public void initDynamicCircuitParser(String circuitConfFile) {
+    dynCircuitParser = new DynCircuitClassParser(circuitConfFile);
+  }
+
+  public void initNameFactory() {
+    factory = new MultiLayerSpfModelNameFactory(getVertexLabels(), dynCircuitParser.getResult().keySet().size());
+  }
+
+  protected Set<String> getVertexLabels() {
     if (_instance==null)
       return Collections.EMPTY_SET;
     Set<String> vertexLabels = new HashSet<>();
@@ -154,30 +141,22 @@ public class MultiLayerSpfTopologyModel {
     model.createLpConstant(FixedConstants.ALPHA, 0.7, constantGroup);
     //Constant to indicate the max route delay, which is used to bound the route delay variable
     model.createLpConstant(FixedConstants.ROUTE_DELAY_INF, 100000, constantGroup);
-    LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, factory.getLinkExistsConstantNameGenerator(), true);
+    LinkExistsConstantGroupInitializer linkExistsConstantGroupInitializer = new LinkExistsConstantGroupInitializer(_instance, factory.getLinkExistsConstantNameGenerator());
     model.createLPConstantGroup("Hat(LinkExists)", "Constants to indicate if link existed in original topology", factory.getLinkExistsConstantNameGenerator(),
-      linkExistsConstantGroupInitializer);
+        linkExistsConstantGroupInitializer);
 
     LinkWeightConstantGroupInitializer linkWeightConstantGroupInitializer = new LinkWeightConstantGroupInitializer(getVertexLabels());
     model.createLPConstantGroup("Hat(W)", "Constants to indicate weight of link if exists", factory.getLinkWeightConstantNameGenerator(),
-      linkWeightConstantGroupInitializer);
+        linkWeightConstantGroupInitializer);
 
     KnownTrafficMatConstGroupInitializer knownTrafficMatConstGroupInitializer = new KnownTrafficMatConstGroupInitializer(getVertexLabels(),_instance);
     model.createLPConstantGroup("lambda", "Constants to indicate requested capacity between two nodes", factory.getKnownTrafficMatConstNameGenerator(),
-      knownTrafficMatConstGroupInitializer);
+        knownTrafficMatConstGroupInitializer);
 
     InitialCapacityConstGroupInitializer initialCapacityConstGroupInitializer = new InitialCapacityConstGroupInitializer(getVertexLabels(),_instance);
     model.createLPConstantGroup("HAT(C)", "Constants to store the initial capacity between each node pair",
-      factory.getInitialCapacityConstNameGenerator(), initialCapacityConstGroupInitializer);
+        factory.getInitialCapacityConstNameGenerator(), initialCapacityConstGroupInitializer);
 
-    LinkDelayConstGroupInitializer linkDelayConstGroupInitializer = new LinkDelayConstGroupInitializer(getVertexLabels(), _instance);
-    model.createLPConstantGroup("D(L)", "Constants to store the link delays", factory.getLinkDelayConstantNameGenerator(), linkDelayConstGroupInitializer);
-
-    RouterDelayConstGroupInitializer routerDelayConstGroupInitializer = new RouterDelayConstGroupInitializer(getVertexLabels(), _instance);
-    model.createLPConstantGroup("D(R)", "Constants to store delay of routers", factory.getRouterDelayConstantNameGenerator(), routerDelayConstGroupInitializer);
-
-    RoutePathDelayConstGroupInitializer routePathDelayConstGroupInitializer = new RoutePathDelayConstGroupInitializer(getVertexLabels());
-    model.createLPConstantGroup("D(Path)", "Constants to store max delay on path", factory.getRoutePathDelayConstantNameGenerator(), routePathDelayConstGroupInitializer);
   }
 
   public void initVarGroups() throws LPVarGroupException {
@@ -213,9 +192,6 @@ public class MultiLayerSpfTopologyModel {
     DynCircuitVarGroupInitializer dynCircuitVarGroupInitializer = new DynCircuitVarGroupInitializer(vertexLabels);
     model.createLPVarGroup("DynCircuits", "Dynamic circuits variables", factory.getDynamicCircuitNameGenerator(), dynCircuitVarGroupInitializer);
 
-    RouterInPathVarGroupInitializer routerInPathVarGroupInitializer = new RouterInPathVarGroupInitializer(vertexLabels);
-    model.createLPVarGroup("RouterInPath", "Variable to indicate if router is in path", factory.getRouterInPathVarNameGenerator(), routerInPathVarGroupInitializer);
-
   }
 
   public void initConstraintGroups() throws LPConstraintGroupException {
@@ -227,13 +203,7 @@ public class MultiLayerSpfTopologyModel {
       log.error("TopologyManager not initialized, skipping constraint group generation");
     }
 
-
-    //Fixed Link Exists constraints
     Set<String> vertexLabels = getVertexLabels();
-    FixedLinkExistsConstrNameGenerator fixedLinkExistsConstrNameGenerator = new FixedLinkExistsConstrNameGenerator(vertexLabels);
-    FixedLinkExistsConstrGroupInitializer fixedLinkExistsVarGroupInitializer = new FixedLinkExistsConstrGroupInitializer(_instance, factory.getLinkExistsNameGenerator());
-    model.createLPConstraintGroup("FixedLinkExistsConstr", "Constarint to restrict link exists to already existing links", fixedLinkExistsConstrNameGenerator, fixedLinkExistsVarGroupInitializer);
-
 
     //Link Exists constraints
     try {
@@ -254,30 +224,30 @@ public class MultiLayerSpfTopologyModel {
 
       //Capacity constraints
       ActualCapacityNameGenerator actualCapacityNameGenerator =
-        new ActualCapacityNameGenerator(vertexLabels);
+          new ActualCapacityNameGenerator(vertexLabels);
       ActualCapacityGroupInitializer actualCapacityGroupInitializer =
-        new ActualCapacityGroupInitializer(
-          vertexLabels,
-          factory.getCapacityVarNameGenerator(),
-          factory.getInitialCapacityConstNameGenerator(),
-          factory.getDynamicCircuitNameGenerator(),
-          dynCircuitParser.getResult()
-        );
+          new ActualCapacityGroupInitializer(
+              vertexLabels,
+              factory.getCapacityVarNameGenerator(),
+              factory.getInitialCapacityConstNameGenerator(),
+              factory.getDynamicCircuitNameGenerator(),
+              dynCircuitParser.getResult()
+          );
       model.createLPConstraintGroup("ActualCapacityConstr",
-        "Constraints to instantiated capacity equal to initial plus dynaimc circuits",
-        actualCapacityNameGenerator, actualCapacityGroupInitializer);
+          "Constraints to instantiated capacity equal to initial plus dynaimc circuits",
+          actualCapacityNameGenerator, actualCapacityGroupInitializer);
       KnownTmTrafficConstrNameGenerator knownTmTrafficConstrNameGenerator =
-        new KnownTmTrafficConstrNameGenerator(vertexLabels);
+          new KnownTmTrafficConstrNameGenerator(vertexLabels);
       KnownTmTrafficConstrGroupInitializer knownTmTrafficConstrGroupInitializer =
-        new KnownTmTrafficConstrGroupInitializer(
-          vertexLabels,
-          factory.getCapacityVarNameGenerator(),
-          factory.getKnownTrafficMatConstNameGenerator(),
-          factory.getRoutingNameGenerator()
-        );
+          new KnownTmTrafficConstrGroupInitializer(
+              vertexLabels,
+              factory.getCapacityVarNameGenerator(),
+              factory.getKnownTrafficMatConstNameGenerator(),
+              factory.getRoutingNameGenerator()
+          );
       model.createLPConstraintGroup("ActualDemandedCapacityConstr",
-        "Constrains instantiated capacity to be at least as big as requested",
-        knownTmTrafficConstrNameGenerator, knownTmTrafficConstrGroupInitializer);
+          "Constrains instantiated capacity to be at least as big as requested",
+          knownTmTrafficConstrNameGenerator, knownTmTrafficConstrGroupInitializer);
 
 
     } catch (LPConstantException e) {
@@ -300,7 +270,7 @@ public class MultiLayerSpfTopologyModel {
 
     RoutingCostConstrNameGenerator routingCostConstrNameGenerator = new RoutingCostConstrNameGenerator(vertexLabels);
     RoutingCostConstrGroupInitializer routingCostConstrGroupInitializer = new RoutingCostConstrGroupInitializer(vertexLabels, factory.getRoutingCostNameGenerator(),
-      factory.getRoutingNameGenerator(), factory.getLinkWeightConstantNameGenerator());
+        factory.getRoutingNameGenerator(), factory.getLinkWeightConstantNameGenerator());
     model.createLPConstraintGroup("RoutingCost", "Constraint to calculate routing cost based on route", routingCostConstrNameGenerator, routingCostConstrGroupInitializer);
 
     MinRoutingCostConstrNameGenerator minRoutingCostConstrNameGenerator = new MinRoutingCostConstrNameGenerator(vertexLabels);
@@ -327,20 +297,9 @@ public class MultiLayerSpfTopologyModel {
     //Link weight constraint
     LinkWeightConstrNameGenerator linkWeightConstrNameGenerator = new LinkWeightConstrNameGenerator(vertexLabels);
     LinkWeightConstrGroupInitializer linkWeightConstrGroupInitializer = new LinkWeightConstrGroupInitializer(vertexLabels, factory.getLinkWeightVarNameGenerator(),
-      factory.getLinkExistsNameGenerator(), factory.getLinkWeightConstantNameGenerator());
+        factory.getLinkExistsNameGenerator(), factory.getLinkWeightConstantNameGenerator());
     model.createLPConstraintGroup("LinkWeightConstr", "Constraints to define link weight", linkWeightConstrNameGenerator, linkWeightConstrGroupInitializer);
 
-    //Delay Constraints
-    RouterInPathConstrNameGenerator routerInPathConstrNameGenerator = new RouterInPathConstrNameGenerator(vertexLabels);
-    RouterInPathConstrGroupInitializer routerInPathConstrGroupInitializer = new RouterInPathConstrGroupInitializer(vertexLabels, factory.getRoutingNameGenerator(),
-      factory.getRouterInPathVarNameGenerator());
-    model.createLPConstraintGroup("RouterInPathConstr", "Constraint to identify is router is in path", routerInPathConstrNameGenerator, routerInPathConstrGroupInitializer);
-
-    RouteDelayConstrNameGenerator routeDelayConstrNameGenerator = new RouteDelayConstrNameGenerator(vertexLabels);
-    RouteDelayConstrGroupInitializer routeDelayConstrGroupInitializer = new RouteDelayConstrGroupInitializer(vertexLabels, factory.getRoutingNameGenerator(),
-      factory.getRouterInPathVarNameGenerator(), factory.getLinkDelayConstantNameGenerator(), factory.getRouterDelayConstantNameGenerator(),
-      factory.getRoutePathDelayConstantNameGenerator());
-    model.createLPConstraintGroup("RouteDelay", "Constraint to satisfy routing delay constraints", routeDelayConstrNameGenerator, routeDelayConstrGroupInitializer);
   }
 
   public void initModel() throws LPModelException {
@@ -350,6 +309,64 @@ public class MultiLayerSpfTopologyModel {
     model = new GlpkLPModel("Test");
   }
 
+  public void init() throws LPModelException {
+    initModel();
+    initConstants();
+    initVarGroups();
+    initConstraintGroups();
+    //Initialize Objective function generator
+    model.attachObjectiveFunctionGenerator(new MinDynCirCostObjFnGenerator(getVertexLabels(),
+        dynCircuitParser.getResult(), factory.getDynamicCircuitNameGenerator()));
+    //Initialize LP Model
+    model.init();
+    model.initObjectiveFunction();
+  }
+
+  public void compute() throws LPModelException {
+    model.computeModel();
+  }
+
+  public TopologyManager getExtractedModel() throws ModelExtractionException {
+    ModelExtractor<TopologyManager> extractor = initModelExtractor();
+    return extractor.extractModel(model);
+  }
+
+  public void postCompute() {
+    try {
+      if (model.getSolutionStatus() == LPSolutionStatus.OPTIMAL) {
+        log.info("Objective:" + model.getObjectiveValue());
+
+        initModelValidators();
+        runModelValidators();
+
+        log.info("Exporting model to JSON files");
+        LPModelExporter exporter = LPModelExporterFactory.instance(model, LPModelExporterType.JSON_FILE);
+        ((JSONFileLPModelExporter) exporter).setFolderPath("./export/");
+        exporter.export();
+
+        //Import model from JSON to test
+        log.info("Import model from JSON Files");
+        LPModel importModel = new SkeletonLPModel(model.getIdentifier());
+        LPModelImporter modelImporter = LPModelImporterFactory.instance(importModel, LPModelImporterType.JSON_FILE);
+        ((JSONFileLPModelImporter) modelImporter).setFolderPath("./export/");
+        modelImporter.importModel();
+
+        model = importModel;
+        runModelValidators();
+
+        log.info("Import Successful");
+      }
+    } catch (ModelValidationException e) {
+      log.error("Error while validating model", e);
+    } catch (LPExportException e) {
+      log.error("Error in exporting LP model", e);
+    } catch (LPImportException e) {
+      log.error("Error in importing LP model", e);
+    } catch (LPModelException e) {
+      log.error("LP model exception", e);
+    }
+
+  }
 
   public void initModelValidators() {
     validatorList = new ArrayList<>();
@@ -367,66 +384,21 @@ public class MultiLayerSpfTopologyModel {
   }
 
   public ModelExtractor<TopologyManager> initModelExtractor() {
-    return new ModelTopologyExtractor(getVertexLabels(), factory.getLinkExistsNameGenerator());
+    return new ModelTopologyExtractor(getVertexLabels(), factory.getLinkExistsNameGenerator(), factory.getCapacityVarNameGenerator(), _instance);
   }
 
   public static void main (String[] args) {
     try {
 
-      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel();
-
-      lpModel._instance = lpModel.initTopology();
+      TopologyManager manager = new TopologyManagerImpl("test");
       SNDLibImportTopology importer = new SNDLibImportTopology();
-      importer.importFromFile("conf/nobel-us.xml", lpModel._instance);
+      importer.importFromFile("conf/nobel-us.xml", manager);
 
+      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/nobel-us.xml", manager);
+      lpModel.init();
+      lpModel.compute();
+      lpModel.postCompute();
 
-
-      lpModel.dynCircuitParser = new DynCircuitClassParser("conf/circuit-cap.xml");
-      lpModel.factory = new MultiLayerSpfModelNameFactory(lpModel.getVertexLabels(), lpModel.dynCircuitParser.getResult().keySet().size());
-
-      int circuitClasses = lpModel.dynCircuitParser.getResult().keySet().size();
-      lpModel.factory = new MultiLayerSpfModelNameFactory(lpModel.getVertexLabels(), circuitClasses);
-
-      lpModel.initModel();
-      lpModel.initConstants();
-      lpModel.initVarGroups();
-      lpModel.initConstraintGroups();
-
-
-      //Initialize Objective function
-      lpModel.model.attachObjectiveFunctionGenerator(new MinDynCirCostObjFnGenerator(lpModel.getVertexLabels(),
-        lpModel.dynCircuitParser.getResult(), lpModel.factory.getDynamicCircuitNameGenerator()));
-//      obj.addTerm(1);
-//      lpModel.model.setObjFn(obj, LPObjType.MAXIMIZE);
-      lpModel.model.init();
-      lpModel.model.initObjectiveFunction();
-      lpModel.model.computeModel();
-      if (lpModel.model.getSolutionStatus() == LPSolutionStatus.OPTIMAL) {
-        log.info("Objective:" + lpModel.model.getObjectiveValue());
-
-        lpModel.initModelValidators();
-        lpModel.runModelValidators();
-
-        ModelExtractor<TopologyManager> extractor = lpModel.initModelExtractor();
-        extractor.extractModel(lpModel.model);
-
-        log.info("Exporting model to JSON files");
-        LPModelExporter exporter = LPModelExporterFactory.instance(lpModel.model, LPModelExporterType.JSON_FILE);
-        ((JSONFileLPModelExporter) exporter).setFolderPath("./export/");
-        exporter.export();
-
-        //Import model from JSON to test
-        log.info("Import model from JSON Files");
-        LPModel importModel = new SkeletonLPModel(lpModel.model.getIdentifier());
-        LPModelImporter modelImporter = LPModelImporterFactory.instance(importModel, LPModelImporterType.JSON_FILE);
-        ((JSONFileLPModelImporter) modelImporter).setFolderPath("./export/");
-        modelImporter.importModel();
-
-        lpModel.model = importModel;
-        lpModel.runModelValidators();
-
-        log.info("Import Successful");
-      }
     } catch (LPModelException e) {
       log.error("Error initializing model", e);
     } catch (TopologyException e) {
@@ -435,14 +407,6 @@ public class MultiLayerSpfTopologyModel {
       e.printStackTrace();
     } catch (IOException e) {
       log.error("Error initializing model file", e);
-    } catch (ModelValidationException e) {
-      log.error("Error while validating model", e);
-    } catch (ModelExtractionException e) {
-      log.error("Error while extracting topology from model", e);
-    } catch (LPExportException e) {
-      log.error("Error in exporting LP model", e);
-    } catch (LPImportException e) {
-      log.error("Error in importing LP model", e);
     }
   }
 }

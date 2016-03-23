@@ -2,20 +2,22 @@ package com.network.topology.capacity.constants;
 
 import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.group.LPGroupInitializer;
-import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
 import com.topology.impl.primitives.TopologyManagerImpl;
+import com.topology.primitives.ConnectionPoint;
+import com.topology.primitives.Link;
+import com.topology.primitives.NetworkLayer;
 import com.topology.primitives.TopologyManager;
-import com.topology.primitives.exception.properties.PropertyException;
-import com.topology.primitives.properties.TEPropertyKey;
+import com.topology.primitives.connresource.BandwidthConnectionResource;
+import com.topology.primitives.exception.TopologyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
   private static final Logger log = LoggerFactory.getLogger(InitialCapacityConstGroupInitializer.class);
@@ -48,14 +50,24 @@ public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
         for (String j : vertices) {
           if (i.equals(j))
             continue;
-          //current default initialization to 0
-          model().createLpConstant(generator().getName(i, j), 0, group);
-          //TODO add check to read capacity from topology links
+
+          ConnectionPoint cp1 = topo.getSingleElementByLabel(i, ConnectionPoint.class);
+          ConnectionPoint cp2 = topo.getSingleElementByLabel(j, ConnectionPoint.class);
+
+          List<Link> ipConns = cp1.getConnections(NetworkLayer.IP, Link.class).stream().filter(v -> v.getaEnd()==cp2 || v.getzEnd() == cp2).collect(Collectors.toList());
+          if (ipConns!=null && ipConns.size()==1) {
+            model().createLpConstant(generator().getName(i, j), ((BandwidthConnectionResource)ipConns.get(0).getTotalResources()).getBandwidth(), group);
+          } else {
+            model().createLpConstant(generator().getName(i, j), 0, group);
+          }
         }
       }
     }catch (LPNameException e) {
       log.error("Constant name not found: " + e.getMessage());
       throw new LPModelException("Constant name not found: " + e.getMessage());
+    } catch (TopologyException e) {
+      log.error("Connection point could not be found", e);
+      throw new LPModelException("Connection point could not be found " + e.getMessage());
     }
   }
 }
