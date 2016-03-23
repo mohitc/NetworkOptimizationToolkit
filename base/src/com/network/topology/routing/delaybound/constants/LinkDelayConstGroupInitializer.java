@@ -115,8 +115,15 @@ public class LinkDelayConstGroupInitializer extends LPGroupInitializer {
       return filterList;
     }
 
-    public int comparePath(List<Connection> seq1, List<Connection> seq2) {
-      double out = getPathDelay(seq1) - getPathDelay(seq2);
+    /**Comparator used in path computation to identify position of path that is extended first for computation
+     * If value is less than 0, newPath is selected before oldPath, and vice versa
+     *
+     * @param newPath
+     * @param oldPath
+     * @return
+     */
+    public int comparePath(List<Connection> newPath, List<Connection> oldPath) {
+      double out = getPathDelay(newPath) - getPathDelay(oldPath);
       return (out<0) ? -1:(out==0)?0:1;
     }
 
