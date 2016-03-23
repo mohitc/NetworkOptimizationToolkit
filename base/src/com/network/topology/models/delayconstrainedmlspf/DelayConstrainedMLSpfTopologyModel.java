@@ -75,7 +75,7 @@ public class DelayConstrainedMLSpfTopologyModel extends MultiLayerSpfTopologyMod
       SNDLibImportTopology importer = new SNDLibImportTopology();
       importer.importFromFile("conf/nobel-us.xml", manager);
 
-      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/nobel-us.xml", manager);
+      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/circuit-cap.xml", manager);
       lpModel.init();
       lpModel.compute();
       lpModel.postCompute();

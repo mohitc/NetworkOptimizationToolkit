@@ -31,8 +31,6 @@ import com.network.topology.forwarding.constraints.UniqueForwardingConstrGroupIn
 import com.network.topology.forwarding.constraints.UniqueForwardingConstrNameGenerator;
 import com.network.topology.forwarding.vars.ForwardingVarGroupInitializer;
 import com.network.topology.linkexists.constants.LinkExistsConstantGroupInitializer;
-import com.network.topology.linkexists.constraints.FixedLinkExistsConstrGroupInitializer;
-import com.network.topology.linkexists.constraints.FixedLinkExistsConstrNameGenerator;
 import com.network.topology.linkexists.constraints.LinkExistsConstrGroupInitializer;
 import com.network.topology.linkexists.constraints.LinkExistsConstrNameGenerator;
 import com.network.topology.linkexists.validators.FixedLinkExistsValidator;
@@ -48,15 +46,7 @@ import com.network.topology.models.validators.ModelValidationException;
 import com.network.topology.models.validators.ModelValidator;
 import com.network.topology.objfn.MinDynCirCostObjFnGenerator;
 import com.network.topology.routing.constraints.*;
-import com.network.topology.routing.delaybound.constants.LinkDelayConstGroupInitializer;
-import com.network.topology.routing.delaybound.constants.RoutePathDelayConstGroupInitializer;
-import com.network.topology.routing.delaybound.constants.RouterDelayConstGroupInitializer;
-import com.network.topology.routing.delaybound.constraints.RouteDelayConstrGroupInitializer;
-import com.network.topology.routing.delaybound.constraints.RouteDelayConstrNameGenerator;
-import com.network.topology.routing.delaybound.constraints.RouterInPathConstrGroupInitializer;
-import com.network.topology.routing.delaybound.constraints.RouterInPathConstrNameGenerator;
 import com.network.topology.routing.delaybound.validators.RouterInPathValidator;
-import com.network.topology.routing.delaybound.vars.RouterInPathVarGroupInitializer;
 import com.network.topology.routing.routingcost.constraints.MinRoutingCostConstrGroupInitializer;
 import com.network.topology.routing.routingcost.constraints.MinRoutingCostConstrNameGenerator;
 import com.network.topology.routing.routingcost.constraints.RoutingCostConstrGroupInitializer;
@@ -69,11 +59,9 @@ import com.network.topology.traffic.knowntm.constants.KnownTrafficMatConstGroupI
 import com.network.topology.traffic.knowntm.constraints.KnownTmTrafficConstrGroupInitializer;
 import com.network.topology.traffic.knowntm.constraints.KnownTmTrafficConstrNameGenerator;
 import com.topology.impl.importers.sndlib.SNDLibImportTopology;
-import com.topology.impl.primitives.TopologyManagerFactoryImpl;
 import com.topology.impl.primitives.TopologyManagerImpl;
 import com.topology.primitives.ConnectionPoint;
 import com.topology.primitives.TopologyManager;
-import com.topology.primitives.TopologyManagerFactory;
 import com.topology.primitives.exception.FileFormatException;
 import com.topology.primitives.exception.TopologyException;
 import org.slf4j.Logger;
@@ -394,7 +382,7 @@ public class MultiLayerSpfTopologyModel {
       SNDLibImportTopology importer = new SNDLibImportTopology();
       importer.importFromFile("conf/nobel-us.xml", manager);
 
-      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/nobel-us.xml", manager);
+      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/circuit-cap.xml", manager);
       lpModel.init();
       lpModel.compute();
       lpModel.postCompute();
