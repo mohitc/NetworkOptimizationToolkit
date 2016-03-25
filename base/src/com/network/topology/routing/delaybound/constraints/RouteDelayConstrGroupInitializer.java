@@ -3,74 +3,37 @@ package com.network.topology.routing.delaybound.constraints;
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstantGroups;
+import com.network.topology.LPMLGroupInitializer;
+import com.network.topology.VarGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class RouteDelayConstrGroupInitializer extends LPGroupInitializer {
+public class RouteDelayConstrGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(RouteDelayConstrGroupInitializer.class);
 
-  private LPNameGenerator routingVarNameGenerator, routerInPathVarNameGenerator, linkDelayConstNameGenerator,
-    routerDelayConstNameGenerator, routePathDelayConstNameGenerator;
-
-  private Set<String> vertexVars;
-
-  public RouteDelayConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator routingVarNameGenerator, LPNameGenerator routerInPathVarNameGenerator,
-                                          LPNameGenerator linkDelayConstNameGenerator, LPNameGenerator routerDelayConstNameGenerator,
-                                          LPNameGenerator routePathDelayConstNameGenerator) {
-    if (routingVarNameGenerator==null) {
-      log.error("Initialized with empty routing variable name generator");
-      this.routingVarNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routingVarNameGenerator = routingVarNameGenerator;
-    }
-    if (routerInPathVarNameGenerator==null) {
-      log.error("Initialized with empty routing in path name generator");
-      this.routerInPathVarNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routerInPathVarNameGenerator = routerInPathVarNameGenerator;
-    }
-    if (linkDelayConstNameGenerator==null) {
-      log.error("Initialized with empty link delay constant name generator");
-      this.linkDelayConstNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkDelayConstNameGenerator = linkDelayConstNameGenerator;
-    }
-    if (routerDelayConstNameGenerator==null) {
-      log.error("Initialized with empty router delay constant name generator");
-      this.routerDelayConstNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routerDelayConstNameGenerator = routerDelayConstNameGenerator;
-    }
-    if (routePathDelayConstNameGenerator==null) {
-      log.error("Initialized with empty route path delay bound constant name generator");
-      this.routePathDelayConstNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routePathDelayConstNameGenerator = routePathDelayConstNameGenerator;
-    }
-    if (vertexVars!=null) {
-      this.vertexVars = Collections.unmodifiableSet(vertexVars);
-    } else {
-      log.error("Constraint generator initialized with empty set of vertices");
-      this.vertexVars = Collections.EMPTY_SET;
-    }
+  public RouteDelayConstrGroupInitializer(Set<String> vertexVars) {
+    super(vertexVars);
   }
 
   @Override
   public void run() throws LPModelException {
     try {
-      //Constraint 11
+      LPNameGenerator routingVarNameGenerator = model().getLPVarGroup(VarGroups.ROUTING).getNameGenerator();
+      LPNameGenerator routerInPathVarNameGenerator = model().getLPVarGroup(VarGroups.ROUTER_IN_PATH).getNameGenerator();
+      LPNameGenerator linkDelayConstNameGenerator = model().getLPConstantGroup(ConstantGroups.LINK_DELAY).getNameGenerator();
+      LPNameGenerator routerDelayConstNameGenerator = model().getLPConstantGroup(ConstantGroups.ROUTER_DELAY).getNameGenerator();
+      LPNameGenerator routePathDelayConstNameGenerator = model().getLPConstantGroup(ConstantGroups.PATH_DELAY).getNameGenerator();
+
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
-      for (String s : vertexVars) {
-        for (String d : vertexVars) {
+      for (String s : vertices) {
+        for (String d : vertices) {
           if (s.equals(d))
             continue;
           //max delay bound on rhs
@@ -78,13 +41,13 @@ public class RouteDelayConstrGroupInitializer extends LPGroupInitializer {
           rhs.addTerm(model().getLPConstant(routePathDelayConstNameGenerator.getName(s,d)));
           LPExpression lhs = new LPExpression(model());
 
-          for (String i: vertexVars) {
+          for (String i: vertices) {
             //add router delays
             lhs.addTerm(model().getLPConstant(routerDelayConstNameGenerator.getName(i)).getValue(),
               model().getLPVar(routerInPathVarNameGenerator.getName(s, d, i)));
             //add link delays
 
-            for (String j: vertexVars) {
+            for (String j: vertices) {
               if (i.equals(j))
                 continue;
 

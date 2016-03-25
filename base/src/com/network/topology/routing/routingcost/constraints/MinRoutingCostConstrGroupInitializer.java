@@ -3,56 +3,35 @@ package com.network.topology.routing.routingcost.constraints;
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.LPMLGroupInitializer;
+import com.network.topology.VarGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class MinRoutingCostConstrGroupInitializer extends LPGroupInitializer {
+public class MinRoutingCostConstrGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(MinRoutingCostConstrGroupInitializer.class);
 
-  private Set<String> vertexVars;
-
-  private LPNameGenerator routingCostNameGenerator, linkWeightNameGenerator;
-
-  public MinRoutingCostConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator routingCostNameGenerator, LPNameGenerator linkWeightNameGenerator) {
-    if (vertexVars!=null) {
-      this.vertexVars= vertexVars;
-    } else {
-      log.error("Null topology manager provided for initializing constraints");
-      this.vertexVars = Collections.EMPTY_SET;
-    }
-    if (routingCostNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.routingCostNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routingCostNameGenerator = routingCostNameGenerator;
-    }
-
-    if (linkWeightNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkWeightNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkWeightNameGenerator = linkWeightNameGenerator;
-    }
+  public MinRoutingCostConstrGroupInitializer(Set<String> vertexVars) {
+    super(vertexVars);
   }
 
   @Override
   public void run() throws LPModelException {
     try {
+      LPNameGenerator routingCostNameGenerator = model().getLPVarGroup(VarGroups.ROUTING_COST).getNameGenerator();
+      LPNameGenerator linkWeightNameGenerator = model().getLPVarGroup(VarGroups.LINK_WEIGHT).getNameGenerator();
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
-      for (String s: vertexVars) {
-        for (String d: vertexVars) {
+      for (String s: vertices) {
+        for (String d: vertices) {
           if (s.equals(d))
             continue;
-          for (String x: vertexVars) {
+          for (String x: vertices) {
             if (x.equals(d))
               continue;
             LPExpression lhs = new LPExpression(model());

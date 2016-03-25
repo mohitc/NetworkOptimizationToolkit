@@ -1,9 +1,9 @@
 package com.network.topology.capacity.constants;
 
 import com.lpapi.entities.LPConstantGroup;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.LPMLGroupInitializer;
 import com.topology.impl.primitives.TopologyManagerImpl;
 import com.topology.primitives.ConnectionPoint;
 import com.topology.primitives.Link;
@@ -14,26 +14,17 @@ import com.topology.primitives.exception.TopologyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class InitialCapacityConstGroupInitializer extends LPGroupInitializer {
+public class InitialCapacityConstGroupInitializer extends LPMLGroupInitializer {
   private static final Logger log = LoggerFactory.getLogger(InitialCapacityConstGroupInitializer.class);
-
-  private Set<String> vertices;
 
   private TopologyManager topo;
 
   public InitialCapacityConstGroupInitializer(Set<String> vertices, TopologyManager topo) {
-    if (vertices==null) {
-      log.error("Set of vertices is null, reverting to empty set");
-      this.vertices = Collections.EMPTY_SET;
-    } else {
-      this.vertices = vertices;
-    }
-
+    super(vertices);
     if (topo==null) {
       log.error("Initialized with empty variable topology manager");
       this.topo = new TopologyManagerImpl("New");

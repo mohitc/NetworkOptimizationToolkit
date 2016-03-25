@@ -2,34 +2,25 @@ package com.network.topology.capacity.vars;
 
 import com.lpapi.entities.LPVarGroup;
 import com.lpapi.entities.LPVarType;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
 import com.network.topology.FixedConstants;
+import com.network.topology.LPMLGroupInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class CapacityVarGroupInitializer extends LPGroupInitializer {
+public class CapacityVarGroupInitializer extends LPMLGroupInitializer {
 
-    private static final Logger log = LoggerFactory.getLogger(CapacityVarGroupInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(CapacityVarGroupInitializer.class);
 
-    private Set<String> vertices;
-
-    public CapacityVarGroupInitializer(Set<String> vertices) {
-    if (vertices==null) {
-      log.error("Set of vertices is null, reverting to empty set");
-      this.vertices = Collections.EMPTY_SET;
-    } else {
-      this.vertices = vertices;
-    }
-
+  public CapacityVarGroupInitializer(Set<String> vertices) {
+    super(vertices);
   }
 
-    @Override
-    public void run() throws LPModelException {
+  @Override
+  public void run() throws LPModelException {
     try {
       LPVarGroup group = this.getGroup().getModel().getLPVarGroup(this.getGroup().getIdentifier());
       double capInf = model().getLPConstant(FixedConstants.CAP_MAX).getValue();

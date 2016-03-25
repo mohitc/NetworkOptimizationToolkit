@@ -8,8 +8,10 @@ import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstantGroups;
 import com.network.topology.FixedConstants;
-import com.topology.primitives.TopologyManager;
+import com.network.topology.LPMLGroupInitializer;
+import com.network.topology.VarGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,52 +19,24 @@ import java.util.Collections;
 import java.util.Set;
 
 
-public class KnownTmTrafficConstrGroupInitializer extends LPGroupInitializer {
+public class KnownTmTrafficConstrGroupInitializer extends LPMLGroupInitializer {
 
 	private static final Logger log = LoggerFactory.getLogger(KnownTmTrafficConstrGroupInitializer.class);
 
-	private LPNameGenerator capacityVarNameGenerator, demandedCapacityConstNameGenerator,
-			routingVarNameGenerator;
-
-	private Set<String> vertexVars;
-
-	public KnownTmTrafficConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator capacityVarNameGenerator,
-																							LPNameGenerator demandedCapacityConstNameGenerator,
-																							LPNameGenerator routingVarNameGenerator) {
-		if (capacityVarNameGenerator==null) {
-			log.error("Initialized with empty capacity variable name generator");
-			this.capacityVarNameGenerator = new LPEmptyNameGenratorImpl<>();
-		} else {
-			this.capacityVarNameGenerator = capacityVarNameGenerator;
-		}
-		if (demandedCapacityConstNameGenerator==null) {
-			log.error("Initialized with empty circuit variable name generator");
-			this.demandedCapacityConstNameGenerator = new LPEmptyNameGenratorImpl<>();
-		} else {
-			this.demandedCapacityConstNameGenerator = demandedCapacityConstNameGenerator;
-		}
-		if (routingVarNameGenerator==null) {
-			log.error("Initialized with empty circuit variable name generator");
-			this.routingVarNameGenerator = new LPEmptyNameGenratorImpl<>();
-		} else {
-			this.routingVarNameGenerator = routingVarNameGenerator;
-		}
-		if (vertexVars!=null) {
-			this.vertexVars = Collections.unmodifiableSet(vertexVars);
-		} else {
-			log.error("Constraint generator initialized with empty set of vertices");
-			this.vertexVars = Collections.EMPTY_SET;
-		}
+	public KnownTmTrafficConstrGroupInitializer(Set<String> vertexVars) {
+    super(vertexVars);
 	}
 
 	@Override
 	public void run() throws LPModelException {
 		try {
-			//Constraint 11 //FIXME: no, this relates to demanded capacity... not 11 (not in the formulation at all)
 			LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
+			LPNameGenerator capacityVarNameGenerator = model().getLPVarGroup(VarGroups.CAPACITY).getNameGenerator();
+			LPNameGenerator trafficMatrixConstNameGenerator = model().getLPConstantGroup(ConstantGroups.TRAFFIC_MAT).getNameGenerator();
+			LPNameGenerator routingVarNameGenerator = model().getLPVarGroup(VarGroups.ROUTING).getNameGenerator();
 
-			for (String i : vertexVars) {
-				for (String j : vertexVars) {
+			for (String i : vertices) {
+				for (String j : vertices) {
 					if (i.equals(j)) {
 						continue; //skip self loop case
 					}
@@ -71,11 +45,11 @@ public class KnownTmTrafficConstrGroupInitializer extends LPGroupInitializer {
 					rhs.addTerm(model().getLPConstant(FixedConstants.ALPHA).getValue(), model().getLPVar(capacityVarNameGenerator.getName(i,j)));
 
 					LPExpression lhs = new LPExpression(model());
-					for (String s : vertexVars) {
-						for (String d : vertexVars) {
+					for (String s : vertices) {
+						for (String d : vertices) {
 							if (s.equals(d))
 								continue;
-							lhs.addTerm(model().getLPConstant(demandedCapacityConstNameGenerator.getName(s, d)).getValue(), model().getLPVar(routingVarNameGenerator.getName(s, d, i, j)));
+							lhs.addTerm(model().getLPConstant(trafficMatrixConstNameGenerator.getName(s, d)).getValue(), model().getLPVar(routingVarNameGenerator.getName(s, d, i, j)));
 						}
 					}
 

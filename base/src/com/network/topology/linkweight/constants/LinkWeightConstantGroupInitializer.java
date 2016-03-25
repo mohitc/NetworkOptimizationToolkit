@@ -1,29 +1,20 @@
 package com.network.topology.linkweight.constants;
 
 import com.lpapi.entities.LPConstantGroup;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.LPMLGroupInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class LinkWeightConstantGroupInitializer extends LPGroupInitializer {
+public class LinkWeightConstantGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(LinkWeightConstantGroupInitializer.class);
 
-  private Set<String> vertices;
-
   public LinkWeightConstantGroupInitializer(Set<String> vertices) {
-    if (vertices==null) {
-      log.error("Set of vertices is null, reverting to empty set");
-      this.vertices = Collections.EMPTY_SET;
-    } else {
-      this.vertices = vertices;
-    }
-
+    super(vertices);
   }
 
   @Override

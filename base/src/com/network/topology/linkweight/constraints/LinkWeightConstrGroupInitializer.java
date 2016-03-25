@@ -3,64 +3,38 @@ package com.network.topology.linkweight.constraints;
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstantGroups;
 import com.network.topology.FixedConstants;
+import com.network.topology.LPMLGroupInitializer;
+import com.network.topology.VarGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class LinkWeightConstrGroupInitializer extends LPGroupInitializer {
+public class LinkWeightConstrGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(LinkWeightConstrGroupInitializer.class);
 
-  private Set<String> vertexVars;
-
-  private LPNameGenerator linkExistsNameGenerator, linkWeightConstantNameGenerator, linkWeightNameGenerator;
-
-  public LinkWeightConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator linkWeightNameGenerator, LPNameGenerator linkExistsNameGenerator, LPNameGenerator linkWeightConstantNameGenerator) {
-    if (vertexVars!=null) {
-      this.vertexVars= vertexVars;
-    } else {
-      log.error("Null topology manager provided for initializing constraints");
-      this.vertexVars = Collections.EMPTY_SET;
-    }
-    if (linkWeightNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkWeightNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkWeightNameGenerator = linkWeightNameGenerator;
-    }
-
-    if (linkExistsNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkExistsNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkExistsNameGenerator = linkExistsNameGenerator;
-    }
-    if (linkWeightConstantNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkWeightConstantNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkWeightConstantNameGenerator = linkWeightConstantNameGenerator;
-    }
+  public LinkWeightConstrGroupInitializer(Set<String> vertexVars) {
+    super(vertexVars);
   }
 
   @Override
   public void run() throws LPModelException {
     //Set<Link> links = manager.getAllElements(Link.class);
     try {
-
+      LPNameGenerator linkExistsNameGenerator = model().getLPVarGroup(VarGroups.LINK_EXISTS).getNameGenerator();
+      LPNameGenerator linkWeightNameGenerator = model().getLPVarGroup(VarGroups.LINK_WEIGHT).getNameGenerator();
+      LPNameGenerator linkWeightConstantNameGenerator = model().getLPConstantGroup(ConstantGroups.LINK_WEIGHT).getNameGenerator();
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
 
       double wInf = model().getLPConstant(FixedConstants.W_INF).getValue();
-      for (String s: vertexVars) {
-        for (String d: vertexVars) {
+      for (String s: vertices) {
+        for (String d: vertices) {
           if (s.equals(d))
             continue;
           LPExpression lhs = new LPExpression(model());

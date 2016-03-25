@@ -2,8 +2,11 @@ package com.network.topology.models.fixedtopology;
 
 import com.lpapi.exception.LPConstraintGroupException;
 import com.lpapi.exception.LPModelException;
+import com.network.topology.ConstraintGroups;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrGroupInitializer;
 import com.network.topology.linkexists.constraints.FixedLinkExistsConstrNameGenerator;
+import com.network.topology.linkexists.validators.FixedLinkExistsValidator;
+import com.network.topology.linkexists.vars.LinkExistsNameGenerator;
 import com.network.topology.models.multilayerspf.MultiLayerSpfTopologyModel;
 import com.topology.impl.importers.sndlib.SNDLibImportTopology;
 import com.topology.impl.primitives.TopologyManagerImpl;
@@ -29,9 +32,14 @@ public class FixedTopologyModel extends MultiLayerSpfTopologyModel {
 
     //Fixed Link Exists constraints
     FixedLinkExistsConstrNameGenerator fixedLinkExistsConstrNameGenerator = new FixedLinkExistsConstrNameGenerator(getVertexLabels());
-    FixedLinkExistsConstrGroupInitializer fixedLinkExistsVarGroupInitializer = new FixedLinkExistsConstrGroupInitializer(_instance, factory.getLinkExistsNameGenerator());
-    model.createLPConstraintGroup("FixedLinkExistsConstr", "Constarint to restrict link exists to already existing links", fixedLinkExistsConstrNameGenerator, fixedLinkExistsVarGroupInitializer);
+    FixedLinkExistsConstrGroupInitializer fixedLinkExistsVarGroupInitializer = new FixedLinkExistsConstrGroupInitializer(_instance);
+    model.createLPConstraintGroup(ConstraintGroups.FIXED_LINK_EXISTS, ConstraintGroups.FIXED_LINK_EXISTS_DESC, fixedLinkExistsConstrNameGenerator, fixedLinkExistsVarGroupInitializer);
 
+  }
+
+  public void initModelValidators() {
+    super.initModelValidators();
+    validatorList.add(new FixedLinkExistsValidator(model, _instance, new LinkExistsNameGenerator(getVertexLabels()), getVertexLabels()));
   }
 
   public static void main (String[] args) {

@@ -22,19 +22,11 @@ public class LinkExistsConstantGroupInitializer extends LPGroupInitializer {
 
   private TopologyManager manager;
 
-  private LPNameGenerator linkExistsNameGenerator;
-
-  public LinkExistsConstantGroupInitializer(TopologyManager manager, LPNameGenerator linkExistsNameGenerator) {
+  public LinkExistsConstantGroupInitializer(TopologyManager manager) {
     if (manager!=null) {
       this.manager= manager;
     } else {
       log.error("Null topology manager provided for initializing constraints");
-    }
-    if (linkExistsNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkExistsNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkExistsNameGenerator = linkExistsNameGenerator;
     }
   }
 
@@ -43,7 +35,6 @@ public class LinkExistsConstantGroupInitializer extends LPGroupInitializer {
     if (manager==null) {
       throw new LPModelException("Provided Topology manager for initializing link exists constraints is null");
     }
-    //Set<Link> links = manager.getAllElements(Link.class);
     try {
       Set<ConnectionPoint> cps = manager.getAllElements(ConnectionPoint.class);
 
@@ -73,10 +64,10 @@ public class LinkExistsConstantGroupInitializer extends LPGroupInitializer {
             continue;
           if (remoteCPs.contains(cp2))
             //hat(LE) ij = 1 if link exists in manager
-            model().createLpConstant(linkExistsNameGenerator.getName(cp1.getLabel(), cp2.getLabel()), 1, group);
+            model().createLpConstant(generator().getName(cp1.getLabel(), cp2.getLabel()), 1, group);
           else
             //hat(LE) ij = 0 otherwise
-            model().createLpConstant(linkExistsNameGenerator.getName(cp1.getLabel(), cp2.getLabel()), 0, group);
+            model().createLpConstant(generator().getName(cp1.getLabel(), cp2.getLabel()), 0, group);
         }
       }
     } catch (LPNameException e) {

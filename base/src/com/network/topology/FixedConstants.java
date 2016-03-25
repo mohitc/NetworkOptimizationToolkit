@@ -2,9 +2,6 @@ package com.network.topology;
 
 public interface FixedConstants {
 
-  String GROUP_NAME="VariableBounds";
-  String GROUP_DESC="Constants defining maximum bounds on variables";
-
   String ROUTING_COST_MAX = "RC(MAX)";
 
   String DYN_CIRTUITS_MAX = "M(MAX)";

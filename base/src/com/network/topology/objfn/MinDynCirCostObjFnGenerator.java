@@ -1,14 +1,14 @@
 package com.network.topology.objfn;
 
 import com.lpapi.entities.LPExpression;
-import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPObjFnGenerator;
 import com.lpapi.entities.LPObjType;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPExpressionException;
 import com.lpapi.exception.LPNameException;
 import com.lpapi.exception.LPVarException;
+import com.lpapi.exception.LPVarGroupException;
+import com.network.topology.VarGroups;
 import com.network.topology.dyncircuits.parser.DynCircuitClass;
 
 import java.util.Collections;
@@ -19,19 +19,10 @@ public class MinDynCirCostObjFnGenerator extends LPObjFnGenerator {
 
   private Set<String> vertexSet;
 
-  private LPNameGenerator dynCircuitVarNameGenerator;
-
   private Map<Integer, DynCircuitClass> circuitClassMap;
 
-
-  public MinDynCirCostObjFnGenerator(Set<String> vertexSet, Map<Integer, DynCircuitClass> circuitClassMap, LPNameGenerator dynCircuitVarNameGenerator){
+  public MinDynCirCostObjFnGenerator(Set<String> vertexSet, Map<Integer, DynCircuitClass> circuitClassMap){
     super(LPObjType.MINIMIZE);
-    if (dynCircuitVarNameGenerator==null) {
-      log.error("Initialized with empty dynamic circuit variable name generator");
-      this.dynCircuitVarNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.dynCircuitVarNameGenerator = dynCircuitVarNameGenerator;
-    }
     if (vertexSet!=null) {
       this.vertexSet = Collections.unmodifiableSet(vertexSet);
     } else {
@@ -49,6 +40,7 @@ public class MinDynCirCostObjFnGenerator extends LPObjFnGenerator {
   public LPExpression generate() throws LPExpressionException {
     LPExpression expr = new LPExpression(getModel());
     try {
+      LPNameGenerator dynCircuitVarNameGenerator = getModel().getLPVarGroup(VarGroups.DYN_CIRCUITS).getNameGenerator();
       for (int i: circuitClassMap.keySet()) {
         double cost = circuitClassMap.get(i).getCost();
         for (String x: vertexSet) {
@@ -66,6 +58,12 @@ public class MinDynCirCostObjFnGenerator extends LPObjFnGenerator {
     } catch (LPNameException e) {
       log.error("Error generating var name", e);
       throw new LPExpressionException("Error generating var name: " + e.getMessage());
+    } catch (LPVarGroupException e) {
+      log.error("Dynamic circuit var group not found", e);
+      throw new LPExpressionException("Dynamic circuit var group not found: " + e.getMessage());
+    } catch (Exception e) {
+      log.error("Unexpected exception: ", e);
+      throw new LPExpressionException("Unexpected exception: " + e.getMessage());
     }
   }
 }

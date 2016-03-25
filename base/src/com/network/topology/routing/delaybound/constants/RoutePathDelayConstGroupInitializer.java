@@ -1,30 +1,19 @@
 package com.network.topology.routing.delaybound.constants;
 
 import com.lpapi.entities.LPConstantGroup;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
-import com.topology.impl.primitives.TopologyManagerImpl;
-import com.topology.primitives.TopologyManager;
+import com.network.topology.LPMLGroupInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class RoutePathDelayConstGroupInitializer extends LPGroupInitializer {
+public class RoutePathDelayConstGroupInitializer extends LPMLGroupInitializer {
   private static final Logger log = LoggerFactory.getLogger(RoutePathDelayConstGroupInitializer.class);
 
-  private Set<String> vertices;
-
   public RoutePathDelayConstGroupInitializer(Set<String> vertices) {
-    if (vertices==null) {
-      log.error("Set of vertices is null, reverting to empty set");
-      this.vertices = Collections.EMPTY_SET;
-    } else {
-      this.vertices = vertices;
-    }
-
+    super(vertices);
   }
 
   @Override

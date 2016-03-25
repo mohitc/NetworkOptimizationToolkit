@@ -3,68 +3,42 @@ package com.network.topology.routing.routingcost.constraints;
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstantGroups;
+import com.network.topology.LPMLGroupInitializer;
+import com.network.topology.VarGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class RoutingCostConstrGroupInitializer extends LPGroupInitializer {
+public class RoutingCostConstrGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(RoutingCostConstrGroupInitializer.class);
 
-  private Set<String> vertexVars;
-
-  private LPNameGenerator routingCostNameGenerator, routingNameGenerator, linkWeightConstantNameGenerator;
-
-  public RoutingCostConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator routingCostNameGenerator, LPNameGenerator routingNameGenerator, LPNameGenerator linkWeightConstantNameGenerator) {
-    if (vertexVars!=null) {
-      this.vertexVars= vertexVars;
-    } else {
-      log.error("Null topology manager provided for initializing constraints");
-      this.vertexVars = Collections.EMPTY_SET;
-    }
-    if (routingCostNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.routingCostNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routingCostNameGenerator = routingCostNameGenerator;
-    }
-
-    if (routingNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.routingNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routingNameGenerator = routingNameGenerator;
-    }
-    if (linkWeightConstantNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkWeightConstantNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkWeightConstantNameGenerator = linkWeightConstantNameGenerator;
-    }
+  public RoutingCostConstrGroupInitializer(Set<String> vertexVars) {
+    super(vertexVars);
   }
 
   @Override
   public void run() throws LPModelException {
     try {
-
+      LPNameGenerator routingCostNameGenerator = model().getLPVarGroup(VarGroups.ROUTING_COST).getNameGenerator();
+      LPNameGenerator routingNameGenerator = model().getLPVarGroup(VarGroups.ROUTING).getNameGenerator();
+      LPNameGenerator linkWeightConstantNameGenerator = model().getLPConstantGroup(ConstantGroups.LINK_WEIGHT).getNameGenerator();
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
 
-      for (String s: vertexVars) {
-        for (String d: vertexVars) {
+      for (String s: vertices) {
+        for (String d: vertices) {
           if (s.equals(d))
             continue;
           LPExpression lhs = new LPExpression(model());
           lhs.addTerm(model().getLPVar(routingCostNameGenerator.getName(s, d)));
           LPExpression rhs = new LPExpression(model());
-          for (String i: vertexVars) {
-            for (String j: vertexVars) {
+          for (String i: vertices) {
+            for (String j: vertices) {
               if (i.equals(j))
                 continue;
               rhs.addTerm(model().getLPConstant(linkWeightConstantNameGenerator.getName(s,d)).getValue(), model().getLPVar(routingNameGenerator.getName(s, d, i, j)));

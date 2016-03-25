@@ -1,9 +1,9 @@
 package com.network.topology.routing.delaybound.constants;
 
 import com.lpapi.entities.LPConstantGroup;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.LPMLGroupInitializer;
 import com.topology.algorithm.PathComputationAlgorithm;
 import com.topology.algorithm.constraint.PathConstraint;
 import com.topology.algorithm.filters.ConnectionFilter;
@@ -18,27 +18,18 @@ import com.topology.primitives.properties.TEPropertyKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class LinkDelayConstGroupInitializer extends LPGroupInitializer {
+public class LinkDelayConstGroupInitializer extends LPMLGroupInitializer {
   private static final Logger log = LoggerFactory.getLogger(LinkDelayConstGroupInitializer.class);
 
   private static final double MAX_DELAY = 100000;
 
-  private Set<String> vertices;
-
   private TopologyManager topo;
 
   public LinkDelayConstGroupInitializer(Set<String> vertices, TopologyManager topo) {
-    if (vertices==null) {
-      log.error("Set of vertices is null, reverting to empty set");
-      this.vertices = Collections.EMPTY_SET;
-    } else {
-      this.vertices = vertices;
-    }
-
+    super(vertices);
     if (topo==null) {
       log.error("Initialized with empty variable topology manager");
     } else {
@@ -87,7 +78,7 @@ public class LinkDelayConstGroupInitializer extends LPGroupInitializer {
     double delay = 0;
     try {
       for (Integer connID : conns) {
-        delay = delay + manager.getElementByID(connID, Connection.class).getProperty(delayProp, Double.class).doubleValue();
+        delay = delay + manager.getElementByID(connID, Connection.class).getProperty(delayProp, Double.class);
       }
       return delay;
     } catch (Exception e) {
@@ -106,12 +97,7 @@ public class LinkDelayConstGroupInitializer extends LPGroupInitializer {
 
     protected List<ConnectionFilter> getConnectionFilters(ConnectionPoint cEnd, List<Connection> path, PathConstraint constraint) {
       List filterList = super.getConnectionFilters(cEnd, path, constraint);
-      filterList.add(new ConnectionFilter() {
-        @Override
-        public boolean filter(Connection connection) {
-          return !((connection.getLayer()!=null) && (connection.getLayer()== NetworkLayer.PHYSICAL));
-        }
-      });
+      filterList.add((ConnectionFilter) connection -> !((connection.getLayer()!=null) && (connection.getLayer()== NetworkLayer.PHYSICAL)));
       return filterList;
     }
 

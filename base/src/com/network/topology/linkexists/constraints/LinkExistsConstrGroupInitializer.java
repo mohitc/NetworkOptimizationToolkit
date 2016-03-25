@@ -3,16 +3,16 @@ package com.network.topology.linkexists.constraints;
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.ConstantGroups;
 import com.network.topology.FixedConstants;
+import com.network.topology.LPMLGroupInitializer;
+import com.network.topology.VarGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
 /** Initialize a group of 3 constraints to ensure that a Link Exists
@@ -20,45 +20,21 @@ import java.util.Set;
  *  2) LE(ij) >=Sum[X(n)(ij)] / M
  *  3) LE(ij) <= hat(LE)(ij) + Sum[X(n)(ij)]
  */
-public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
+public class LinkExistsConstrGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(LinkExistsConstrGroupInitializer.class);
 
-  private Set<String> vertexVars;
-
-  private LPNameGenerator linkExistsNameGenerator, fixedLinkExistsNameGenerator, dynCircuitNameGenerator;
-
-  public LinkExistsConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator linkExistsNameGenerator, LPNameGenerator fixedLinkExistsNameGenerator,
-                                          LPNameGenerator dynCircuitNameGenerator) {
-    if (vertexVars!=null) {
-      this.vertexVars= vertexVars;
-    } else {
-      log.error("Null topology manager provided for initializing constraints");
-      this.vertexVars = Collections.EMPTY_SET;
-    }
-    if (linkExistsNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkExistsNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkExistsNameGenerator = linkExistsNameGenerator;
-    }
-    if (fixedLinkExistsNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.fixedLinkExistsNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.fixedLinkExistsNameGenerator = fixedLinkExistsNameGenerator;
-    }
-    if (dynCircuitNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.dynCircuitNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.dynCircuitNameGenerator = dynCircuitNameGenerator;
-    }
+  public LinkExistsConstrGroupInitializer(Set<String> vertexVars) {
+    super(vertexVars);
   }
 
   @Override
   public void run() throws LPModelException {
     try {
+      LPNameGenerator linkExistsNameGenerator = model().getLPVarGroup(VarGroups.LINK_EXISTS).getNameGenerator();
+      LPNameGenerator fixedLinkExistsNameGenerator = model().getLPConstantGroup(ConstantGroups.LINK_EXISTS).getNameGenerator();
+      LPNameGenerator dynCircuitNameGenerator = model().getLPVarGroup(VarGroups.DYN_CIRCUITS).getNameGenerator();
+
       LPConstraintGroup group = this.getGroup().getModel().getLPConstraintGroup(this.getGroup().getIdentifier());
       double maxCircuits = model().getLPConstant(FixedConstants.DYN_CIRTUITS_MAX).getValue();
       if (maxCircuits<1) {
@@ -67,8 +43,8 @@ public class LinkExistsConstrGroupInitializer extends LPGroupInitializer {
       }
       int vertexClasses = (int)model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
 
-      for (String i: vertexVars) {
-        for (String j: vertexVars) {
+      for (String i: vertices) {
+        for (String j: vertices) {
           if (i.equals(j))
             continue;
 

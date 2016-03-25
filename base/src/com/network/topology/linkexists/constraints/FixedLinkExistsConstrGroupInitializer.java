@@ -5,9 +5,9 @@ import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
 import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.VarGroups;
 import com.topology.primitives.ConnectionPoint;
 import com.topology.primitives.Link;
 import com.topology.primitives.TopologyManager;
@@ -26,19 +26,11 @@ public class FixedLinkExistsConstrGroupInitializer extends LPGroupInitializer {
 
   private TopologyManager manager;
 
-  private LPNameGenerator linkExistsNameGenerator;
-
-  public FixedLinkExistsConstrGroupInitializer(TopologyManager manager, LPNameGenerator linkExistsNameGenerator) {
+  public FixedLinkExistsConstrGroupInitializer(TopologyManager manager) {
     if (manager!=null) {
       this.manager= manager;
     } else {
       log.error("Null topology manager provided for initializing constraints");
-    }
-    if (linkExistsNameGenerator==null) {
-      log.error("Initialized with empty variable name generator");
-      this.linkExistsNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.linkExistsNameGenerator = linkExistsNameGenerator;
     }
   }
 
@@ -50,7 +42,7 @@ public class FixedLinkExistsConstrGroupInitializer extends LPGroupInitializer {
     //Set<Link> links = manager.getAllElements(Link.class);
     try {
       Set<ConnectionPoint> cps = manager.getAllElements(ConnectionPoint.class);
-
+      LPNameGenerator linkExistsNameGenerator = model().getLPVarGroup(VarGroups.LINK_EXISTS).getNameGenerator();
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
 
       for (ConnectionPoint cp1: cps) {

@@ -1,6 +1,7 @@
 package com.network.topology.simulations;
 
 import com.lpapi.exception.LPModelException;
+import com.network.topology.models.delayconstrainedmlspf.DelayConstrainedMLSpfTopologyModel;
 import com.network.topology.models.extractors.ModelExtractionException;
 import com.network.topology.models.fixedtopology.FixedTopologyModel;
 import com.network.topology.models.multilayerspf.MultiLayerSpfTopologyModel;
@@ -46,6 +47,7 @@ public class FixedSimulation {
       }
       newTopology.addProperty(demands, newDemands);
 
+/*
       MultiLayerSpfTopologyModel newLpModel = new MultiLayerSpfTopologyModel("conf/circuit-cap.xml", newTopology);
       newLpModel .init();
       newLpModel .compute();
@@ -53,6 +55,16 @@ public class FixedSimulation {
 
 
       TopologyManager finalTopology = newLpModel.getExtractedModel();
+*/
+
+      DelayConstrainedMLSpfTopologyModel newLpModel = new DelayConstrainedMLSpfTopologyModel("conf/circuit-cap.xml", newTopology);
+      newLpModel .init();
+      newLpModel .compute();
+      newLpModel .postCompute();
+
+
+      TopologyManager finalTopology = newLpModel.getExtractedModel();
+
 
       log.info("Done");
 

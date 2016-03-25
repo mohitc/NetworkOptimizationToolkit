@@ -3,51 +3,36 @@ package com.network.topology.routing.constraints;
 import com.lpapi.entities.LPConstraintGroup;
 import com.lpapi.entities.LPExpression;
 import com.lpapi.entities.LPOperator;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.LPMLGroupInitializer;
+import com.network.topology.VarGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class SymmetricRoutingConstrGroupInitializer extends LPGroupInitializer {
+public class SymmetricRoutingConstrGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(SymmetricRoutingConstrGroupInitializer.class);
 
-  private LPNameGenerator routingNameGenerator;
-
-  private Set<String> vertexVars;
-
-  public SymmetricRoutingConstrGroupInitializer(Set<String> vertexVars, LPNameGenerator routingNameGenerator) {
-    if (routingNameGenerator==null) {
-      log.error("Initialized with empty routing variable name generator");
-      this.routingNameGenerator = new LPEmptyNameGenratorImpl<>();
-    } else {
-      this.routingNameGenerator = routingNameGenerator;
-    }
-    if (vertexVars!=null) {
-      this.vertexVars = Collections.unmodifiableSet(vertexVars);
-    } else {
-      log.error("Constraint generator initialized with empty set of vertices");
-      this.vertexVars = Collections.EMPTY_SET;
-    }
+  public SymmetricRoutingConstrGroupInitializer(Set<String> vertexVars) {
+    super(vertexVars);
   }
 
   @Override
   public void run() throws LPModelException {
     try {
+      LPNameGenerator routingNameGenerator = model().getLPVarGroup(VarGroups.ROUTING).getNameGenerator();
       LPConstraintGroup group = model().getLPConstraintGroup(this.getGroup().getIdentifier());
-      for (String s : vertexVars) {
-        for (String d : vertexVars) {
+      for (String s : vertices) {
+        for (String d : vertices) {
           //Take a single s, d pair and create symmetric routing rules for all i,j pairs
           if (s.compareTo(d)<=0)
             continue;
-          for (String i : vertexVars) {
-            for (String j : vertexVars) {
+          for (String i : vertices) {
+            for (String j : vertices) {
               if (i.equals(j))
                 continue;
               LPExpression lhs = new LPExpression(model());
