@@ -42,6 +42,7 @@ import com.network.topology.models.extractors.ModelExtractionException;
 import com.network.topology.models.extractors.ModelExtractor;
 import com.network.topology.models.validators.ModelValidationException;
 import com.network.topology.models.validators.ModelValidator;
+import com.network.topology.objfn.MinDynCirCostObjFnGenerator;
 import com.topology.primitives.ConnectionPoint;
 import com.topology.primitives.TopologyManager;
 import org.slf4j.Logger;
@@ -186,7 +187,18 @@ public abstract class MultiLayerTopologyModel {
     model = new GlpkLPModel("Test");
   }
 
-  public abstract void init() throws LPModelException;
+  public void init() throws LPModelException {
+    initModel();
+    initConstants();
+    initVarGroups();
+    initConstraintGroups();
+    //Initialize Objective function generator
+    model.attachObjectiveFunctionGenerator(new MinDynCirCostObjFnGenerator(getVertexLabels(),
+        dynCircuitParser.getResult()));
+    //Initialize LP Model
+    model.init();
+    model.initObjectiveFunction();
+  }
 
   public void compute() throws LPModelException {
     model.computeModel();

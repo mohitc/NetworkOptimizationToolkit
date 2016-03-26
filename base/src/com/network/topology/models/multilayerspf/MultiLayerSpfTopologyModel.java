@@ -194,19 +194,6 @@ public class MultiLayerSpfTopologyModel extends MultiLayerTopologyModel {
 
   }
 
-  public void init() throws LPModelException {
-    initModel();
-    initConstants();
-    initVarGroups();
-    initConstraintGroups();
-    //Initialize Objective function generator
-    model.attachObjectiveFunctionGenerator(new MinDynCirCostObjFnGenerator(getVertexLabels(),
-        dynCircuitParser.getResult()));
-    //Initialize LP Model
-    model.init();
-    model.initObjectiveFunction();
-  }
-
   public TopologyManager getExtractedModel() throws ModelExtractionException {
     ModelExtractor<TopologyManager> extractor = initModelExtractor();
     return extractor.extractModel(model);
