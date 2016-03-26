@@ -5,6 +5,7 @@ import com.lpapi.entities.LPVarType;
 import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.LPMLGroupInitializer;
 import com.network.topology.serviceaware.ServiceAwareFixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,19 +13,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Set;
 
-public class ServiceAwareRoutingVarGroupInitializer extends LPGroupInitializer {
+public class ServiceAwareRoutingVarGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(ServiceAwareRoutingVarGroupInitializer.class);
 
-  private Set<String> vertices;
-
   public ServiceAwareRoutingVarGroupInitializer(Set<String> vertices) {
-    if (vertices==null) {
-      log.error("Set of vertices is null, reverting to empty set");
-      this.vertices = Collections.EMPTY_SET;
-    } else {
-      this.vertices = vertices;
-    }
+    super(vertices);
   }
 
   @Override
