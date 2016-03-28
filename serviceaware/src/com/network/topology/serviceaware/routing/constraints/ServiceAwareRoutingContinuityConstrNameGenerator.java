@@ -5,7 +5,6 @@ import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
 import com.lpapi.entities.group.validators.LPPrefixClassValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.ConstraintPrefixes;
 import com.network.topology.serviceaware.ServiceAwareConstraintPrefixes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

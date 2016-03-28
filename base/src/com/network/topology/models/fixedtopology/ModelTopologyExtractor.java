@@ -24,11 +24,11 @@ public class ModelTopologyExtractor implements ModelExtractor<TopologyManager> {
 
   private Set<String> vertexLabels;
 
-  LPNameGenerator linkExistsNameGenerator;
+  private LPNameGenerator linkExistsNameGenerator;
 
-  LPNameGenerator capacityVarNameGenerator;
+  private LPNameGenerator capacityVarNameGenerator;
 
-  TopologyManager physicalTopology;
+  private TopologyManager physicalTopology;
 
   public ModelTopologyExtractor(Set<String> vertexLabels, LPNameGenerator linkExistsNameGenerator, LPNameGenerator capacityVarNameGenerator, TopologyManager physicalTopology) {
     if (vertexLabels==null) {

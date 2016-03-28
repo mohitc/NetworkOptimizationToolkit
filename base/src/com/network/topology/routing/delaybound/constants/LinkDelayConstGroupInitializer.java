@@ -87,7 +87,7 @@ public class LinkDelayConstGroupInitializer extends LPMLGroupInitializer {
     }
   }
 
-  private class PhysicalPathComputationAlgorithm extends PathComputationAlgorithm {
+  private static class PhysicalPathComputationAlgorithm extends PathComputationAlgorithm {
 
     private TEPropertyKey delay;
 

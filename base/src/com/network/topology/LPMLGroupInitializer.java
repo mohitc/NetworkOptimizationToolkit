@@ -14,7 +14,7 @@ public abstract class LPMLGroupInitializer extends LPGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(LPMLGroupInitializer.class);
 
-  public LPMLGroupInitializer(Set<String> vertices) {
+  protected LPMLGroupInitializer(Set<String> vertices) {
     if (vertices==null) {
       log.error("Set of vertices is null, reverting to empty set");
       this.vertices = Collections.EMPTY_SET;

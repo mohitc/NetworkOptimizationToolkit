@@ -16,4 +16,12 @@ public interface SAConstraintGroups {
   String SA_DEST_LOOP_AVOIDANCE = "SADestLoopAvoidance";
   String SA_DEST_LOOP_AVOIDANCE_DESC = "Constraint to ensure loop avoidance at destination for each service routing";
 
+  String SA_ROUTER_IN_PATH = "RouterInServicePathConstr";
+  String SA_ROUTER_IN_PATH_DESC = "Constraint to identify is router is in path for a particular service class";
+
+  String SA_ROUTE_DELAY = "ServiceRouteDelay";
+  String SA_ROUTE_DELAY_DESC = "Constraint to satisfy routing delay constraints for each service path";
+
+  String SA_KNOWN_TRAFFIC_MAT = "KnownServiceTrafficMatrixCapacityConstr";
+  String SA_KNOWN_TRAFFIC_MAT_DESC = "Constrains instantiated capacity to be at least as big as requested across services";
 }

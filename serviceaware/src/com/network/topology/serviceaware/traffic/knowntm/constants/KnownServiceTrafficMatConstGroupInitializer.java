@@ -1,9 +1,9 @@
 package com.network.topology.serviceaware.traffic.knowntm.constants;
 
 import com.lpapi.entities.LPConstantGroup;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
+import com.network.topology.LPMLGroupInitializer;
 import com.network.topology.serviceaware.ServiceAwareFixedConstants;
 import com.topology.impl.primitives.TopologyManagerImpl;
 import com.topology.primitives.TopologyManager;
@@ -12,24 +12,16 @@ import com.topology.primitives.properties.TEPropertyKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-public class KnownServiceTrafficMatConstGroupInitializer extends LPGroupInitializer {
+public class KnownServiceTrafficMatConstGroupInitializer extends LPMLGroupInitializer {
   private static final Logger log = LoggerFactory.getLogger(KnownServiceTrafficMatConstGroupInitializer.class);
-
-  private Set<String> vertices;
 
   private TopologyManager topo;
 
   public KnownServiceTrafficMatConstGroupInitializer(Set<String> vertices, TopologyManager topo) {
-    if (vertices==null) {
-      log.error("Set of vertices is null, reverting to empty set");
-      this.vertices = Collections.EMPTY_SET;
-    } else {
-      this.vertices = vertices;
-    }
+    super(vertices);
 
     if (topo==null) {
       log.error("Initialized with empty variable topology manager");

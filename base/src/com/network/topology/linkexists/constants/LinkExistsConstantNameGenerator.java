@@ -2,7 +2,6 @@ package com.network.topology.linkexists.constants;
 
 import com.lpapi.entities.group.generators.LPNameGeneratorImpl;
 import com.lpapi.entities.group.validators.LPDistinctPrefixValidator;
-import com.lpapi.entities.group.validators.LPPrefixClassValidator;
 import com.lpapi.entities.group.validators.LPSetContainmentValidator;
 import com.lpapi.exception.LPNameException;
 import org.slf4j.Logger;

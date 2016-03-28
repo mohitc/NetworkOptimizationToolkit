@@ -6,11 +6,11 @@ public abstract class ModelValidator {
 
   private LPModel model;
 
-  public LPModel getModel() {
+  protected LPModel getModel() {
     return model;
   }
 
-  public ModelValidator(LPModel model) {
+  protected ModelValidator(LPModel model) {
     this.model = model;
   }
 

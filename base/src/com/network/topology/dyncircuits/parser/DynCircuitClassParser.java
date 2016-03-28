@@ -15,7 +15,7 @@ import java.util.*;
 
 public class DynCircuitClassParser {
 
-  private String fileName;
+  private final String fileName;
 
   private static final Logger log = LoggerFactory.getLogger(DynCircuitClassParser.class);
 
@@ -45,8 +45,8 @@ public class DynCircuitClassParser {
       return Collections.EMPTY_MAP;
     }
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder builder = null;
-    Document doc = null;
+    DocumentBuilder builder;
+    Document doc;
     try {
       builder = factory.newDocumentBuilder();
       doc = builder.parse(capFile);

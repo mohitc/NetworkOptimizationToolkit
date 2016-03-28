@@ -16,25 +16,21 @@ public class DynCircuitVarGroupInitializer extends LPMLGroupInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(DynCircuitVarGroupInitializer.class);
 
-  private int circuitClasses;
-
   public DynCircuitVarGroupInitializer(Set<String> vertices) {
     super(vertices);
   }
 
   @Override
   public void run() throws LPModelException {
+    int circuitClasses = 1;
     try {
-      int circuitClasses = (int) model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
+      circuitClasses = (int) model().getLPConstant(FixedConstants.CIRCUIT_CLASSES).getValue();
       if (circuitClasses <= 0) {
         log.error("Circuit classes should be a positive integer (>0). Defaulting to 1");
-        this.circuitClasses = 1;
-      } else {
-        this.circuitClasses = circuitClasses;
+        circuitClasses = 1;
       }
     } catch (LPConstantException e) {
       log.error("Number of dynamic circuit classes not defined. Defaulting to 1");
-      this.circuitClasses = 1;
     }
     try {
       LPVarGroup group = this.getGroup().getModel().getLPVarGroup(this.getGroup().getIdentifier());

@@ -5,15 +5,33 @@ import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.entities.group.LPNameGenerator;
 import com.lpapi.exception.*;
 import com.network.topology.ConstantGroups;
+import com.network.topology.FixedConstants;
 import com.network.topology.models.extractors.ModelExtractionException;
 import com.network.topology.models.extractors.ModelExtractor;
 import com.network.topology.models.mltopology.MultiLayerTopologyModel;
+import com.network.topology.routing.delaybound.constants.LinkDelayConstGroupInitializer;
+import com.network.topology.routing.delaybound.constants.LinkDelayConstNameGenerator;
+import com.network.topology.serviceaware.SAConstantGroups;
 import com.network.topology.serviceaware.SAConstraintGroups;
 import com.network.topology.serviceaware.SAVarGroups;
 import com.network.topology.serviceaware.ServiceAwareFixedConstants;
 import com.network.topology.serviceaware.routing.constraints.*;
+import com.network.topology.serviceaware.routing.delaybound.constants.ServiceAwareRoutePathDelayConstGroupInitializer;
+import com.network.topology.serviceaware.routing.delaybound.constants.ServiceAwareRoutePathDelayConstNameGenerator;
+import com.network.topology.serviceaware.routing.delaybound.constants.ServiceAwareRouterDelayConstGroupInitializer;
+import com.network.topology.serviceaware.routing.delaybound.constants.ServiceAwareRouterDelayConstNameGenerator;
+import com.network.topology.serviceaware.routing.delaybound.constraints.RouterInServicePathConstrGroupInitializer;
+import com.network.topology.serviceaware.routing.delaybound.constraints.RouterInServicePathConstrNameGenerator;
+import com.network.topology.serviceaware.routing.delaybound.constraints.ServiceRouteDelayConstrGroupInitializer;
+import com.network.topology.serviceaware.routing.delaybound.constraints.ServiceRouteDelayConstrNameGenerator;
+import com.network.topology.serviceaware.routing.delaybound.vars.RouterInServicePathVarGroupInitializer;
+import com.network.topology.serviceaware.routing.delaybound.vars.RouterInServicePathVarNameGenerator;
 import com.network.topology.serviceaware.routing.vars.ServiceAwareRoutingVarGroupInitializer;
 import com.network.topology.serviceaware.routing.vars.ServiceAwareRoutingVarNameGenerator;
+import com.network.topology.serviceaware.traffic.knowntm.constants.KnownServiceTrafficMatConstGroupInitializer;
+import com.network.topology.serviceaware.traffic.knowntm.constants.KnownServiceTrafficMatConstNameGenerator;
+import com.network.topology.serviceaware.traffic.knowntm.constraints.KnownServiceTmTrafficConstrGroupInitializer;
+import com.network.topology.serviceaware.traffic.knowntm.constraints.KnownServiceTmTrafficConstrNameGenerator;
 import com.topology.primitives.TopologyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +50,39 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
     super.initConstants();
 
     //add constant for service classes
+    int serviceClasses = 3;
     LPConstantGroup constantGroup = model.getLPConstantGroup(ConstantGroups.VARIABLE_BOUNDS);
-    model.createLpConstant(ServiceAwareFixedConstants.SERVICE_CLASSES, 3, constantGroup);
+    model.createLpConstant(ServiceAwareFixedConstants.SERVICE_CLASSES, serviceClasses, constantGroup);
+    //constant to indicate the max utilization of a link (Alpha)
+    model.createLpConstant(FixedConstants.ALPHA, 0.7, constantGroup);
+    //Max Route Delay
+    model.createLpConstant(FixedConstants.ROUTE_DELAY_INF, 100000, constantGroup);
+
+    Set<String> vertexLabels = getVertexLabels();
+
+    //delay bounds on routers based on service classes
+    LPNameGenerator saRouterDelayConstNameGenerator = new ServiceAwareRouterDelayConstNameGenerator(vertexLabels, serviceClasses);
+    LPGroupInitializer saRouterDelayConstGroupInitializer = new ServiceAwareRouterDelayConstGroupInitializer(vertexLabels);
+    model.createLPConstantGroup(SAConstantGroups.SERVICE_ROUTER_DELAY, SAConstantGroups.SERVICE_ROUTER_DELAY_DESC,
+        saRouterDelayConstNameGenerator, saRouterDelayConstGroupInitializer);
+
+    //Link Delay constants computed based on shortest delay path in the physical topology
+    LPNameGenerator linkDelayConstantNameGenerator = new LinkDelayConstNameGenerator(vertexLabels);
+    LinkDelayConstGroupInitializer linkDelayConstGroupInitializer = new LinkDelayConstGroupInitializer(vertexLabels, _instance);
+    model.createLPConstantGroup(ConstantGroups.LINK_DELAY, ConstantGroups.LINK_DELAY_DESC, linkDelayConstantNameGenerator, linkDelayConstGroupInitializer);
+
+    //Delay bound on routes based on service classes
+    LPNameGenerator saRoutePathDelayConstNameGenerator = new ServiceAwareRoutePathDelayConstNameGenerator(vertexLabels, serviceClasses);
+    LPGroupInitializer saRoutePathDelayConstGroupInitializer = new ServiceAwareRoutePathDelayConstGroupInitializer(vertexLabels);
+    model.createLPConstantGroup(SAConstantGroups.SERVICE_PATH_DELAY, SAConstantGroups.SERVICE_PATH_DELAY_DESC,
+        saRoutePathDelayConstNameGenerator, saRoutePathDelayConstGroupInitializer);
+
+    //Traffic matrix (known)
+    LPNameGenerator knownServiceTrafficMatConstNameGenerator = new KnownServiceTrafficMatConstNameGenerator(vertexLabels, serviceClasses);
+    LPGroupInitializer knownServiceTrafficMatConstGroupInitializer = new KnownServiceTrafficMatConstGroupInitializer(vertexLabels, _instance);
+    model.createLPConstantGroup(SAConstantGroups.SA_TRAFFIC_MAT, SAConstantGroups.SA_TRAFFIC_MAT_DESC,
+        knownServiceTrafficMatConstNameGenerator, knownServiceTrafficMatConstGroupInitializer);
+
   }
 
   public void initVarGroups() throws LPVarGroupException {
@@ -50,6 +99,11 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
     LPNameGenerator serviceAwareRoutingNameGenerator = new ServiceAwareRoutingVarNameGenerator(vertexLabels, serviceClasses);
     LPGroupInitializer serviceAwareRoutingVarGroupInitializer = new ServiceAwareRoutingVarGroupInitializer(vertexLabels);
     model.createLPVarGroup(SAVarGroups.SA_ROUTING, SAVarGroups.SA_ROUTING_DESC, serviceAwareRoutingNameGenerator, serviceAwareRoutingVarGroupInitializer);
+
+    //Router in service path
+    LPNameGenerator routerInServicePathNameGenerator = new RouterInServicePathVarNameGenerator(vertexLabels, serviceClasses);
+    LPGroupInitializer routerInServicePathVarGroupInitializer = new RouterInServicePathVarGroupInitializer(vertexLabels);
+    model.createLPVarGroup(SAVarGroups.SA_ROUTER_IN_PATH, SAVarGroups.SA_ROUTER_IN_PATH_DESC, routerInServicePathNameGenerator, routerInServicePathVarGroupInitializer);
   }
 
 
@@ -89,10 +143,29 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
     model.createLPConstraintGroup(SAConstraintGroups.SA_SOURCE_LOOP_AVOIDANCE, SAConstraintGroups.SA_SOURCE_LOOP_AVOIDANCE_DESC,
         saSourceLoopAvoidanceConstrNameGenerator, saSourceLoopAvoidanceConstrGroupInitializer);
 
+    //Destination loop avoidance
     LPNameGenerator saDestLoopAvoidanceConstrNameGenerator = new ServiceAwareDestLoopAvoidanceConstrNameGenerator(vertexLabels, serviceClasses);
     LPGroupInitializer saDestLoopAvoidanceConstrGroupInitializer = new ServiceAwareDestLoopAvoidanceConstrGroupInitializer(vertexLabels);
     model.createLPConstraintGroup(SAConstraintGroups.SA_DEST_LOOP_AVOIDANCE, SAConstraintGroups.SA_DEST_LOOP_AVOIDANCE_DESC,
         saDestLoopAvoidanceConstrNameGenerator, saDestLoopAvoidanceConstrGroupInitializer);
+
+    //Router in service path
+    LPNameGenerator routerInServicePathConstrNameGenerator = new RouterInServicePathConstrNameGenerator(vertexLabels, serviceClasses);
+    LPGroupInitializer routerInServicePathConstrGroupInitializer = new RouterInServicePathConstrGroupInitializer(vertexLabels);
+    model.createLPConstraintGroup(SAConstraintGroups.SA_ROUTER_IN_PATH, SAConstraintGroups.SA_ROUTER_IN_PATH_DESC,
+        routerInServicePathConstrNameGenerator, routerInServicePathConstrGroupInitializer);
+
+    //Path Delay constraints on service path
+    LPNameGenerator serviceRouteDelayConstrNameGenerator = new ServiceRouteDelayConstrNameGenerator(vertexLabels, serviceClasses);
+    LPGroupInitializer serviceRouteDelayConstrGroupInitializer = new ServiceRouteDelayConstrGroupInitializer(vertexLabels);
+    model.createLPConstraintGroup(SAConstraintGroups.SA_ROUTE_DELAY, SAConstraintGroups.SA_ROUTE_DELAY_DESC, serviceRouteDelayConstrNameGenerator,
+        serviceRouteDelayConstrGroupInitializer);
+
+    //Traffic constraints (known traffic matrix)
+    LPNameGenerator knownServiceTmTrafficConstrNameGenerator = new KnownServiceTmTrafficConstrNameGenerator(vertexLabels, serviceClasses);
+    LPGroupInitializer knownServiceTmTrafficConstrGroupInitializer = new KnownServiceTmTrafficConstrGroupInitializer(vertexLabels);
+    model.createLPConstraintGroup(SAConstraintGroups.SA_KNOWN_TRAFFIC_MAT, SAConstraintGroups.SA_KNOWN_TRAFFIC_MAT_DESC,
+        knownServiceTmTrafficConstrNameGenerator, knownServiceTmTrafficConstrGroupInitializer);
   }
 
   @Override

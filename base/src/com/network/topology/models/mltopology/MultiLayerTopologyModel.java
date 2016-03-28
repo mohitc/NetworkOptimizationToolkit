@@ -44,11 +44,13 @@ import com.network.topology.models.validators.ModelValidationException;
 import com.network.topology.models.validators.ModelValidator;
 import com.network.topology.objfn.MinDynCirCostObjFnGenerator;
 import com.topology.primitives.ConnectionPoint;
+import com.topology.primitives.TopologyElement;
 import com.topology.primitives.TopologyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class MultiLayerTopologyModel {
 
@@ -74,11 +76,9 @@ public abstract class MultiLayerTopologyModel {
   protected Set<String> getVertexLabels() {
     if (_instance==null)
       return Collections.EMPTY_SET;
-    Set<String> vertexLabels = new HashSet<>();
+    //Set<String> vertexLabels = new HashSet<>();
     Set<ConnectionPoint> cps = _instance.getAllElements(ConnectionPoint.class);
-    for (ConnectionPoint cp: cps) {
-      vertexLabels.add(cp.getLabel());
-    }
+    Set<String> vertexLabels = cps.stream().map(TopologyElement::getLabel).collect(Collectors.toSet());
     return Collections.unmodifiableSet(vertexLabels);
   }
 

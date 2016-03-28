@@ -2,7 +2,6 @@ package com.network.topology.serviceaware.routing.vars;
 
 import com.lpapi.entities.LPVarGroup;
 import com.lpapi.entities.LPVarType;
-import com.lpapi.entities.group.LPGroupInitializer;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
 import com.network.topology.LPMLGroupInitializer;
@@ -10,7 +9,6 @@ import com.network.topology.serviceaware.ServiceAwareFixedConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Set;
 
 public class ServiceAwareRoutingVarGroupInitializer extends LPMLGroupInitializer {

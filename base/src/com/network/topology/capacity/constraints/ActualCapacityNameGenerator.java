@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.lpapi.entities.group.generators.LPNameGeneratorImpl;
 import com.lpapi.exception.LPNameException;
-import com.network.topology.forwarding.constraints.ForwardingBasedRoutingConstrNameGenerator;
 
 public class ActualCapacityNameGenerator extends LPNameGeneratorImpl<String> {
 	

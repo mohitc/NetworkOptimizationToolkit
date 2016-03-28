@@ -2,8 +2,6 @@ package com.network.topology.linkexists.constants;
 
 import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.group.LPGroupInitializer;
-import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.group.generators.LPEmptyNameGenratorImpl;
 import com.lpapi.exception.LPModelException;
 import com.lpapi.exception.LPNameException;
 import com.topology.primitives.ConnectionPoint;

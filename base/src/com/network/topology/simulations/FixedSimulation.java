@@ -4,7 +4,6 @@ import com.lpapi.exception.LPModelException;
 import com.network.topology.models.delayconstrainedmlspf.DelayConstrainedMLSpfTopologyModel;
 import com.network.topology.models.extractors.ModelExtractionException;
 import com.network.topology.models.fixedtopology.FixedTopologyModel;
-import com.network.topology.models.multilayerspf.MultiLayerSpfTopologyModel;
 import com.topology.impl.importers.sndlib.SNDLibImportTopology;
 import com.topology.impl.primitives.TopologyManagerImpl;
 import com.topology.primitives.TopologyManager;
@@ -43,7 +42,7 @@ public class FixedSimulation {
       Map<String, Double> oldDemands = manager.getProperty(demands, Map.class);
       Map<String, Double> newDemands = new HashMap<>();
       for (Map.Entry<String, Double> entry: oldDemands.entrySet()) {
-        newDemands.put(entry.getKey(), entry.getValue().doubleValue() * 10);
+        newDemands.put(entry.getKey(), entry.getValue() * 10);
       }
       newTopology.addProperty(demands, newDemands);
 

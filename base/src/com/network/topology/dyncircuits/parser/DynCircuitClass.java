@@ -2,11 +2,11 @@ package com.network.topology.dyncircuits.parser;
 
 public class DynCircuitClass {
 
-  private int classType;
+  private final int classType;
 
-  private double capacity;
+  private final double capacity;
 
-  private double cost;
+  private final double cost;
 
   public DynCircuitClass(int classType, double capacity, double cost) {
     this.classType = classType;

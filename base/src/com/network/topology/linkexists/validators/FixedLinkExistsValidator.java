@@ -20,11 +20,11 @@ public class FixedLinkExistsValidator extends ModelValidator {
 
   private static final Logger log = LoggerFactory.getLogger(FixedLinkExistsValidator.class);
 
-  TopologyManager initTopology;
+  private TopologyManager initTopology;
 
-  LPNameGenerator linkExistsNameGenerator;
+  private LPNameGenerator linkExistsNameGenerator;
 
-  Set<String> vertexLabels;
+  private Set<String> vertexLabels;
 
   public FixedLinkExistsValidator(LPModel model, TopologyManager initTopology, LPNameGenerator linkExistsNameGenerator, Set<String> vertexLabels) {
     super(model);

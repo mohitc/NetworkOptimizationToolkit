@@ -41,13 +41,13 @@ public class MinDynCirCostObjFnGenerator extends LPObjFnGenerator {
     LPExpression expr = new LPExpression(getModel());
     try {
       LPNameGenerator dynCircuitVarNameGenerator = getModel().getLPVarGroup(VarGroups.DYN_CIRCUITS).getNameGenerator();
-      for (int i: circuitClassMap.keySet()) {
-        double cost = circuitClassMap.get(i).getCost();
+      for (Map.Entry<Integer, DynCircuitClass> entry: circuitClassMap.entrySet()) {
+        double cost = entry.getValue().getCost();
         for (String x: vertexSet) {
           for (String y: vertexSet) {
             if (x.equals(y))
               continue;
-            expr.addTerm(cost, getModel().getLPVar(dynCircuitVarNameGenerator.getName(i, x, y)));
+            expr.addTerm(cost, getModel().getLPVar(dynCircuitVarNameGenerator.getName(entry.getKey(), x, y)));
           }
         }
       }

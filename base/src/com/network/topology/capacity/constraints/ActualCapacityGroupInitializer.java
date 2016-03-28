@@ -22,7 +22,7 @@ public class ActualCapacityGroupInitializer extends LPMLGroupInitializer {
 
 	private static final Logger log = LoggerFactory.getLogger(ActualCapacityGroupInitializer.class);
 
-	private Map<Integer, DynCircuitClass> circuitClassMap;
+	private final Map<Integer, DynCircuitClass> circuitClassMap;
 
 	public ActualCapacityGroupInitializer(Set<String> vertexVars, Map<Integer, DynCircuitClass> circuitClassMap) {
 		super(vertexVars);
@@ -67,7 +67,7 @@ public class ActualCapacityGroupInitializer extends LPMLGroupInitializer {
 		}
 	}
 
-	public double getDynCircuitCapacity(int n){
+	private double getDynCircuitCapacity(int n){
 		if (circuitClassMap.containsKey(n)) {
 			return circuitClassMap.get(n).getCapacity();
 		} else {

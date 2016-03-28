@@ -8,6 +8,7 @@ import com.network.topology.serviceaware.routing.ServiceRoutingNameValidatorHelp
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -20,9 +21,7 @@ public class ServiceAwareRoutingConstrNameGenerator extends LPNameGeneratorImpl 
   public ServiceAwareRoutingConstrNameGenerator(Set<String> vertexVars, int serviceClasses) {
     super(PREFIX, 5);
     List<LPNamePrefixValidator> validators = ServiceRoutingNameValidatorHelper.getServiceAwareNameValidators(serviceClasses, vertexVars, log);
-    for (LPNamePrefixValidator validator : validators) {
-      addValidator(validator);
-    }
+    validators.forEach(v->addValidator(v));
   }
 
   @Override
