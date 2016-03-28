@@ -39,4 +39,5 @@ public interface ConstraintPrefixes {
 
   //Delay Constraints
   String ROUTER_IN_PATH = "ROUTER_IN_PATH";
+  String ROUTE_DELAY = "ROUTE_DELAY";
 }
