@@ -13,6 +13,7 @@
   <path id="base.classpath">
     <pathelement location="bin"/>
     <path refid="base.jars.classpath"/>
+    <pathelement location="/opt/gurobi650/linux64/lib/gurobi.jar"/>
   </path>
   <target name="init">
     <mkdir dir="bin"/>
@@ -63,6 +64,7 @@
   </pathconvert>
   <target depends="build" name="jar">
     <delete file="base.jar"/>
+    <echo message="${manifest.classpath}"/>
     <jar destfile="base.jar" basedir="bin/">
       <manifest>
         <attribute name="Class-Path" value="${manifest.classpath}"/>

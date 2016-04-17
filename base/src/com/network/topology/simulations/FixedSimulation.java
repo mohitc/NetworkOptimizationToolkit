@@ -29,7 +29,7 @@ public class FixedSimulation {
       SNDLibImportTopology importer = new SNDLibImportTopology();
       importer.importFromFile("conf/nobel-us.xml", manager);
 
-      FixedTopologyModel lpModel = new FixedTopologyModel("conf/circuit-cap.xml", manager);
+      FixedTopologyModel lpModel = new FixedTopologyModel("conf/circuit-cap.xml", manager, "abc");
       lpModel.init();
       lpModel.compute();
       lpModel.postCompute();
@@ -56,7 +56,7 @@ public class FixedSimulation {
       TopologyManager finalTopology = newLpModel.getExtractedModel();
 */
 
-      DelayConstrainedMLSpfTopologyModel newLpModel = new DelayConstrainedMLSpfTopologyModel("conf/circuit-cap.xml", newTopology);
+      DelayConstrainedMLSpfTopologyModel newLpModel = new DelayConstrainedMLSpfTopologyModel("conf/circuit-cap.xml", newTopology, "abc");
       newLpModel .init();
       newLpModel .compute();
       newLpModel .postCompute();

@@ -42,8 +42,12 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
 
   private static final Logger log = LoggerFactory.getLogger(ServiceAwareMultiLayerSpfModel.class);
 
-  public ServiceAwareMultiLayerSpfModel(String circuitConfFile, TopologyManager manager) {
-    super(circuitConfFile, manager);
+  public ServiceAwareMultiLayerSpfModel(String circuitConfFile, TopologyManager manager, String instanceName) {
+    super(circuitConfFile, manager, instanceName);
+  }
+
+  public ServiceAwareMultiLayerSpfModel(String circuitConfFile, TopologyManager manager, String instanceName, String exportPath) {
+    super(circuitConfFile, manager, instanceName, exportPath);
   }
 
   public void initConstants() throws LPConstantGroupException, LPConstantException {

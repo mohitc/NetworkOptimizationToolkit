@@ -22,8 +22,12 @@ public class FixedTopologyModel extends MultiLayerSpfTopologyModel {
 
   private static final Logger log = LoggerFactory.getLogger(FixedTopologyModel.class);
 
-  public FixedTopologyModel(String circuitConfFile, TopologyManager manager) {
-    super(circuitConfFile, manager);
+  public FixedTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName) {
+    super(circuitConfFile, manager, instanceName);
+  }
+
+  public FixedTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName, String exportPath) {
+    super(circuitConfFile, manager, instanceName, exportPath);
   }
 
   public void initConstraintGroups() throws LPConstraintGroupException {
@@ -45,14 +49,31 @@ public class FixedTopologyModel extends MultiLayerSpfTopologyModel {
   public static void main (String[] args) {
     try {
 
-      TopologyManager manager = new TopologyManagerImpl("test");
-      SNDLibImportTopology importer = new SNDLibImportTopology();
-      importer.importFromFile("conf/nobel-us.xml", manager);
+      //arg 1 = file name for topology
+      //arg 2 = file name for circuit capacity
+      //arg 3 = path to export folder
+      //arg 4 = identifier for the model
+      //arg 5 = identify if we should run the model or read from file
+      if (args==null || args.length!=5) {
+        log.error("Invalid arguments provided to program. Expected {path to topology} {path to circuit capacity configuration} {path to export folder} {model identifier} {boolean to indicate if model shold be solved}");
+      }
 
-      FixedTopologyModel lpModel = new FixedTopologyModel("conf/circuit-cap.xml", manager);
-      lpModel.init();
-      lpModel.compute();
-      lpModel.postCompute();
+      TopologyManager manager = new TopologyManagerImpl(args[3]);
+      SNDLibImportTopology importer = new SNDLibImportTopology();
+      importer.importFromFile(args[0], manager);
+
+      FixedTopologyModel lpModel = new FixedTopologyModel(args[1], manager, args[3], args[2]);
+      boolean compute = Boolean.parseBoolean(args[4]);
+
+      if (compute) {
+        log.info("Computing model");
+        lpModel.init();
+        lpModel.compute();
+        lpModel.postCompute();
+      } else {
+        log.info("Attempting to load model from export information");
+        lpModel.importModel();
+      }
 
     } catch (LPModelException e) {
       log.error("Error initializing model", e);

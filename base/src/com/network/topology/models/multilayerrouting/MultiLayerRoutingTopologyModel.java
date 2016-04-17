@@ -38,8 +38,12 @@ public class MultiLayerRoutingTopologyModel extends MultiLayerTopologyModel {
 
   private static final Logger log = LoggerFactory.getLogger(MultiLayerRoutingTopologyModel.class);
 
-  public MultiLayerRoutingTopologyModel(String circuitConfFile, TopologyManager manager) {
-    super(circuitConfFile, manager);
+  public MultiLayerRoutingTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName) {
+    super(circuitConfFile, manager, instanceName);
+  }
+
+  public MultiLayerRoutingTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName, String exportPath) {
+    super(circuitConfFile, manager, instanceName, exportPath);
   }
 
   public void initConstants() throws LPConstantGroupException, LPConstantException {
@@ -128,7 +132,7 @@ public class MultiLayerRoutingTopologyModel extends MultiLayerTopologyModel {
       SNDLibImportTopology importer = new SNDLibImportTopology();
       importer.importFromFile("conf/nobel-us.xml", manager);
 
-      MultiLayerRoutingTopologyModel lpModel = new MultiLayerRoutingTopologyModel("conf/circuit-cap.xml", manager);
+      MultiLayerRoutingTopologyModel lpModel = new MultiLayerRoutingTopologyModel("conf/circuit-cap.xml", manager, "testABC");
       lpModel.init();
       lpModel.compute();
       lpModel.postCompute();

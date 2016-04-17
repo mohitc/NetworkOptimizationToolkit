@@ -35,8 +35,12 @@ public class DelayConstrainedMLSpfTopologyModel extends MultiLayerSpfTopologyMod
 
   private static final Logger log = LoggerFactory.getLogger(DelayConstrainedMLSpfTopologyModel.class);
 
-  public DelayConstrainedMLSpfTopologyModel(String circuitConfFile, TopologyManager manager) {
-    super(circuitConfFile, manager);
+  public DelayConstrainedMLSpfTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName) {
+    super(circuitConfFile, manager, instanceName);
+  }
+
+  public DelayConstrainedMLSpfTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName, String exportPath) {
+    super(circuitConfFile, manager, instanceName, exportPath);
   }
 
   public void initConstants() throws LPConstantGroupException, LPConstantException {
@@ -102,7 +106,7 @@ public class DelayConstrainedMLSpfTopologyModel extends MultiLayerSpfTopologyMod
       SNDLibImportTopology importer = new SNDLibImportTopology();
       importer.importFromFile("conf/nobel-us.xml", manager);
 
-      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/circuit-cap.xml", manager);
+      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/circuit-cap.xml", manager, "TestABC");
       lpModel.init();
       lpModel.compute();
       lpModel.postCompute();

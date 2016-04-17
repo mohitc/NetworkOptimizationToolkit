@@ -3,10 +3,9 @@ package com.network.topology.models.mltopology;
 import com.lpapi.entities.LPConstantGroup;
 import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPSolutionStatus;
-import com.lpapi.entities.glpk.impl.GlpkLPModel;
 import com.lpapi.entities.group.LPNameGenerator;
-//import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.entities.gurobi.impl.GurobiLPModel;
+import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
 import com.lpapi.exception.*;
 import com.lpapi.export.LPModelExporter;
 import com.lpapi.export.LPModelExporterType;
@@ -65,9 +64,21 @@ public abstract class MultiLayerTopologyModel {
 
   protected List<ModelValidator> validatorList;
 
-  public MultiLayerTopologyModel(String circuitConfFile, TopologyManager manager) {
+  private String instanceName;
+
+  private String exportPath = "./export/";
+
+  public MultiLayerTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName) {
     initDynamicCircuitParser(circuitConfFile);
     this._instance = manager;
+    this.instanceName = instanceName;
+  }
+
+  public MultiLayerTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName, String exportPath) {
+    initDynamicCircuitParser(circuitConfFile);
+    this._instance = manager;
+    this.instanceName = instanceName;
+    this.exportPath = exportPath;
   }
 
   public void initDynamicCircuitParser(String circuitConfFile) {
@@ -182,10 +193,7 @@ public abstract class MultiLayerTopologyModel {
   }
 
   public void initModel() throws LPModelException {
-//  model = new CplexLPModel("Test");
-//    model = new GurobiLPModel("Test");
-//    model = new SkeletonLPModel("Test");
-    model = new GlpkLPModel("Test");
+    model = new GurobiLPModel(instanceName);
   }
 
   public void init() throws LPModelException {
@@ -207,6 +215,36 @@ public abstract class MultiLayerTopologyModel {
 
   public abstract TopologyManager getExtractedModel() throws ModelExtractionException;
 
+  public void exportModel() {
+    try {
+      log.info("Exporting model to JSON files");
+      LPModelExporter exporter = LPModelExporterFactory.instance(model, LPModelExporterType.JSON_FILE);
+      ((JSONFileLPModelExporter) exporter).setFolderPath(getExportPath());
+      exporter.export();
+      log.info("Export successful");
+    } catch (LPExportException e) {
+      log.error("Error in exporting LP model", e);
+    }
+  }
+
+  public void importModel() {
+    try {
+      //Import model from JSON to test
+      log.info("Import model from JSON Files");
+      LPModel importModel = new SkeletonLPModel(instanceName);
+      LPModelImporter modelImporter = LPModelImporterFactory.instance(importModel, LPModelImporterType.JSON_FILE);
+      ((JSONFileLPModelImporter) modelImporter).setFolderPath(getExportPath());
+      modelImporter.importModel();
+      model = importModel;
+      log.info("Import Successful");
+    } catch (LPImportException e) {
+      log.error("Error in importing LP model", e);
+    } catch (LPModelException e) {
+      log.error("LP model exception", e);
+    }
+
+  }
+
   public void postCompute() {
     try {
       if (model.getSolutionStatus() == LPSolutionStatus.OPTIMAL) {
@@ -214,36 +252,13 @@ public abstract class MultiLayerTopologyModel {
 
         initModelValidators();
         runModelValidators();
-
-        log.info("Exporting model to JSON files");
-        LPModelExporter exporter = LPModelExporterFactory.instance(model, LPModelExporterType.JSON_FILE);
-        ((JSONFileLPModelExporter) exporter).setFolderPath("./export/");
-        exporter.export();
-
-        //Import model from JSON to test
-        log.info("Import model from JSON Files");
-//        LPModel importModel = new SkeletonLPModel(model.getIdentifier()); //TODO: use this
-        LPModel importModel = new GlpkLPModel(model.getIdentifier());
-//        LPModel importModel = new GurobiLPModel(model.getIdentifier());
-        LPModelImporter modelImporter = LPModelImporterFactory.instance(importModel, LPModelImporterType.JSON_FILE);
-        ((JSONFileLPModelImporter) modelImporter).setFolderPath("./export/");
-        modelImporter.importModel();
-
-        model = importModel;
-        runModelValidators();
-
-        log.info("Import Successful");
+        exportModel();
       }
     } catch (ModelValidationException e) {
       log.error("Error while validating model", e);
-    } catch (LPExportException e) {
-      log.error("Error in exporting LP model", e);
-    } catch (LPImportException e) {
-      log.error("Error in importing LP model", e);
     } catch (LPModelException e) {
       log.error("LP model exception", e);
     }
-
   }
 
   public abstract void initModelValidators();
@@ -256,4 +271,11 @@ public abstract class MultiLayerTopologyModel {
 
   public abstract ModelExtractor<TopologyManager> initModelExtractor();
 
+  public String getExportPath() {
+    return exportPath;
+  }
+
+  public void setExportPath(String exportPath) {
+    this.exportPath = exportPath!=null?exportPath:"";
+  }
 }
