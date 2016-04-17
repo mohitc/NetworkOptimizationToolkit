@@ -5,7 +5,8 @@ import com.lpapi.entities.LPModel;
 import com.lpapi.entities.LPSolutionStatus;
 import com.lpapi.entities.glpk.impl.GlpkLPModel;
 import com.lpapi.entities.group.LPNameGenerator;
-import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
+//import com.lpapi.entities.skeleton.impl.SkeletonLPModel;
+import com.lpapi.entities.gurobi.impl.GurobiLPModel;
 import com.lpapi.exception.*;
 import com.lpapi.export.LPModelExporter;
 import com.lpapi.export.LPModelExporterType;
@@ -182,7 +183,7 @@ public abstract class MultiLayerTopologyModel {
 
   public void initModel() throws LPModelException {
 //  model = new CplexLPModel("Test");
-//  model = new GurobiLPModel("Test");
+//    model = new GurobiLPModel("Test");
 //    model = new SkeletonLPModel("Test");
     model = new GlpkLPModel("Test");
   }
@@ -221,7 +222,9 @@ public abstract class MultiLayerTopologyModel {
 
         //Import model from JSON to test
         log.info("Import model from JSON Files");
-        LPModel importModel = new SkeletonLPModel(model.getIdentifier());
+//        LPModel importModel = new SkeletonLPModel(model.getIdentifier()); //TODO: use this
+        LPModel importModel = new GlpkLPModel(model.getIdentifier());
+//        LPModel importModel = new GurobiLPModel(model.getIdentifier());
         LPModelImporter modelImporter = LPModelImporterFactory.instance(importModel, LPModelImporterType.JSON_FILE);
         ((JSONFileLPModelImporter) modelImporter).setFolderPath("./export/");
         modelImporter.importModel();
