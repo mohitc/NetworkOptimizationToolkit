@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project basedir="." default="build" name="base"  xmlns:ivy="antlib:org.apache.ivy.ant">
+  <loadproperties srcFile="jarpaths.properties"/>
+  <property name="debuglevel" value="source,lines,vars"/>
+  <property name="target" value="1.8"/>
+  <property name="source" value="1.8"/>
+  <path id="base.jars.classpath">
+    <fileset dir="./lib">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+  <path id="base.classpath">
+    <pathelement location="bin"/>
+    <path refid="base.jars.classpath"/>
+  </path>
+  <target name="init">
+    <mkdir dir="bin"/>
+    <mkdir dir="lib"/>
+  </target>
+  <target name="clean">
+    <delete failonerror="false">
+      <fileset dir = "bin"/>
+      <fileset dir = "lib"/>
+    </delete>
+    <echo message="Fetching all dependencies from repository"/>
+    <ivy:retrieve pattern="lib/[artifact].[ext]" conf="runtime"/>
+    <copy file="${topologyelements}" todir="lib"/>
+    <copy file="${topologyprovider}" todir="lib"/>
+    <copy file="${topologyimporters}" todir="lib"/>
+    <copy file="${lpapi}" todir="lib"/>
+    <copy file="${skeletonlpimpl}" todir="lib"/>
+    <antcall target="copy_gurobi"/>
+    <antcall target="copy_cplex"/>
+    <antcall target="copy_glpk"/>
+  </target>
+  <target name="copy_gurobi" if="${usegurobi}">
+    <copy file="${gurobilpimpl}" todir="lib"/>
+  </target>
+  <target name="copy_glpk" if="${useglpk}">
+    <copy file="${glpklpimpl}" todir="lib"/>
+  </target>
+  <target name="copy_cplex" if="${usecplex}">
+    <copy file="${cplexlpimpl}" todir="lib"/>
+  </target>
+
+
+  <target depends="init" name="build">
+    <echo message="${ant.project.name}: ${ant.file}"/>
+    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+      <src path="src"/>
+      <classpath refid="base.classpath"/>
+    </javac>
+  </target>
+  <pathconvert property="manifest.classpath" pathsep=" ">
+    <path refid="base.jars.classpath"/>
+    <mapper>
+      <chainedmapper>
+        <flattenmapper/>
+        <globmapper from="*.jar" to="*.jar"/>
+      </chainedmapper>
+    </mapper>
+  </pathconvert>
+  <target depends="build" name="jar">
+    <delete file="base.jar"/>
+    <jar destfile="base.jar" basedir="bin/">
+      <manifest>
+        <attribute name="Class-Path" value="${manifest.classpath}"/>
+      </manifest>
+    </jar>
+  </target>
+</project>
