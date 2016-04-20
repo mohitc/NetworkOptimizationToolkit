@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project basedir="." default="build" name="serviceaware">
+  <loadproperties srcFile="jarpaths.properties"/>
+  <property name="debuglevel" value="source,lines,vars"/>
+  <property name="target" value="1.8"/>
+  <property name="source" value="1.8"/>
+  <property name="base.location" value="../base/"/>
+  <path id="serviceaware.jars.classpath">
+    <fileset dir="./lib">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+  <path id="base.classpath">
+    <pathelement location="bin"/>
+    <path refid="serviceaware.jars.classpath"/>
+  </path>
+  <target name="init">
+    <mkdir dir="bin"/>
+    <mkdir dir="lib"/>
+  </target>
+  <target name="clean">
+    <delete failonerror="false">
+      <fileset dir = "bin"/>
+      <fileset dir = "lib"/>
+    </delete>
+    <ant antfile="build.xml" dir="${base.location}" inheritAll="false" target="clean" />
+    <ant antfile="build.xml" dir="${base.location}" inheritAll="false" target="jar" />
+    <copy file="${base.location}/base.jar" todir="lib"/>
+  </target>
+  <target depends="init, clean" name="build">
+    <echo message="${ant.project.name}: ${ant.file}"/>
+    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+      <src path="src"/>
+      <classpath refid="base.classpath"/>
+    </javac>
+  </target>
+  <pathconvert property="manifest.classpath" pathsep=" ">
+    <path refid="serviceaware.jars.classpath"/>
+    <mapper>
+      <chainedmapper>
+        <flattenmapper/>
+        <globmapper from="*.jar" to="*.jar"/>
+      </chainedmapper>
+    </mapper>
+  </pathconvert>
+  <target depends="build" name="jar">
+    <delete file="serviceaware.jar"/>
+    <echo message="${manifest.classpath}"/>
+    <jar destfile="base.jar" basedir="bin/">
+      <manifest>
+        <attribute name="Class-Path" value="${manifest.classpath}"/>
+      </manifest>
+    </jar>
+  </target>
+</project>
