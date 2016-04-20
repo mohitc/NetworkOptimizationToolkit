@@ -46,7 +46,7 @@ public class MultiLayerSpfTopologyModel extends MultiLayerRoutingTopologyModel {
   }
 
   public MultiLayerSpfTopologyModel(String circuitConfFile, TopologyManager manager, String instanceName, String exportPath) {
-    super(circuitConfFile, manager, instanceName);
+    super(circuitConfFile, manager, instanceName, exportPath);
   }
 
   public void initConstants() throws LPConstantGroupException, LPConstantException {

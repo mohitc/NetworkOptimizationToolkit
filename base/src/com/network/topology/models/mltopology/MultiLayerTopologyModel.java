@@ -78,7 +78,7 @@ public abstract class MultiLayerTopologyModel {
     initDynamicCircuitParser(circuitConfFile);
     this._instance = manager;
     this.instanceName = instanceName;
-    this.exportPath = exportPath;
+    this.setExportPath(exportPath);
   }
 
   public void initDynamicCircuitParser(String circuitConfFile) {
