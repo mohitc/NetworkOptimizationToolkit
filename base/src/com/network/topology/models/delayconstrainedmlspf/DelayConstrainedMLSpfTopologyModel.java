@@ -7,6 +7,8 @@ import com.network.topology.ConstantGroups;
 import com.network.topology.ConstraintGroups;
 import com.network.topology.FixedConstants;
 import com.network.topology.VarGroups;
+import com.network.topology.models.extractors.ModelExtractionException;
+import com.network.topology.models.fixedtopology.FixedTopologyModel;
 import com.network.topology.models.multilayerspf.MultiLayerSpfTopologyModel;
 import com.network.topology.routing.delaybound.constants.*;
 import com.network.topology.routing.delaybound.constraints.RouteDelayConstrGroupInitializer;
@@ -101,15 +103,30 @@ public class DelayConstrainedMLSpfTopologyModel extends MultiLayerSpfTopologyMod
 
   public static void main (String[] args) {
     try {
+      //arg 1 = file name for topology
+      //arg 2 = file name for circuit capacity
+      //arg 3 = path to import folder
+      //arg 4 = identifier for the import model
+      //arg 5 = path to export folder
+      //arg 6 = identifier for the export model
+      if (args==null || args.length!=6) {
+        log.error("Invalid arguments provided to program. Expected {path to topology} {path to circuit capacity configuration} {path to export folder} {model identifier} {boolean to indicate if model shold be solved}");
+      }
 
-      TopologyManager manager = new TopologyManagerImpl("test");
+      TopologyManager manager = new TopologyManagerImpl(args[3]);
       SNDLibImportTopology importer = new SNDLibImportTopology();
-      importer.importFromFile("conf/nobel-us.xml", manager);
+      importer.importFromFile(args[0], manager);
 
-      MultiLayerSpfTopologyModel lpModel = new MultiLayerSpfTopologyModel("conf/circuit-cap.xml", manager, "TestABC");
-      lpModel.init();
-      lpModel.compute();
-      lpModel.postCompute();
+      FixedTopologyModel lpModel = new FixedTopologyModel(args[1], manager, args[3], args[2]);
+      log.info("Attempting to load model from export information");
+      lpModel.importModel();
+
+      TopologyManager newTopology = lpModel.getExtractedModel();
+
+      DelayConstrainedMLSpfTopologyModel newModel = new DelayConstrainedMLSpfTopologyModel(args[1], newTopology, args[5], args[4]);
+      newModel.init();
+      newModel.compute();
+      newModel.postCompute();
 
     } catch (LPModelException e) {
       log.error("Error initializing model", e);
@@ -119,6 +136,8 @@ public class DelayConstrainedMLSpfTopologyModel extends MultiLayerSpfTopologyMod
       e.printStackTrace();
     } catch (IOException e) {
       log.error("Error initializing model file", e);
+    } catch (ModelExtractionException e) {
+      log.error("Error extracting topology from initial solution", e);
     }
   }
 }
