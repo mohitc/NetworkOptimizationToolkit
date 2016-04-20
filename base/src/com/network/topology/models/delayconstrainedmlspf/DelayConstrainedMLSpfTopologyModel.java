@@ -26,11 +26,14 @@ import com.topology.impl.primitives.TopologyManagerImpl;
 import com.topology.primitives.TopologyManager;
 import com.topology.primitives.exception.FileFormatException;
 import com.topology.primitives.exception.TopologyException;
+import com.topology.primitives.properties.TEPropertyKey;
+import com.topology.primitives.properties.converters.impl.MapConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 public class DelayConstrainedMLSpfTopologyModel extends MultiLayerSpfTopologyModel {
@@ -122,6 +125,9 @@ public class DelayConstrainedMLSpfTopologyModel extends MultiLayerSpfTopologyMod
       lpModel.importModel();
 
       TopologyManager newTopology = lpModel.getExtractedModel();
+
+      TEPropertyKey demands = newTopology.registerKey("Demands", "Demands for the topology", Map.class, MapConverter.class);
+      newTopology.addProperty(demands, manager.getProperty(demands, Map.class));
 
       DelayConstrainedMLSpfTopologyModel newModel = new DelayConstrainedMLSpfTopologyModel(args[1], newTopology, args[5], args[4]);
       newModel.init();
