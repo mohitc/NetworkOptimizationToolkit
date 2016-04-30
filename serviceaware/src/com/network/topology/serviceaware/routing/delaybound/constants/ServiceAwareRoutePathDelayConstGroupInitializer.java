@@ -26,6 +26,8 @@ public class ServiceAwareRoutePathDelayConstGroupInitializer extends LPMLGroupIn
       for (int t=1;t<=serviceClasses; t++) {
         for (String i : vertices) {
           for (String j: vertices) {
+            if (i.equals(j))
+              continue;
             //Todo base values based on service classes
             double delay = 100 - t*20;
             delay = (delay>40) ? delay : 40;

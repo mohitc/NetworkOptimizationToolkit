@@ -41,7 +41,7 @@ public class ServiceAwareSourceLoopAvoidanceConstrGroupInitializer extends LPMLG
             }
             LPExpression rhs = new LPExpression(model());
             rhs.addTerm(0);
-            model().addConstraint(generator().getName(s, d), lhs, LPOperator.EQUAL, rhs, group);
+            model().addConstraint(generator().getName(n, s, d), lhs, LPOperator.EQUAL, rhs, group);
           }
         }
       }

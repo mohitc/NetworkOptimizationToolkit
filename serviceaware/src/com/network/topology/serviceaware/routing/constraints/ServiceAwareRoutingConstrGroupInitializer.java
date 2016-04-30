@@ -39,6 +39,8 @@ public class ServiceAwareRoutingConstrGroupInitializer extends LPMLGroupInitiali
               continue;
             for (String i : vertices) {
               for (String j : vertices) {
+                if (i.equals(j))
+                  continue;
                 LPExpression lhs = new LPExpression(model());
                 lhs.addTerm(model().getLPVar(serviceRoutingNameGenerator.getName(n, s, d, i, j)));
                 LPExpression rhs = new LPExpression(model());

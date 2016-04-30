@@ -32,13 +32,9 @@ public class ServiceAwareRoutingVarGroupInitializer extends LPMLGroupInitializer
               continue;
             for (String i : vertices) {
               for (String j : vertices) {
-                if (i.equals(j) || d.equals(i))
+                if (i.equals(j))
                   continue;
-                //all incoming links to the source cannot carry traffic going out from the source
-                if (j.equals(s))
-                  this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(t, s, d, i, j), LPVarType.BOOLEAN, 0, 0, group);
-                else
-                  this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(t, s, d, i, j), LPVarType.BOOLEAN, 0, 1, group);
+                this.getGroup().getModel().createLPVar(group.getNameGenerator().getName(t, s, d, i, j), LPVarType.BOOLEAN, 0, 1, group);
               }
             }
           }

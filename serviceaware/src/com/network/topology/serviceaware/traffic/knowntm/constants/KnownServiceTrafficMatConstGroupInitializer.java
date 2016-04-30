@@ -52,11 +52,11 @@ public class KnownServiceTrafficMatConstGroupInitializer extends LPMLGroupInitia
               continue;
             String label = "[" + n + "]{" + i + "}{" + j + "}";
             if (demandStore.containsKey(label)) {
-              model().createLpConstant(generator().getName(i, j), demandStore.get(label), group);
+              model().createLpConstant(generator().getName(n, i, j), demandStore.get(label), group);
               count++;
             } else {
               log.info("No demand found for nodes (" + i + " -> " + j + "), defaulting to 0");
-              model().createLpConstant(generator().getName(i, j), 0, group);
+              model().createLpConstant(generator().getName(n, i, j), 0, group);
             }
           }
         }
