@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
 @JacksonXmlRootElement
-public class ServiceTrafficMatrix {
+public class ServiceTrafficMatrixSplit {
 
   private List<ServiceTrafficMatrixEntry> trafficMatrixEntry;
 

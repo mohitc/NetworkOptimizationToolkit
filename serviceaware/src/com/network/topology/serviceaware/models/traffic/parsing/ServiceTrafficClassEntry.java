@@ -7,6 +7,7 @@ public class ServiceTrafficClassEntry {
   @JacksonXmlProperty(isAttribute = true)
   private int serviceClass;
 
+  @JacksonXmlProperty(isAttribute = true)
   private double fraction;
 
   public ServiceTrafficClassEntry() {}
