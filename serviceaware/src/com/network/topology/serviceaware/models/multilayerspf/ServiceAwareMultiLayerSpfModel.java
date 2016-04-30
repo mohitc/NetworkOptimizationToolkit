@@ -8,6 +8,7 @@ import com.network.topology.ConstantGroups;
 import com.network.topology.FixedConstants;
 import com.network.topology.models.extractors.ModelExtractionException;
 import com.network.topology.models.extractors.ModelExtractor;
+import com.network.topology.models.fixedtopology.FixedTopologyModel;
 import com.network.topology.models.mltopology.MultiLayerTopologyModel;
 import com.network.topology.routing.delaybound.constants.LinkDelayConstGroupInitializer;
 import com.network.topology.routing.delaybound.constants.LinkDelayConstNameGenerator;
@@ -15,6 +16,8 @@ import com.network.topology.serviceaware.SAConstantGroups;
 import com.network.topology.serviceaware.SAConstraintGroups;
 import com.network.topology.serviceaware.SAVarGroups;
 import com.network.topology.serviceaware.ServiceAwareFixedConstants;
+import com.network.topology.serviceaware.models.traffic.generator.ServiceTrafficMatrixGenerator;
+import com.network.topology.serviceaware.models.traffic.parsing.ServiceTrafficMatrixSplit;
 import com.network.topology.serviceaware.routing.constraints.*;
 import com.network.topology.serviceaware.routing.delaybound.constants.ServiceAwareRoutePathDelayConstGroupInitializer;
 import com.network.topology.serviceaware.routing.delaybound.constants.ServiceAwareRoutePathDelayConstNameGenerator;
@@ -32,10 +35,18 @@ import com.network.topology.serviceaware.traffic.knowntm.constants.KnownServiceT
 import com.network.topology.serviceaware.traffic.knowntm.constants.KnownServiceTrafficMatConstNameGenerator;
 import com.network.topology.serviceaware.traffic.knowntm.constraints.KnownServiceTmTrafficConstrGroupInitializer;
 import com.network.topology.serviceaware.traffic.knowntm.constraints.KnownServiceTmTrafficConstrNameGenerator;
+import com.topology.impl.importers.sndlib.SNDLibImportTopology;
+import com.topology.impl.primitives.TopologyManagerImpl;
 import com.topology.primitives.TopologyManager;
+import com.topology.primitives.exception.FileFormatException;
+import com.topology.primitives.exception.TopologyException;
+import com.topology.primitives.properties.TEPropertyKey;
+import com.topology.primitives.properties.converters.impl.MapConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 
 public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
@@ -54,7 +65,7 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
     super.initConstants();
 
     //add constant for service classes
-    int serviceClasses = 3;
+    int serviceClasses = 2;
     LPConstantGroup constantGroup = model.getLPConstantGroup(ConstantGroups.VARIABLE_BOUNDS);
     model.createLpConstant(ServiceAwareFixedConstants.SERVICE_CLASSES, serviceClasses, constantGroup);
     //constant to indicate the max utilization of a link (Alpha)
@@ -166,7 +177,7 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
         serviceRouteDelayConstrGroupInitializer);
 
     //Traffic constraints (known traffic matrix)
-    LPNameGenerator knownServiceTmTrafficConstrNameGenerator = new KnownServiceTmTrafficConstrNameGenerator(vertexLabels, serviceClasses);
+    LPNameGenerator knownServiceTmTrafficConstrNameGenerator = new KnownServiceTmTrafficConstrNameGenerator(vertexLabels);
     LPGroupInitializer knownServiceTmTrafficConstrGroupInitializer = new KnownServiceTmTrafficConstrGroupInitializer(vertexLabels);
     model.createLPConstraintGroup(SAConstraintGroups.SA_KNOWN_TRAFFIC_MAT, SAConstraintGroups.SA_KNOWN_TRAFFIC_MAT_DESC,
         knownServiceTmTrafficConstrNameGenerator, knownServiceTmTrafficConstrGroupInitializer);
@@ -186,4 +197,63 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
   public ModelExtractor<TopologyManager> initModelExtractor() {
     return null;
   }
+
+  public static void main (String[] args) {
+    try {
+      //arg 1 = file name for topology
+      //arg 2 = file name for circuit capacity
+      //arg 3 = path to import folder
+      //arg 4 = identifier for the import model
+      //arg 5 = path to export folder
+      //arg 6 = identifier for the export model
+      //arg 7 = path to xml defining the service traffic matrix split
+      if (args==null || args.length!=7) {
+        log.error("Invalid arguments provided to program. Expected {path to topology} {path to circuit capacity configuration} {path to export folder} {model identifier} {boolean to indicate if model shold be solved}");
+      }
+
+      TopologyManager manager = new TopologyManagerImpl(args[3]);
+      SNDLibImportTopology importer = new SNDLibImportTopology();
+      importer.importFromFile(args[0], manager);
+
+      FixedTopologyModel lpModel = new FixedTopologyModel(args[1], manager, args[3], args[2]);
+      log.info("Attempting to load model from export information");
+/*
+      lpModel.init();
+      lpModel.compute();
+      lpModel.postCompute();
+      lpModel.exportModel();
+*/
+      lpModel.importModel();
+
+      TopologyManager newTopology = lpModel.getExtractedModel();
+
+      TEPropertyKey demands = newTopology.registerKey("Demands", "Demands for the topology", Map.class, MapConverter.class);
+      ServiceTrafficMatrixGenerator generator = new ServiceTrafficMatrixGenerator();
+      log.info("parsing service traffic matrix split");
+      ServiceTrafficMatrixSplit split = generator.parseXml(args[6]);
+      if (split==null) {
+        log.error("Could not parse split successfully. Exiting");
+        return;
+      }
+
+      newTopology.addProperty(demands, generator.generateServiceTrafficMatrix(manager.getProperty(demands, Map.class), split));
+
+      ServiceAwareMultiLayerSpfModel newModel = new ServiceAwareMultiLayerSpfModel(args[1], newTopology, args[5], args[4]);
+      newModel.init();
+      newModel.compute();
+      newModel.postCompute();
+
+    } catch (LPModelException e) {
+      log.error("Error initializing model", e);
+    } catch (TopologyException e) {
+      log.error("Error initializing topology", e);
+    } catch (FileFormatException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      log.error("Error initializing model file", e);
+    } catch (ModelExtractionException e) {
+      log.error("Error extracting topology from initial solution", e);
+    }
+  }
+
 }
