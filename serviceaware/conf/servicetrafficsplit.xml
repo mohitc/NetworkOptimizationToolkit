@@ -1,0 +1,1096 @@
+<ServiceTrafficMatrixSplit>
+  <trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Atlanta" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ann-Arbor" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Pittsburgh" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Salt-Lake-City" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Ithaca" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Washington" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Boulder" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Lincoln" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Princeton" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Palo-Alto" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Seattle" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Houston" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="San-Diego" destination="Urbana-Champaign">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Atlanta">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Ann-Arbor">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Pittsburgh">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Salt-Lake-City">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Ithaca">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Washington">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Boulder">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Lincoln">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Princeton">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Palo-Alto">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Seattle">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="Houston">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+    <trafficMatrixEntry source="Urbana-Champaign" destination="San-Diego">
+      <serviceClassSplit>
+        <serviceClassSplit serviceClass="1" fraction="0.8"/>
+        <serviceClassSplit serviceClass="2" fraction="0.2"/>
+      </serviceClassSplit>
+    </trafficMatrixEntry>
+  </trafficMatrixEntry>
+</ServiceTrafficMatrixSplit>
