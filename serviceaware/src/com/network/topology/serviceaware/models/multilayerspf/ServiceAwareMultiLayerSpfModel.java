@@ -29,6 +29,8 @@ import com.network.topology.serviceaware.routing.delaybound.constraints.ServiceR
 import com.network.topology.serviceaware.routing.delaybound.constraints.ServiceRouteDelayConstrNameGenerator;
 import com.network.topology.serviceaware.routing.delaybound.vars.RouterInServicePathVarGroupInitializer;
 import com.network.topology.serviceaware.routing.delaybound.vars.RouterInServicePathVarNameGenerator;
+import com.network.topology.serviceaware.routing.validators.ServiceRoutingPathValidator;
+import com.network.topology.serviceaware.routing.validators.SymmetricServiceRoutingPathValidator;
 import com.network.topology.serviceaware.routing.vars.ServiceAwareRoutingVarGroupInitializer;
 import com.network.topology.serviceaware.routing.vars.ServiceAwareRoutingVarNameGenerator;
 import com.network.topology.serviceaware.traffic.knowntm.constants.KnownServiceTrafficMatConstGroupInitializer;
@@ -46,6 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -190,7 +193,17 @@ public class ServiceAwareMultiLayerSpfModel extends MultiLayerTopologyModel {
 
   @Override
   public void initModelValidators() {
-
+    try {
+      validatorList = new ArrayList<>();
+      Set<String> vertexLabels = getVertexLabels();
+      int serviceClasses = (int)model.getLPConstant(ServiceAwareFixedConstants.SERVICE_CLASSES).getValue();
+      ServiceRoutingPathValidator serviceRoutingPathValidator = new ServiceRoutingPathValidator(model, vertexLabels, serviceClasses,
+          new ServiceAwareRoutingVarNameGenerator(vertexLabels, serviceClasses));
+      validatorList.add(serviceRoutingPathValidator);
+      validatorList.add(new SymmetricServiceRoutingPathValidator(model, vertexLabels, serviceClasses, serviceRoutingPathValidator));
+    } catch (LPConstantException e) {
+      log.error("Could not find constant : ", e);
+    }
   }
 
   @Override
