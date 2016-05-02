@@ -44,6 +44,9 @@
   <target name="copy_cplex" if="${usecplex}">
     <copy file="${cplexlpimpl}" todir="lib"/>
   </target>
+  <target name="copy_extern_lib" if="${useexternlib}">
+    <copy file="${externlibfile}" todir="lib"/>
+  </target>
 
 
   <target depends="init" name="build">
