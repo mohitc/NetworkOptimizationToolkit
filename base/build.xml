@@ -34,6 +34,7 @@
     <antcall target="copy_gurobi"/>
     <antcall target="copy_cplex"/>
     <antcall target="copy_glpk"/>
+    <antcall target="copy_extern_lib"/>
   </target>
   <target name="copy_gurobi" if="${usegurobi}">
     <copy file="${gurobilpimpl}" todir="lib"/>
@@ -43,6 +44,9 @@
   </target>
   <target name="copy_cplex" if="${usecplex}">
     <copy file="${cplexlpimpl}" todir="lib"/>
+  </target>
+  <target name="copy_extern_lib" if="${useexternlib}">
+    <copy file="${externlibfile}" todir="lib"/>
   </target>
 
 
