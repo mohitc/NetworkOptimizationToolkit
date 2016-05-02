@@ -10,7 +10,7 @@
       <include name="**/*.jar" />
     </fileset>
   </path>
-  <path id="base.classpath">
+  <path id="serviceaware.classpath">
     <pathelement location="bin"/>
     <path refid="serviceaware.jars.classpath"/>
   </path>
@@ -37,7 +37,7 @@
     <echo message="${ant.project.name}: ${ant.file}"/>
     <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
       <src path="src"/>
-      <classpath refid="base.classpath"/>
+      <classpath refid="serviceaware.classpath"/>
     </javac>
   </target>
   <pathconvert property="manifest.classpath" pathsep=" ">
@@ -52,7 +52,7 @@
   <target name="jar">
     <delete file="serviceaware.jar"/>
     <echo message="${manifest.classpath}"/>
-    <jar destfile="base.jar" basedir="bin/">
+    <jar destfile="serviceaware.jar" basedir="bin/">
       <manifest>
         <attribute name="Class-Path" value="${manifest.classpath}"/>
       </manifest>
